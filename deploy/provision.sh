@@ -188,7 +188,12 @@ set_env DB_PASSWORD "\"${DB_PASS}\""
 if [[ "$NEW_ENV" == true ]]; then
     set_env APP_ENV production
     set_env APP_DEBUG false
-    set_env APP_URL "https://${DOMAIN}"
+    # HTTP, not HTTPS. The vhost below is port 80 only until certbot has run,
+    # and APP_URL is what makes the application generate links, assets and
+    # redirects — pointing those at https:// before a certificate exists sends
+    # every one of them to a closed port, which looks exactly like an outage.
+    # The certbot step at the end of this script's output flips it to https.
+    set_env APP_URL "http://${DOMAIN}"
 fi
 
 log "Installing PHP dependencies"
@@ -233,19 +238,12 @@ chmod -R ug+rwX "${APP_ROOT}/storage" "${APP_ROOT}/bootstrap/cache"
 chmod 640 "${APP_ROOT}/.env"
 
 # ---------------------------------------------------------------------------
-# Services
+# Web server
+#
+# Nginx and PHP-FPM come up before the queue worker and the scheduler. They are
+# what "the site is live" actually means, and wiring them first means a broken
+# background service can never leave the box serving nothing.
 # ---------------------------------------------------------------------------
-log "Installing systemd units"
-for unit in horizon scheduler; do
-    sed -e "s|/var/www/artaclean/current|${APP_ROOT}|g" \
-        -e "s|/usr/bin/php8.4|/usr/bin/php${PHP_VERSION}|g" \
-        "deploy/${unit}.service" > "/etc/systemd/system/artaclean-${unit}.service"
-done
-
-systemctl daemon-reload
-systemctl enable --now artaclean-horizon artaclean-scheduler
-systemctl restart artaclean-horizon artaclean-scheduler
-
 log "Configuring Nginx"
 sed -e "s|__DOMAIN__|${DOMAIN}|g" \
     -e "s|__APP_ROOT__|${APP_ROOT}|g" \
@@ -259,6 +257,54 @@ nginx -t
 systemctl enable --now nginx
 systemctl reload nginx
 systemctl restart "php${PHP_VERSION}-fpm"
+
+# A host image with ufw already enabled usually allows nothing but SSH, which
+# makes a perfectly healthy site look unreachable from the outside.
+if command -v ufw >/dev/null && ufw status 2>/dev/null | grep -q 'Status: active'; then
+    log "Opening the firewall for HTTP and HTTPS"
+    ufw allow 'Nginx Full' >/dev/null
+fi
+
+# ---------------------------------------------------------------------------
+# Background services
+#
+# Deliberately non-fatal: the storefront reads from the database and serves
+# fine without them. A failure here costs queued notifications and scheduled
+# sweeps, and is worth reporting loudly — but not worth aborting an otherwise
+# working install for.
+# ---------------------------------------------------------------------------
+log "Installing systemd units"
+for unit in horizon scheduler; do
+    sed -e "s|/var/www/artaclean/current|${APP_ROOT}|g" \
+        -e "s|/usr/bin/php8.4|/usr/bin/php${PHP_VERSION}|g" \
+        "deploy/${unit}.service" > "/etc/systemd/system/artaclean-${unit}.service"
+done
+
+systemctl daemon-reload
+systemctl enable artaclean-horizon artaclean-scheduler >/dev/null 2>&1 || true
+
+for unit in artaclean-horizon artaclean-scheduler; do
+    if ! systemctl restart "$unit"; then
+        warn "${unit} failed to start. The site is unaffected; queued jobs are not."
+        warn "  Diagnose with: journalctl -u ${unit} -n 50 --no-pager"
+    fi
+done
+
+# ---------------------------------------------------------------------------
+# Health check
+# ---------------------------------------------------------------------------
+log "Checking the site responds"
+# Laravel's built-in health endpoint, registered in bootstrap/app.php.
+HEALTH="$(curl -fsS -o /dev/null -w '%{http_code}' -H "Host: ${DOMAIN}" http://127.0.0.1/up 2>/dev/null || echo 000)"
+
+if [[ "$HEALTH" == "200" ]]; then
+    printf '\033[1;32m  [ok] The application answered 200 on http://%s/up\033[0m\n' "$DOMAIN"
+else
+    warn "The application returned '${HEALTH}' instead of 200. Check, in this order:"
+    warn "  tail -50 /var/log/nginx/artaclean.error.log"
+    warn "  tail -50 ${APP_ROOT}/storage/logs/laravel-\$(date +%F).log"
+    warn "  systemctl status php${PHP_VERSION}-fpm nginx"
+fi
 
 # ---------------------------------------------------------------------------
 # Done
@@ -276,9 +322,17 @@ $(printf '\033[1;32m')  Provisioning complete.$(printf '\033[0m')
   Services    systemctl status artaclean-horizon artaclean-scheduler
 
   Next steps
-    1. Point ${DOMAIN} at this server, then enable HTTPS:
+    1. Point ${DOMAIN} at this server, then enable HTTPS. Both commands, in
+       this order — certbot opens port 443, and APP_URL is what makes the
+       application generate https links to it:
+
          sudo certbot --nginx -d ${DOMAIN} -d www.${DOMAIN}
-       Certbot rewrites the vhost in place and sets up auto-renewal.
+         cd ${APP_ROOT} \\
+           && sudo sed -i 's|^APP_URL=http://|APP_URL=https://|' .env \\
+           && sudo -u ${RUN_USER} php artisan config:cache
+
+       Certbot rewrites the vhost in place and sets up auto-renewal. Until it
+       has run, the site is served over plain HTTP by design.
 
     2. Create the first administrator:
          cd ${APP_ROOT} && php artisan tinker

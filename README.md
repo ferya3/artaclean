@@ -202,11 +202,22 @@ That installs PHP 8.4-FPM, Nginx, MySQL 8, Redis, Composer and Node 22; creates
 the database with a generated password; installs dependencies; builds assets;
 migrates; and brings up Horizon and the scheduler under systemd.
 
-Then, once DNS points at the box:
+The site is served over plain HTTP at this point, and `APP_URL` is set to
+`http://` to match. Once DNS points at the box, turn on TLS — **both commands,
+in this order**:
 
 ```bash
 sudo certbot --nginx -d artaclean.ir -d www.artaclean.ir
+
+cd /var/www/artaclean/current \
+  && sudo sed -i 's|^APP_URL=http://|APP_URL=https://|' .env \
+  && sudo -u www-data php artisan config:cache
 ```
+
+Certbot opens port 443; `APP_URL` is what makes the application generate links
+to it. Doing only the first leaves the site reachable but still linking to
+`http://`; doing only the second points every link and asset at a port that
+isn't listening.
 
 Notes:
 
@@ -220,6 +231,28 @@ Notes:
 * **`nginx.conf` is HTTP-only by design.** A fresh server has no certificate, so
   hard-coded `ssl_certificate` paths would fail `nginx -t` and block the reload
   you need to obtain one. Certbot adds the TLS block and the redirect in place.
+* **Nginx comes up before Horizon.** The web server is configured first, and the
+  queue worker and scheduler are started non-fatally afterwards, so a background
+  service that will not start can never leave the box serving nothing.
+* **`provision.sh` finishes with a health check** against `/up` and prints the
+  three logs to read if it does not answer 200.
+
+### If the site does not come up
+
+Work down this list; each step tells you which layer is at fault.
+
+| Symptom | Check | Usual cause |
+|---|---|---|
+| Connection times out | `sudo ufw status` | Firewall allows only SSH. `sudo ufw allow 'Nginx Full'` |
+| Default "Welcome to nginx" page | `ls -l /etc/nginx/sites-enabled/` | `provision.sh` aborted before the Nginx step — read its last output |
+| Page loads but is unstyled, links dead | `grep APP_URL .env` | `APP_URL=https://` while Nginx is still HTTP-only. Set it to `http://` and `php artisan config:cache` |
+| 502 Bad Gateway | `systemctl status php8.4-fpm` | FPM down, or the socket path in the vhost does not match |
+| 500 on every page | `tail -50 storage/logs/laravel-$(date +%F).log` | Usually `.env` credentials or `storage/` permissions |
+| Everything looks right, still nothing | `curl -I -H 'Host: artaclean.ir' http://127.0.0.1/up` | 200 here means the server is fine and the problem is DNS or Cloudflare |
+
+Behind Cloudflare, keep the proxy in **Full (strict)** mode once certbot has
+run. *Flexible* mode makes Cloudflare speak HTTP to an origin that redirects to
+HTTPS, which is an infinite redirect loop.
 
 ### Routine releases
 

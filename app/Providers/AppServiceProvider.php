@@ -33,7 +33,11 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('vendor.pagination.tailwind');
         Paginator::defaultSimpleView('vendor.pagination.simple-tailwind');
 
-        if ($this->app->isProduction()) {
+        // Follow the scheme in APP_URL rather than the environment name. A
+        // freshly provisioned server is HTTP-only until certbot has run, and
+        // keying this off `isProduction()` there would point every link, asset
+        // and redirect at a port nothing is listening on yet.
+        if (str_starts_with((string) config('app.url'), 'https://')) {
             URL::forceScheme('https');
         }
 
