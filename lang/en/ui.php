@@ -29,6 +29,7 @@ return [
     'optional' => 'optional',
     'required_field' => 'required',
     'price_on_request' => 'Price on request',
+    'currency' => 'IRR',
     'price_note' => 'Prices move with the market, so a specialist confirms today’s figure.',
     'whatsapp_chat' => 'Chat on WhatsApp',
     'call_us' => 'Call us',
@@ -48,6 +49,14 @@ return [
     'hero_stat_products' => 'machine models',
     'hero_stat_brands' => 'trusted brands',
     'hero_stat_support' => 'technical support',
+
+    // Three reassurances a procurement manager checks before enquiring.
+    'hero_trust' => [
+        'warranty' => 'Manufacturer warranty',
+        'parts' => 'Spare parts in stock',
+        'service' => 'On-site service and training',
+    ],
+
     'categories_title' => 'Product categories',
     'categories_subtitle' => 'From industrial vacuums to ride-on sweepers and detergents.',
     'environments_title' => 'Which environment are you cleaning?',

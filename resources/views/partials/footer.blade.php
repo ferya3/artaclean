@@ -2,11 +2,21 @@
     $navigation = app(App\Services\NavigationService::class);
 @endphp
 
-<footer class="mt-auto border-t border-ink-100 bg-ink-950 text-ink-300">
+<footer class="relative isolate mt-auto overflow-hidden bg-ink-950 text-ink-300">
+    <div class="absolute inset-0 -z-10 blueprint-fine opacity-60"></div>
+    <div class="absolute -top-40 start-1/4 -z-10 size-[30rem] glow-brand-soft"></div>
+    <div class="absolute inset-x-0 top-0 -z-10 h-px bg-linear-to-r from-transparent via-white/15 to-transparent"></div>
+
     <div class="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5 lg:py-16">
         <div class="lg:col-span-2">
             <div class="flex items-center gap-2.5">
-                <span class="grid size-9 place-items-center rounded-lg bg-white text-sm font-black text-ink-950">A</span>
+                <span class="relative grid size-9 place-items-center overflow-hidden rounded-lg bg-white/10 ring-1 ring-white/15">
+                    <svg viewBox="0 0 24 24" class="size-[18px] text-white" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <path d="M4.5 17.5 10 6.5M10 17.5 15.5 6.5M15.5 17.5 19.5 9.5" />
+                    </svg>
+                    <span class="absolute inset-x-0 bottom-0 h-[3px] bg-accent-400"></span>
+                </span>
                 <span class="text-lg font-black text-white">{{ config('app.name') }}</span>
             </div>
 
@@ -29,7 +39,7 @@
         </div>
 
         <div>
-            <h2 class="mb-4 text-sm font-semibold text-white">{{ __('nav.categories') }}</h2>
+            <h2 class="mb-4 text-xs font-semibold tracking-[0.12em] text-white uppercase">{{ __('nav.categories') }}</h2>
             <ul class="space-y-2.5 text-sm">
                 @foreach ($navigation->categories()->take(9) as $category)
                     <li><a href="{{ $category->url() }}" class="hover:text-white">{{ $category->name }}</a></li>
@@ -38,7 +48,7 @@
         </div>
 
         <div>
-            <h2 class="mb-4 text-sm font-semibold text-white">{{ __('nav.environments') }}</h2>
+            <h2 class="mb-4 text-xs font-semibold tracking-[0.12em] text-white uppercase">{{ __('nav.environments') }}</h2>
             <ul class="space-y-2.5 text-sm">
                 @foreach ($navigation->environments()->take(8) as $environment)
                     <li><a href="{{ $environment->url() }}" class="hover:text-white">{{ $environment->name }}</a></li>
@@ -47,7 +57,7 @@
         </div>
 
         <div>
-            <h2 class="mb-4 text-sm font-semibold text-white">{{ __('nav.quick_links') }}</h2>
+            <h2 class="mb-4 text-xs font-semibold tracking-[0.12em] text-white uppercase">{{ __('nav.quick_links') }}</h2>
             <ul class="space-y-2.5 text-sm">
                 <li><a href="{{ route('selector') }}" class="hover:text-white">{{ __('nav.selector') }}</a></li>
                 <li><a href="{{ route('rental') }}" class="hover:text-white">{{ __('nav.rental') }}</a></li>
@@ -62,7 +72,12 @@
     </div>
 
     <div class="border-t border-white/10">
-        <div class="container-page flex flex-col items-center justify-between gap-3 py-5 text-xs sm:flex-row">
+        {{--
+            The WhatsApp button and the comparison strip are fixed to the
+            bottom corners, so the last row of the page needs to clear them or
+            the legal links sit underneath a floating widget.
+        --}}
+        <div class="container-page flex flex-col items-center justify-between gap-3 pt-5 pb-24 text-xs sm:flex-row">
             <p>© {{ date('Y') }} {{ config('app.name') }} — {{ __('nav.rights') }}</p>
 
             <div class="flex items-center gap-4">

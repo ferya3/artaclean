@@ -30,8 +30,21 @@
     </div>
 
     <div class="container-page flex h-16 items-center justify-between gap-4 lg:h-20">
-        <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-2.5">
-            <span class="grid size-9 place-items-center rounded-lg bg-ink-900 text-sm font-black text-white">A</span>
+        {{--
+            The mark is three raked sweep strokes on a dark tile with an accent
+            base — a cleaning pass rendered as a diagram, which sits closer to
+            the product than a lettered square did. The strokes are deliberately
+            slanted: drawn level they read as a hamburger menu button, which is
+            the last thing a logo should be mistaken for.
+        --}}
+        <a href="{{ route('home') }}" class="group flex shrink-0 items-center gap-2.5">
+            <span class="relative grid size-9 place-items-center overflow-hidden rounded-lg bg-ink-900 shadow-[var(--shadow-e1)] transition-transform duration-300 ease-[var(--ease-out-quart)] group-hover:-translate-y-px">
+                <svg viewBox="0 0 24 24" class="size-[18px] text-white" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M4.5 17.5 10 6.5M10 17.5 15.5 6.5M15.5 17.5 19.5 9.5" />
+                </svg>
+                <span class="absolute inset-x-0 bottom-0 h-[3px] bg-accent-400"></span>
+            </span>
             <span class="text-lg font-black tracking-tight text-ink-900">{{ config('app.name') }}</span>
         </a>
 

@@ -30,6 +30,7 @@ return [
     'optional' => 'اختیاری',
     'required_field' => 'الزامی',
     'price_on_request' => 'قیمت با استعلام',
+    'currency' => 'ریال',
     'price_note' => 'به دلیل نوسان بازار، قیمت روز از طریق کارشناس اعلام می‌شود.',
     'whatsapp_chat' => 'گفتگو در واتساپ',
     'call_us' => 'تماس با ما',
@@ -51,6 +52,14 @@ return [
     'hero_stat_products' => 'مدل دستگاه',
     'hero_stat_brands' => 'برند معتبر',
     'hero_stat_support' => 'پشتیبانی فنی',
+
+    // Three reassurances a procurement manager checks before enquiring.
+    'hero_trust' => [
+        'warranty' => 'گارانتی رسمی دستگاه',
+        'parts' => 'موجودی قطعات یدکی',
+        'service' => 'سرویس و آموزش در محل',
+    ],
+
     'categories_title' => 'دسته‌بندی محصولات',
     'categories_subtitle' => 'از جاروبرقی صنعتی تا سوییپر سرنشین‌دار و مواد شوینده.',
     'environments_title' => 'دستگاه مناسب برای کدام محیط؟',

@@ -15,59 +15,81 @@
             <img src="{{ asset('images/hero-poster.svg') }}"
                  alt=""
                  fetchpriority="high"
-                 class="size-full object-cover opacity-55">
-            <video class="absolute inset-0 size-full object-cover opacity-55"
+                 class="size-full object-cover opacity-40">
+            <video class="absolute inset-0 size-full object-cover opacity-40"
                    autoplay muted loop playsinline preload="none"
                    poster="{{ asset('images/hero-poster.svg') }}">
                 <source src="{{ asset('videos/hero.mp4') }}" type="video/mp4">
             </video>
-            <div class="absolute inset-0 bg-linear-to-t from-ink-950 via-ink-950/70 to-ink-950/30"></div>
+
+            {{--
+                The panel is designed to stand up with no footage behind it at
+                all: a blueprint grid for scale, a cool key light from the top
+                of the text column, and a floor gradient to seat the type. Real
+                footage lands on top of this rather than being load-bearing.
+            --}}
+            <div class="absolute inset-0 blueprint"></div>
+            <div class="absolute -top-40 -start-32 size-[38rem] glow-brand"></div>
+            <div class="absolute -bottom-52 -end-24 size-[34rem] glow-accent"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-ink-950 via-ink-950/80 to-ink-950/40"></div>
+            <div class="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent"></div>
         </div>
 
         <div class="container-page py-24 sm:py-32 lg:py-40">
             <div class="max-w-3xl">
-                <p class="text-xs font-semibold tracking-[0.16em] text-accent-400 uppercase">
-                    {{ __('ui.hero_eyebrow') }}
-                </p>
+                <p class="eyebrow-light">{{ __('ui.hero_eyebrow') }}</p>
 
-                <h1 class="mt-5 text-3xl leading-tight font-black text-white sm:text-4xl lg:text-5xl lg:leading-[1.15]">
+                <h1 class="mt-6 text-[2rem] leading-[1.2] font-black text-white sm:text-5xl sm:leading-[1.15] lg:text-[3.5rem] lg:leading-[1.1]">
                     {{ __('ui.hero_title') }}
                 </h1>
 
-                <p class="mt-6 max-w-2xl text-base leading-8 text-ink-200 sm:text-lg">
+                <p class="mt-7 max-w-2xl text-base leading-8 text-ink-300 sm:text-lg sm:leading-9">
                     {{ __('ui.hero_subtitle') }}
                 </p>
 
-                <div class="mt-9 flex flex-wrap gap-3">
-                    <a href="{{ route('products.index') }}" class="btn-primary">
+                <div class="mt-10 flex flex-wrap gap-3">
+                    <a href="{{ route('products.index') }}" class="btn-accent btn-lg">
                         {{ __('ui.view_products') }}
                         <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
                     </a>
-                    <a href="{{ route('contact') }}" class="btn bg-white text-ink-900 hover:bg-ink-100">
-                        {{ __('ui.free_consultation') }}
+                    <a href="{{ route('selector') }}"
+                       class="btn btn-lg border border-white/20 bg-white/5 text-white backdrop-blur-sm hover:-translate-y-px hover:border-white/40 hover:bg-white/10">
+                        <x-ui-icon name="calculator" class="size-4" />
+                        {{ __('ui.calculate') }}
                     </a>
-                    <a href="{{ route('downloads.index') }}" class="btn border border-white/25 text-white hover:bg-white/10">
+                    <a href="{{ route('downloads.index') }}"
+                       class="btn btn-lg text-ink-300 hover:bg-white/5 hover:text-white">
                         <x-ui-icon name="download" class="size-4" />
                         {{ __('ui.download_catalog') }}
                     </a>
                 </div>
 
-                <dl class="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-white/15 pt-8">
+                {{-- Figures first, reassurance underneath. --}}
+                <dl class="mt-14 grid max-w-xl grid-cols-3 border-t border-white/15 pt-8 [&>*+*]:border-s [&>*+*]:border-white/10 [&>*+*]:ps-6">
                     <div>
-                        <dt class="text-xs text-ink-400">{{ __('ui.hero_stat_products') }}</dt>
-                        <dd class="tabular text-2xl font-black text-white">
-                            {{ number_format($categories->sum('products_count')) }}+
+                        <dd class="tabular text-3xl leading-none font-black text-white sm:text-4xl">
+                            {{ number_format($categories->sum('products_count')) }}<span class="text-accent-400">+</span>
                         </dd>
+                        <dt class="mt-2.5 text-xs text-ink-400">{{ __('ui.hero_stat_products') }}</dt>
                     </div>
-                    <div>
-                        <dt class="text-xs text-ink-400">{{ __('ui.hero_stat_brands') }}</dt>
-                        <dd class="tabular text-2xl font-black text-white">{{ $brands->count() }}</dd>
+                    <div class="ps-6">
+                        <dd class="tabular text-3xl leading-none font-black text-white sm:text-4xl">{{ $brands->count() }}</dd>
+                        <dt class="mt-2.5 text-xs text-ink-400">{{ __('ui.hero_stat_brands') }}</dt>
                     </div>
-                    <div>
-                        <dt class="text-xs text-ink-400">{{ __('ui.hero_stat_support') }}</dt>
-                        <dd class="tabular text-2xl font-black text-white">۲۴/۷</dd>
+                    <div class="ps-6">
+                        <dd class="tabular text-3xl leading-none font-black text-white sm:text-4xl">۲۴/۷</dd>
+                        <dt class="mt-2.5 text-xs text-ink-400">{{ __('ui.hero_stat_support') }}</dt>
                     </div>
                 </dl>
+
+                <ul class="mt-8 flex flex-wrap gap-x-7 gap-y-3">
+                    @foreach (['warranty', 'parts', 'service'] as $signal)
+                        <li class="flex items-center gap-2 text-sm text-ink-300">
+                            <x-ui-icon name="check-circle" class="size-4 shrink-0 text-accent-400" />
+                            {{ __('ui.hero_trust.'.$signal) }}
+                        </li>
+                    @endforeach
+                </ul>
             </div>
         </div>
     </section>
@@ -82,22 +104,35 @@
                                :subtitle="__('ui.categories_subtitle')"
                                :href="route('products.index')" />
 
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {{--
+                Nine categories once carried the same generic icon, which read
+                as filler. A drawing-sheet index number is honest about being
+                navigation, gives each tile its own anchor, and leaves the room
+                the icon was taking to the description a buyer actually reads.
+            --}}
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($categories as $category)
                     <a href="{{ $category->url() }}"
-                       class="card-hover group flex items-center gap-4 p-5">
-                        <span class="grid size-14 shrink-0 place-items-center rounded-lg bg-ink-50 text-ink-500 transition-colors group-hover:bg-brand-50 group-hover:text-brand-600">
-                            <x-ui-icon name="cube" class="size-6" />
+                       class="card-hover tick-frame group relative flex flex-col overflow-hidden p-6">
+                        <span class="absolute top-5 end-5 tabular text-2xl leading-none font-black text-ink-100 transition-colors duration-300 group-hover:text-brand-100">
+                            {{ str_pad((string) ($loop->index + 1), 2, '0', STR_PAD_LEFT) }}
                         </span>
 
-                        <span class="min-w-0 flex-1">
-                            <span class="block truncate text-sm font-bold text-ink-900">{{ $category->name }}</span>
-                            <span class="tabular mt-0.5 block text-xs text-ink-400">
+                        <h3 class="pe-12 text-base leading-7 font-bold text-ink-900 transition-colors group-hover:text-brand-700">
+                            {{ $category->name }}
+                        </h3>
+
+                        @if ($category->short_description)
+                            <p class="mt-2 line-clamp-2 text-sm leading-6 text-ink-500">{{ $category->short_description }}</p>
+                        @endif
+
+                        <span class="mt-5 flex items-center justify-between border-t border-ink-100 pt-4">
+                            <span class="tabular text-xs font-medium text-ink-400">
                                 {{ __('ui.results_count', ['count' => $category->products_count]) }}
                             </span>
+                            <x-ui-icon name="arrow-left"
+                                       class="size-4 shrink-0 text-ink-300 transition-[transform,color] duration-300 ease-[var(--ease-out-quart)] group-hover:-translate-x-1 group-hover:text-brand-600 flip-rtl rtl:group-hover:translate-x-1" />
                         </span>
-
-                        <x-ui-icon name="arrow-left" class="size-4 shrink-0 text-ink-300 transition-transform group-hover:-translate-x-1 flip-rtl rtl:group-hover:translate-x-1" />
                     </a>
                 @endforeach
             </div>
@@ -117,14 +152,24 @@
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach ($environments as $environment)
                     <a href="{{ $environment->url() }}"
-                       class="group relative flex aspect-4/3 flex-col justify-end overflow-hidden rounded-[var(--radius-card)] bg-ink-900 p-5">
+                       class="group relative flex aspect-4/3 flex-col justify-end overflow-hidden rounded-[var(--radius-card)] bg-ink-900 p-5
+                              shadow-[var(--shadow-e1)] ring-1 ring-ink-900/5 transition-[transform,box-shadow] duration-300 ease-[var(--ease-out-quart)]
+                              hover:-translate-y-0.5 hover:shadow-[var(--shadow-e3)]">
                         @if ($environment->image)
                             <img src="{{ Storage::url($environment->image) }}"
                                  alt="{{ $environment->name }}"
                                  loading="lazy"
                                  class="absolute inset-0 size-full object-cover opacity-60 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-105">
+                        @else
+                            {{-- With no photograph, the tile still needs texture and depth. --}}
+                            <div class="absolute inset-0 blueprint-fine opacity-70"></div>
+                            <div class="absolute -top-16 -end-10 size-56 glow-brand opacity-70 transition-opacity duration-500 group-hover:opacity-100"></div>
                         @endif
-                        <div class="absolute inset-0 bg-linear-to-t from-ink-950 via-ink-950/40 to-transparent"></div>
+
+                        <div class="absolute inset-0 bg-linear-to-t from-ink-950 via-ink-950/45 to-transparent"></div>
+
+                        {{-- A hairline that fills with the accent as the tile is hovered. --}}
+                        <span class="absolute inset-x-5 bottom-0 h-0.5 origin-left scale-x-0 bg-accent-400 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-x-100 rtl:origin-right"></span>
 
                         <div class="relative">
                             <h3 class="text-base font-bold text-white">{{ $environment->name }}</h3>
@@ -143,15 +188,17 @@
     {{-- ------------------------------------------------------------------ --}}
     <section class="section">
         <div class="container-page">
-            <div class="grid items-center gap-10 rounded-2xl bg-ink-900 p-8 lg:grid-cols-2 lg:p-14">
+            <div class="relative isolate grid items-center gap-10 overflow-hidden rounded-2xl bg-ink-900 p-8 shadow-[var(--shadow-e3)] lg:grid-cols-2 lg:p-14">
+                <div class="absolute inset-0 -z-10 blueprint"></div>
+                <div class="absolute -top-32 -start-20 -z-10 size-[26rem] glow-brand"></div>
+                <div class="absolute inset-x-0 top-0 -z-10 h-px bg-linear-to-r from-transparent via-white/25 to-transparent"></div>
+
                 <div>
-                    <p class="text-xs font-semibold tracking-[0.16em] text-accent-400 uppercase">
-                        {{ __('nav.selector') }}
-                    </p>
-                    <h2 class="mt-4 text-2xl font-black text-white sm:text-3xl">{{ __('ui.selector_title') }}</h2>
+                    <p class="eyebrow-light">{{ __('nav.selector') }}</p>
+                    <h2 class="mt-5 text-2xl leading-snug font-black text-white sm:text-3xl">{{ __('ui.selector_title') }}</h2>
                     <p class="mt-4 max-w-lg text-base leading-8 text-ink-300">{{ __('ui.selector_subtitle') }}</p>
 
-                    <a href="{{ route('selector') }}" class="btn bg-white text-ink-900 mt-8 hover:bg-ink-100">
+                    <a href="{{ route('selector') }}" class="btn-accent mt-8">
                         <x-ui-icon name="calculator" class="size-4" />
                         {{ __('ui.calculate') }}
                     </a>
@@ -164,9 +211,11 @@
                         ['icon' => 'calculator', 'key' => 'selector'],
                         ['icon' => 'wrench', 'key' => 'support'],
                     ] as $feature)
-                        <div class="rounded-xl bg-white/5 p-5">
-                            <x-ui-icon :name="$feature['icon']" class="size-6 text-accent-400" />
-                            <h3 class="mt-3 text-sm font-bold text-white">{{ __('ui.why.'.$feature['key'].'_title') }}</h3>
+                        <div class="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-colors duration-300 hover:border-white/20 hover:bg-white/10">
+                            <span class="grid size-10 place-items-center rounded-lg bg-accent-400/10 text-accent-400 ring-1 ring-accent-400/20">
+                                <x-ui-icon :name="$feature['icon']" class="size-5" />
+                            </span>
+                            <h3 class="mt-4 text-sm font-bold text-white">{{ __('ui.why.'.$feature['key'].'_title') }}</h3>
                             <p class="mt-1.5 text-xs leading-6 text-ink-400">{{ __('ui.why.'.$feature['key'].'_body') }}</p>
                         </div>
                     @endforeach
@@ -181,7 +230,8 @@
     @if ($featured->isNotEmpty())
         <section class="section pt-0">
             <div class="container-page">
-                <x-section-heading :eyebrow="__('ui.featured_title')"
+                {{-- The eyebrow repeated the title verbatim; the section label belongs here. --}}
+                <x-section-heading :eyebrow="__('nav.products')"
                                    :title="__('ui.featured_title')"
                                    :subtitle="__('ui.featured_subtitle')"
                                    :href="route('products.index')" />
@@ -216,20 +266,31 @@
     {{-- Brands                                                             --}}
     {{-- ------------------------------------------------------------------ --}}
     @if ($brands->isNotEmpty())
-        <section class="border-y border-ink-100 bg-ink-50 py-12">
+        <section class="border-y border-ink-100 bg-ink-50 py-14">
             <div class="container-page">
-                <p class="mb-8 text-center text-xs font-semibold tracking-[0.14em] text-ink-400 uppercase">
-                    {{ __('ui.brands_title') }}
-                </p>
+                <div class="mb-9 flex items-center gap-5">
+                    <div class="h-px flex-1 bg-ink-200"></div>
+                    <p class="shrink-0 text-xs font-semibold tracking-[0.14em] text-ink-400 uppercase">
+                        {{ __('ui.brands_title') }}
+                    </p>
+                    <div class="h-px flex-1 bg-ink-200"></div>
+                </div>
 
-                <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+                {{--
+                    Without real logo files this row is wordmarks, so it is set
+                    as one: even optical weight, generous tracking, and a single
+                    hover that brings the name to full ink.
+                --}}
+                <div class="flex flex-wrap items-center justify-center gap-x-12 gap-y-7">
                     @foreach ($brands as $brand)
                         <a href="{{ $brand->url() }}"
-                           class="opacity-60 grayscale transition duration-200 hover:opacity-100 hover:grayscale-0">
+                           class="group grayscale opacity-70 transition duration-300 ease-[var(--ease-out-quart)] hover:opacity-100 hover:grayscale-0">
                             @if ($brand->logo)
                                 <img src="{{ Storage::url($brand->logo) }}" alt="{{ $brand->name }}" loading="lazy" class="h-8 w-auto object-contain">
                             @else
-                                <span class="text-sm font-bold text-ink-500">{{ $brand->name }}</span>
+                                <span class="text-base font-black tracking-tight text-ink-500 transition-colors group-hover:text-ink-900">
+                                    {{ $brand->name }}
+                                </span>
                             @endif
                         </a>
                     @endforeach

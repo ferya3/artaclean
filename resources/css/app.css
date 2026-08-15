@@ -17,6 +17,11 @@
 | Karcher/Nilfisk/Tennant house style: white and light grey ground, near-black
 | type, one saturated brand colour used sparingly, and a safety-yellow accent
 | borrowed from the machines themselves for hover and highlight states.
+|
+| The visual idea underneath is "engineered precision" — the buyer is a
+| procurement manager reading specifications, so the page furniture borrows
+| from technical drawings: hairline rules, a blueprint grid on dark ground,
+| corner registration ticks, and numerals set in tabular figures.
 */
 
 @theme {
@@ -45,13 +50,25 @@
     --color-brand-800: #1843b3;
     --color-brand-900: #1a3c8d;
 
+    --color-accent-300: #ffe066;
     --color-accent-400: #ffd43b;
     --color-accent-500: #fcc419;
+    --color-accent-600: #eaa900;
 
-    --radius-card: 0.75rem;
+    --radius-card: 0.875rem;
 
-    --shadow-card: 0 1px 2px rgb(15 19 25 / 0.04), 0 8px 24px -12px rgb(15 19 25 / 0.12);
-    --shadow-card-hover: 0 2px 4px rgb(15 19 25 / 0.06), 0 18px 40px -16px rgb(15 19 25 / 0.22);
+    /*
+     * A three-step elevation ramp. Each step pairs a tight contact shadow with
+     * a wide, heavily-offset ambient one — a single blurred drop shadow reads
+     * as haze rather than as a raised surface.
+     */
+    --shadow-e1: 0 1px 2px rgb(15 19 25 / 0.05), 0 1px 3px -1px rgb(15 19 25 / 0.06);
+    --shadow-e2: 0 1px 2px rgb(15 19 25 / 0.04), 0 10px 24px -12px rgb(15 19 25 / 0.18);
+    --shadow-e3: 0 2px 4px rgb(15 19 25 / 0.05), 0 24px 48px -20px rgb(15 19 25 / 0.26);
+
+    /* Retained under their old names so existing markup keeps working. */
+    --shadow-card: var(--shadow-e2);
+    --shadow-card-hover: var(--shadow-e3);
 
     --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
@@ -73,6 +90,22 @@
         font-feature-settings: 'ss01';
     }
 
+    /*
+     * Vazirmatn at its heaviest weights sets loose at display sizes. Persian
+     * has no capitals to anchor the line, so headings need the tracking pulled
+     * in by hand or they read as separate words rather than one phrase.
+     */
+    h1,
+    h2,
+    h3 {
+        letter-spacing: -0.015em;
+        text-wrap: balance;
+    }
+
+    p {
+        text-wrap: pretty;
+    }
+
     /* Persian digits read better with tabular figures in spec tables. */
     table,
     .tabular {
@@ -92,6 +125,11 @@
             transition-duration: 0.01ms !important;
             scroll-behavior: auto !important;
         }
+    }
+
+    ::selection {
+        background: var(--color-accent-400);
+        color: var(--color-ink-950);
     }
 }
 
@@ -115,21 +153,38 @@
     .btn-primary,
     .btn-dark,
     .btn-outline,
-    .btn-ghost {
-        @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold
+    .btn-ghost,
+    .btn-accent {
+        @apply relative inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold
                transition-all duration-200 ease-[var(--ease-out-quart)] disabled:cursor-not-allowed disabled:opacity-50;
     }
 
+    /*
+     * The inset top highlight is what separates a solid fill from a moulded
+     * button; the shadow tightens on press so the surface reads as travelling
+     * down rather than just changing colour.
+     */
     .btn-primary {
-        @apply bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800;
+        @apply bg-brand-600 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_1px_2px_rgb(15_19_25/0.16)]
+               hover:-translate-y-px hover:bg-brand-700 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_6px_16px_-6px_rgb(28_102_241/0.6)]
+               active:translate-y-0 active:bg-brand-800 active:shadow-[inset_0_1px_2px_rgb(15_19_25/0.24)];
     }
 
     .btn-dark {
-        @apply bg-ink-900 text-white hover:bg-ink-800;
+        @apply bg-ink-900 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_1px_2px_rgb(15_19_25/0.16)]
+               hover:-translate-y-px hover:bg-ink-800 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_6px_16px_-6px_rgb(15_19_25/0.5)]
+               active:translate-y-0;
+    }
+
+    .btn-accent {
+        @apply bg-accent-400 text-ink-950 shadow-[inset_0_1px_0_rgb(255_255_255/0.4),0_1px_2px_rgb(15_19_25/0.16)]
+               hover:-translate-y-px hover:bg-accent-300 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.4),0_6px_16px_-6px_rgb(234_169_0/0.7)]
+               active:translate-y-0 active:bg-accent-500;
     }
 
     .btn-outline {
-        @apply border border-ink-200 bg-white text-ink-900 hover:border-ink-900 hover:bg-ink-50;
+        @apply border border-ink-200 bg-white text-ink-900 shadow-[var(--shadow-e1)]
+               hover:-translate-y-px hover:border-ink-300 hover:bg-white hover:shadow-[var(--shadow-e2)] active:translate-y-0;
     }
 
     .btn-ghost {
@@ -140,13 +195,23 @@
         @apply px-3.5 py-2 text-xs;
     }
 
-    .card,
-    .card-hover {
-        @apply rounded-[var(--radius-card)] border border-ink-100 bg-white shadow-[var(--shadow-card)];
+    .btn-lg {
+        @apply gap-2.5 px-6 py-3.5 text-base;
     }
 
+    .card,
     .card-hover {
-        @apply transition-shadow duration-300 ease-[var(--ease-out-quart)] hover:shadow-[var(--shadow-card-hover)];
+        @apply rounded-[var(--radius-card)] border border-ink-100 bg-white shadow-[var(--shadow-e1)];
+    }
+
+    /*
+     * Hover moves three things at once — lift, shadow depth and border weight.
+     * Shadow alone reads as a glow; the 2px travel is what sells the card as a
+     * physical object being picked up.
+     */
+    .card-hover {
+        @apply transition-[transform,box-shadow,border-color] duration-300 ease-[var(--ease-out-quart)]
+               hover:-translate-y-0.5 hover:border-ink-200 hover:shadow-[var(--shadow-e3)];
     }
 
     .field-label {
@@ -154,8 +219,8 @@
     }
 
     .field {
-        @apply w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900
-               placeholder:text-ink-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none;
+        @apply w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900 shadow-[inset_0_1px_2px_rgb(15_19_25/0.04)]
+               transition-colors placeholder:text-ink-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none;
     }
 
     .field-error {
@@ -166,12 +231,44 @@
         @apply inline-flex items-center gap-1.5 rounded-full border border-ink-200 bg-white px-3 py-1 text-xs font-medium text-ink-700;
     }
 
+    /*
+     * The eyebrow carries a short accent rule in front of it — the one place
+     * the safety yellow appears on light ground, which is what ties the light
+     * and dark halves of the page together.
+     */
     .eyebrow {
-        @apply text-xs font-semibold tracking-[0.14em] text-brand-600 uppercase;
+        @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.14em] text-brand-600 uppercase;
+    }
+
+    .eyebrow::before {
+        content: '';
+        @apply block h-px w-6 shrink-0 bg-accent-500;
+    }
+
+    .eyebrow-light {
+        @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.16em] text-accent-400 uppercase;
+    }
+
+    .eyebrow-light::before {
+        content: '';
+        @apply block h-px w-6 shrink-0 bg-accent-400/70;
     }
 
     .section {
         @apply py-16 sm:py-20 lg:py-24;
+    }
+
+    /*
+     * Spec figures: the numeral is the content, the label and unit are
+     * scaffolding. Setting the three at clearly different weights lets a buyer
+     * scan a row of machines by number alone.
+     */
+    .spec-value {
+        @apply text-base leading-6 font-black text-ink-900 tabular-nums;
+    }
+
+    .spec-label {
+        @apply mt-1 block text-[11px] leading-4 font-medium text-ink-400;
     }
 
     .prose-article {
@@ -223,6 +320,118 @@
 */
 
 @layer utilities {
+    /*
+     * Blueprint grid. A technical-drawing ground for dark sections — it gives
+     * the large flat panels a sense of scale that a plain fill cannot, and it
+     * costs nothing: two gradients, no image request.
+     */
+    .blueprint {
+        background-image:
+            linear-gradient(to right, rgb(255 255 255 / 0.055) 1px, transparent 1px),
+            linear-gradient(to bottom, rgb(255 255 255 / 0.055) 1px, transparent 1px);
+        background-size: 56px 56px;
+    }
+
+    .blueprint-fine {
+        background-image:
+            linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+            linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+        background-size: 24px 24px;
+    }
+
+    .blueprint-ink {
+        background-image:
+            linear-gradient(to right, rgb(15 19 25 / 0.04) 1px, transparent 1px),
+            linear-gradient(to bottom, rgb(15 19 25 / 0.04) 1px, transparent 1px);
+        background-size: 56px 56px;
+    }
+
+    /*
+     * Registration ticks, as on a technical drawing. Two opposite corners is
+     * enough to read as a frame, and drawing only two keeps the motif quiet
+     * until the card is actually hovered.
+     */
+    .tick-frame {
+        position: relative;
+    }
+
+    .tick-frame::before,
+    .tick-frame::after {
+        content: '';
+        position: absolute;
+        width: 0.875rem;
+        height: 0.875rem;
+        border-color: var(--color-accent-500);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s var(--ease-out-quart);
+    }
+
+    .tick-frame::before {
+        top: -1px;
+        inset-inline-start: -1px;
+        border-top-width: 2px;
+        border-inline-start-width: 2px;
+        border-start-start-radius: var(--radius-card);
+    }
+
+    .tick-frame::after {
+        bottom: -1px;
+        inset-inline-end: -1px;
+        border-bottom-width: 2px;
+        border-inline-end-width: 2px;
+        border-end-end-radius: var(--radius-card);
+    }
+
+    .tick-frame:hover::before,
+    .tick-frame:hover::after {
+        opacity: 1;
+    }
+
+    /*
+     * Key lights behind the dark panels.
+     *
+     * The obvious way to draw these is a rounded div with a large `blur()`,
+     * but a 120px blur radius is a genuinely expensive raster — enough to
+     * stall compositing on software rendering and to cost frames on the
+     * mid-range phones this audience browses from. A radial gradient paints
+     * the identical falloff with no filter at all.
+     */
+    .glow-brand {
+        background: radial-gradient(closest-side, rgb(28 102 241 / 0.3), rgb(28 102 241 / 0.08), transparent);
+    }
+
+    .glow-brand-soft {
+        background: radial-gradient(closest-side, rgb(21 81 221 / 0.22), transparent);
+    }
+
+    .glow-accent {
+        background: radial-gradient(closest-side, rgb(252 196 25 / 0.16), transparent);
+    }
+
+    /* A hairline that fades out at both ends — for section dividers. */
+    .rule-fade {
+        height: 1px;
+        background: linear-gradient(
+            to right,
+            transparent,
+            var(--color-ink-200) 15%,
+            var(--color-ink-200) 85%,
+            transparent
+        );
+    }
+
+    .rule-fade-light {
+        height: 1px;
+        background: linear-gradient(
+            to right,
+            transparent,
+            rgb(255 255 255 / 0.16) 15%,
+            rgb(255 255 255 / 0.16) 85%,
+            transparent
+        );
+    }
+
     /* Swiper's arrows are replaced with buttons that match the design system. */
     .swiper-button-next::after,
     .swiper-button-prev::after {
