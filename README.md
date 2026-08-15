@@ -111,6 +111,57 @@ php artisan serve
 For the full stack, keep `.env.example` as shipped (MySQL 8 + Redis) and run
 `php artisan horizon` alongside.
 
+### Windows (cmd)
+
+> **Read this first.** Horizon requires `ext-pcntl` and `ext-posix`, which do not
+> exist in PHP for Windows at all. A plain `composer install` therefore fails on
+> Windows. Skip those two platform requirements — nothing but the `horizon`
+> command itself needs them, and queues run inline locally anyway.
+
+```bat
+:: 1. Dependencies
+composer install --ignore-platform-req=ext-pcntl --ignore-platform-req=ext-posix
+npm install
+
+:: 2. Environment
+copy .env.example .env
+php artisan key:generate
+
+:: 3. Point the app at SQLite, files and an inline queue
+powershell -Command "(Get-Content .env) -replace '^DB_CONNECTION=.*','DB_CONNECTION=sqlite' -replace '^CACHE_STORE=.*','CACHE_STORE=file' -replace '^SESSION_DRIVER=.*','SESSION_DRIVER=file' -replace '^QUEUE_CONNECTION=.*','QUEUE_CONNECTION=sync' | Set-Content .env"
+
+:: Comment out the MySQL host settings so they cannot override the above
+powershell -Command "(Get-Content .env) -replace '^(DB_(HOST|PORT|DATABASE|USERNAME|PASSWORD)=)','# $1' | Set-Content .env"
+
+:: 4. Database
+type nul > database\database.sqlite
+php artisan migrate --seed
+
+:: 5. Build and run
+npm run build
+php artisan serve
+```
+
+Then open <http://127.0.0.1:8000>.
+
+**Windows notes**
+
+* **PHP 8.4+** with `pdo_sqlite`, `sqlite3`, `mbstring`, `fileinfo`, `intl`,
+  `openssl`, `curl`, `zip` and `gd` enabled in `php.ini`. Laragon and Herd ship
+  these on; a bare `php.ini-development` does not — uncomment them.
+* **Using MySQL instead** (Laragon/XAMPP): skip step 3, create an empty
+  `artaclean` database, and set `DB_USERNAME` / `DB_PASSWORD` in `.env` by hand.
+* **`php artisan storage:link`** creates a symlink, which Windows only permits
+  under Developer Mode or an Administrator prompt. You only need it once uploaded
+  images have to be served.
+* **`php artisan horizon` will not run on Windows.** With `QUEUE_CONNECTION=sync`
+  jobs execute inline, so nothing is lost locally. Production is Ubuntu, where
+  Horizon runs under systemd — see `deploy/`.
+* **Prefer WSL2** if you want the environment to match production: install
+  Ubuntu 24.04 from the Microsoft Store, clone the repo *inside* the Linux
+  filesystem (`~/artaclean`, not `/mnt/c/...`, which is dramatically slower), and
+  follow the Unix instructions above unchanged.
+
 ### Seeded accounts
 
 | Role | Email | Password | Panel |
