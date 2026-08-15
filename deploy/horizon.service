@@ -1,0 +1,34 @@
+# -----------------------------------------------------------------------------
+# Laravel Horizon as a systemd unit.
+#
+#   sudo cp deploy/horizon.service /etc/systemd/system/artaclean-horizon.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now artaclean-horizon
+#
+# After each deploy run `php artisan horizon:terminate`; systemd restarts the
+# master supervisor, which picks up the new code without dropping jobs.
+# -----------------------------------------------------------------------------
+
+[Unit]
+Description=ArtaClean Horizon queue supervisor
+After=network.target redis-server.service
+Requires=redis-server.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/artaclean/current
+ExecStart=/usr/bin/php8.4 /var/www/artaclean/current/artisan horizon
+Restart=always
+RestartSec=3
+
+# Horizon shuts down gracefully, so give in-flight jobs time to finish.
+KillSignal=SIGTERM
+TimeoutStopSec=120
+
+StandardOutput=append:/var/log/artaclean/horizon.log
+StandardError=append:/var/log/artaclean/horizon-error.log
+
+[Install]
+WantedBy=multi-user.target

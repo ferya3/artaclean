@@ -1,0 +1,29 @@
+# -----------------------------------------------------------------------------
+# Laravel's scheduler, run as a long-lived service instead of a crontab entry.
+#
+#   sudo cp deploy/scheduler.service /etc/systemd/system/artaclean-scheduler.service
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now artaclean-scheduler
+#
+# Drives the Horizon metric snapshots and the nightly quote-expiry sweep
+# registered in routes/console.php.
+# -----------------------------------------------------------------------------
+
+[Unit]
+Description=ArtaClean scheduler
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/artaclean/current
+ExecStart=/usr/bin/php8.4 /var/www/artaclean/current/artisan schedule:work
+Restart=always
+RestartSec=5
+
+StandardOutput=append:/var/log/artaclean/scheduler.log
+StandardError=append:/var/log/artaclean/scheduler-error.log
+
+[Install]
+WantedBy=multi-user.target

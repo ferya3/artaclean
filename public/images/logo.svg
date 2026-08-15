@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 48" width="220" height="48">
+  <rect width="40" height="40" x="2" y="4" rx="9" fill="#0f1319"/>
+  <path d="M11 33 22 11l11 22h-6l-5-10.4L17 33h-6Z" fill="#fff"/>
+  <text x="52" y="32" font-family="system-ui, sans-serif" font-size="22" font-weight="800" fill="#0f1319">ArtaClean</text>
+</svg>

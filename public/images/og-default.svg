@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#0f1319"/>
+  <rect width="40" height="40" x="80" y="80" rx="9" fill="#fff"/>
+  <path d="M89 111 100 87l11 24h-6l-5-11-5 11h-6Z" fill="#0f1319"/>
+  <text x="136" y="112" font-family="system-ui, sans-serif" font-size="30" font-weight="800" fill="#fff">ArtaClean</text>
+  <text x="80" y="330" font-family="system-ui, sans-serif" font-size="62" font-weight="800" fill="#fff">Industrial cleaning</text>
+  <text x="80" y="410" font-family="system-ui, sans-serif" font-size="62" font-weight="800" fill="#3286fc">equipment</text>
+  <text x="80" y="500" font-family="system-ui, sans-serif" font-size="28" fill="#8593a5">Scrubbers · Sweepers · Vacuums · Steam cleaners</text>
+</svg>

@@ -1,0 +1,249 @@
+@import 'tailwindcss';
+
+@import '@fontsource-variable/vazirmatn/index.css';
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+@import 'swiper/css/thumbs';
+@import 'swiper/css/free-mode';
+
+@source '../views';
+@source '../../app/Livewire';
+
+/*
+|-----------------------------------------------------------------------------
+| Design tokens
+|-----------------------------------------------------------------------------
+| Karcher/Nilfisk/Tennant house style: white and light grey ground, near-black
+| type, one saturated brand colour used sparingly, and a safety-yellow accent
+| borrowed from the machines themselves for hover and highlight states.
+*/
+
+@theme {
+    --font-sans: 'Vazirmatn Variable', ui-sans-serif, system-ui, sans-serif;
+
+    --color-ink-50: #f6f7f8;
+    --color-ink-100: #eceef1;
+    --color-ink-200: #d5dae1;
+    --color-ink-300: #b0b9c6;
+    --color-ink-400: #8593a5;
+    --color-ink-500: #66748a;
+    --color-ink-600: #505c70;
+    --color-ink-700: #414a5b;
+    --color-ink-800: #383f4d;
+    --color-ink-900: #0f1319;
+    --color-ink-950: #080b0f;
+
+    --color-brand-50: #eef6ff;
+    --color-brand-100: #d9ecff;
+    --color-brand-200: #bcdeff;
+    --color-brand-300: #8ec9ff;
+    --color-brand-400: #59aaff;
+    --color-brand-500: #3286fc;
+    --color-brand-600: #1c66f1;
+    --color-brand-700: #1551dd;
+    --color-brand-800: #1843b3;
+    --color-brand-900: #1a3c8d;
+
+    --color-accent-400: #ffd43b;
+    --color-accent-500: #fcc419;
+
+    --radius-card: 0.75rem;
+
+    --shadow-card: 0 1px 2px rgb(15 19 25 / 0.04), 0 8px 24px -12px rgb(15 19 25 / 0.12);
+    --shadow-card-hover: 0 2px 4px rgb(15 19 25 / 0.06), 0 18px 40px -16px rgb(15 19 25 / 0.22);
+
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/*
+|-----------------------------------------------------------------------------
+| Base
+|-----------------------------------------------------------------------------
+*/
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        @apply bg-white text-ink-900 antialiased;
+        font-feature-settings: 'ss01';
+    }
+
+    /* Persian digits read better with tabular figures in spec tables. */
+    table,
+    .tabular {
+        font-variant-numeric: tabular-nums;
+    }
+
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-brand-600;
+    }
+
+    /* The design uses very little motion by choice; honour the OS switch too. */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+}
+
+/*
+|-----------------------------------------------------------------------------
+| Components
+|-----------------------------------------------------------------------------
+*/
+
+@layer components {
+    .container-page {
+        @apply mx-auto w-full max-w-[88rem] px-4 sm:px-6 lg:px-10;
+    }
+
+    /*
+     * Tailwind 4 will not `@apply` one custom class inside another, so the
+     * shared button and card bases are spelled out per variant. The variants
+     * are still safe to combine in markup (`class="btn-primary btn-sm"`).
+     */
+    .btn,
+    .btn-primary,
+    .btn-dark,
+    .btn-outline,
+    .btn-ghost {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold
+               transition-all duration-200 ease-[var(--ease-out-quart)] disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .btn-primary {
+        @apply bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800;
+    }
+
+    .btn-dark {
+        @apply bg-ink-900 text-white hover:bg-ink-800;
+    }
+
+    .btn-outline {
+        @apply border border-ink-200 bg-white text-ink-900 hover:border-ink-900 hover:bg-ink-50;
+    }
+
+    .btn-ghost {
+        @apply text-ink-600 hover:bg-ink-50 hover:text-ink-900;
+    }
+
+    .btn-sm {
+        @apply px-3.5 py-2 text-xs;
+    }
+
+    .card,
+    .card-hover {
+        @apply rounded-[var(--radius-card)] border border-ink-100 bg-white shadow-[var(--shadow-card)];
+    }
+
+    .card-hover {
+        @apply transition-shadow duration-300 ease-[var(--ease-out-quart)] hover:shadow-[var(--shadow-card-hover)];
+    }
+
+    .field-label {
+        @apply mb-1.5 block text-sm font-medium text-ink-700;
+    }
+
+    .field {
+        @apply w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900
+               placeholder:text-ink-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none;
+    }
+
+    .field-error {
+        @apply mt-1.5 text-xs text-red-600;
+    }
+
+    .chip {
+        @apply inline-flex items-center gap-1.5 rounded-full border border-ink-200 bg-white px-3 py-1 text-xs font-medium text-ink-700;
+    }
+
+    .eyebrow {
+        @apply text-xs font-semibold tracking-[0.14em] text-brand-600 uppercase;
+    }
+
+    .section {
+        @apply py-16 sm:py-20 lg:py-24;
+    }
+
+    .prose-article {
+        @apply max-w-none leading-8 text-ink-700;
+    }
+
+    .prose-article h2 {
+        @apply mt-10 mb-4 text-2xl font-bold text-ink-900;
+    }
+
+    .prose-article h3 {
+        @apply mt-8 mb-3 text-xl font-semibold text-ink-900;
+    }
+
+    .prose-article p {
+        @apply mb-5;
+    }
+
+    .prose-article ul {
+        @apply mb-5 list-disc space-y-2 ps-6;
+    }
+
+    .prose-article ol {
+        @apply mb-5 list-decimal space-y-2 ps-6;
+    }
+
+    .prose-article a {
+        @apply text-brand-700 underline underline-offset-4 hover:text-brand-800;
+    }
+
+    .prose-article table {
+        @apply my-6 w-full border-collapse text-sm;
+    }
+
+    .prose-article th,
+    .prose-article td {
+        @apply border border-ink-200 px-3 py-2 text-start;
+    }
+
+    .prose-article blockquote {
+        @apply my-6 border-s-4 border-brand-500 bg-ink-50 px-5 py-4 text-ink-800;
+    }
+}
+
+/*
+|-----------------------------------------------------------------------------
+| Utilities
+|-----------------------------------------------------------------------------
+*/
+
+@layer utilities {
+    /* Swiper's arrows are replaced with buttons that match the design system. */
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+        display: none;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: var(--color-brand-600);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* Flip icons that imply direction when the document runs right to left. */
+    [dir='rtl'] .flip-rtl {
+        transform: scaleX(-1);
+    }
+}
