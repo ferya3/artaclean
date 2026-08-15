@@ -190,14 +190,52 @@ control including dealer scoping.
 
 ## Deployment
 
+### First install, on a fresh Ubuntu 24.04 server
+
+```bash
+sudo apt-get update && sudo apt-get install -y git && \
+sudo git clone https://github.com/ferya3/artaclean.git /var/www/artaclean/current && \
+sudo DOMAIN=artaclean.ir SEED=true bash /var/www/artaclean/current/deploy/provision.sh
+```
+
+That installs PHP 8.4-FPM, Nginx, MySQL 8, Redis, Composer and Node 22; creates
+the database with a generated password; installs dependencies; builds assets;
+migrates; and brings up Horizon and the scheduler under systemd.
+
+Then, once DNS points at the box:
+
+```bash
+sudo certbot --nginx -d artaclean.ir -d www.artaclean.ir
+```
+
+Notes:
+
+* **The repository is private**, so the clone will ask for credentials. Use a
+  deploy key, or a personal access token in the URL.
+* **`SEED=true` loads the demo catalog.** Drop it on a real production install —
+  seeding writes 17 sample machines and demo accounts with known passwords.
+* **`provision.sh` is safe to re-run.** It never overwrites an existing `.env`,
+  never regenerates `APP_KEY` (which would invalidate every session), and never
+  drops a database. It reuses the `DB_PASSWORD` already in `.env`.
+* **`nginx.conf` is HTTP-only by design.** A fresh server has no certificate, so
+  hard-coded `ssl_certificate` paths would fail `nginx -t` and block the reload
+  you need to obtain one. Certbot adds the TLS block and the redirect in place.
+
+### Routine releases
+
+```bash
+cd /var/www/artaclean/current && ./deploy/deploy.sh
+```
+
 `deploy/` contains the production pieces:
 
 | File | Purpose |
 |---|---|
+| `provision.sh` | One-shot server bootstrap: packages, database, services, vhost |
+| `deploy.sh` | Routine release: pull, install, build, migrate, cache, restart workers |
 | `nginx.conf` | Site config with Cloudflare real-IP, security headers, asset caching |
 | `horizon.service` | Horizon under systemd |
 | `scheduler.service` | `schedule:work` under systemd |
-| `deploy.sh` | Pull, install, build, migrate, cache, restart workers |
 
 Queue supervisors are split in `config/horizon.php`: `notifications` (a new lead
 must reach sales immediately), `search` (Scout re-indexing), and `default`.
