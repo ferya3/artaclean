@@ -10,6 +10,7 @@ use App\Models\Environment;
 use App\Models\Faq;
 use App\Models\Product;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -150,7 +151,7 @@ return [
     'serializable_classes' => [
         Illuminate\Database\Eloquent\Collection::class,
         Collection::class,
-        Illuminate\Support\Carbon::class,
+        Carbon::class,
         CarbonImmutable::class,
 
         Blog::class,
