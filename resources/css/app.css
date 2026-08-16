@@ -149,14 +149,26 @@
      * shared button and card bases are spelled out per variant. The variants
      * are still safe to combine in markup (`class="btn-primary btn-sm"`).
      */
+    /*
+     * Sizing is mobile-first and set by the thumb, not by the design.
+     *
+     * Material Design 3 and Lighthouse's tap-target audit both want an
+     * interactive element to be at least 48x48 CSS px on a touch screen; Apple's
+     * HIG says 44x44. So the floor is 48px on mobile and relaxes to 44px from
+     * `sm:` up, where a mouse is doing the pointing and the extra height only
+     * costs density. `min-h` rather than padding, so a button keeps its target
+     * even when its label wraps to one short word.
+     */
     .btn,
     .btn-primary,
     .btn-dark,
     .btn-outline,
     .btn-ghost,
     .btn-accent {
-        @apply relative inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold
-               transition-all duration-200 ease-[var(--ease-out-quart)] disabled:cursor-not-allowed disabled:opacity-50;
+        @apply relative inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3
+               text-base font-semibold transition-all duration-200 ease-[var(--ease-out-quart)]
+               disabled:cursor-not-allowed disabled:opacity-50
+               sm:min-h-11 sm:text-sm;
     }
 
     /*
@@ -191,12 +203,25 @@
         @apply text-ink-600 hover:bg-ink-50 hover:text-ink-900;
     }
 
+    /*
+     * Even the "small" button stays a legal tap target on a phone. It only
+     * shrinks to a dense control from `sm:` up, where the pointer is precise.
+     */
     .btn-sm {
-        @apply px-3.5 py-2 text-xs;
+        @apply min-h-11 px-4 py-2.5 text-sm sm:min-h-9 sm:px-3.5 sm:py-2 sm:text-xs;
     }
 
     .btn-lg {
-        @apply gap-2.5 px-6 py-3.5 text-base;
+        @apply min-h-13 gap-2.5 px-6 py-3.5 text-base sm:min-h-12;
+    }
+
+    /* Icon-only controls have no label to widen them, so square them off. */
+    .btn-icon {
+        @apply size-12 shrink-0 !px-0 sm:size-11;
+    }
+
+    .btn-icon-sm {
+        @apply size-11 shrink-0 !px-0 sm:size-9;
     }
 
     .card,
@@ -218,17 +243,38 @@
         @apply mb-1.5 block text-sm font-medium text-ink-700;
     }
 
+    /*
+     * 16px on mobile is not a taste call: iOS Safari zooms the viewport when a
+     * focused input's font-size is below 16px, which shunts the layout sideways
+     * mid-form. It drops to 14px from `sm:` up, where no such rule applies.
+     */
     .field {
-        @apply w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900 shadow-[inset_0_1px_2px_rgb(15_19_25/0.04)]
-               transition-colors placeholder:text-ink-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none;
+        @apply min-h-12 w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-base text-ink-900
+               shadow-[inset_0_1px_2px_rgb(15_19_25/0.04)] transition-colors placeholder:text-ink-400
+               focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none
+               sm:min-h-11 sm:text-sm;
     }
 
     .field-error {
-        @apply mt-1.5 text-xs text-red-600;
+        @apply mt-1.5 text-sm text-red-600 sm:text-xs;
     }
 
     .chip {
-        @apply inline-flex items-center gap-1.5 rounded-full border border-ink-200 bg-white px-3 py-1 text-xs font-medium text-ink-700;
+        @apply inline-flex min-h-9 items-center gap-1.5 rounded-full border border-ink-200 bg-white px-3.5 py-1.5
+               text-sm font-medium text-ink-700 sm:min-h-0 sm:px-3 sm:py-1 sm:text-xs;
+    }
+
+    /*
+     * A checkbox is 16px square — far under the tap-target floor — so the whole
+     * label row carries the target instead. Used by the catalog filter panel.
+     */
+    .check-row {
+        @apply flex min-h-11 cursor-pointer items-center gap-3 rounded-lg py-1.5 text-base text-ink-700
+               hover:text-ink-900 sm:min-h-0 sm:py-1 sm:text-sm;
+    }
+
+    .check-box {
+        @apply size-5 shrink-0 rounded border-ink-300 text-brand-600 focus:ring-brand-500 sm:size-4;
     }
 
     /*

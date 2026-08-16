@@ -35,8 +35,14 @@
             <div class="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent"></div>
         </div>
 
-        <div class="container-page py-24 sm:py-32 lg:py-40">
-            <div class="max-w-3xl">
+        {{--
+            Two columns from lg up, stacked on a phone. The copy comes first in
+            source order on every breakpoint: it carries the H1, and on mobile a
+            visitor should be reading the proposition before an illustration
+            pushes it under the fold.
+        --}}
+        <div class="container-page grid items-center gap-12 pt-24 pb-16 sm:pt-28 lg:grid-cols-12 lg:gap-10 lg:pt-36 lg:pb-28">
+            <div class="lg:col-span-7">
                 <p class="eyebrow-light">{{ __('ui.hero_eyebrow') }}</p>
 
                 <h1 class="mt-6 text-[2rem] leading-[1.2] font-black text-white sm:text-5xl sm:leading-[1.15] lg:text-[3.5rem] lg:leading-[1.1]">
@@ -47,18 +53,23 @@
                     {{ __('ui.hero_subtitle') }}
                 </p>
 
-                <div class="mt-10 flex flex-wrap gap-3">
-                    <a href="{{ route('products.index') }}" class="btn-accent btn-lg">
+                {{--
+                    Full-width stacked buttons on a phone: a wrapped row of
+                    pills leaves half-width targets and ragged edges, and the
+                    primary action should not have to be aimed at.
+                --}}
+                <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    <a href="{{ route('products.index') }}" class="btn-accent btn-lg w-full sm:w-auto">
                         {{ __('ui.view_products') }}
                         <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
                     </a>
                     <a href="{{ route('selector') }}"
-                       class="btn btn-lg border border-white/20 bg-white/5 text-white backdrop-blur-sm hover:-translate-y-px hover:border-white/40 hover:bg-white/10">
+                       class="btn btn-lg w-full border border-white/20 bg-white/5 text-white backdrop-blur-sm hover:-translate-y-px hover:border-white/40 hover:bg-white/10 sm:w-auto">
                         <x-ui-icon name="calculator" class="size-4" />
                         {{ __('ui.calculate') }}
                     </a>
                     <a href="{{ route('downloads.index') }}"
-                       class="btn btn-lg text-ink-300 hover:bg-white/5 hover:text-white">
+                       class="btn btn-lg w-full text-ink-300 hover:bg-white/5 hover:text-white sm:w-auto">
                         <x-ui-icon name="download" class="size-4" />
                         {{ __('ui.download_catalog') }}
                     </a>
@@ -84,12 +95,78 @@
 
                 <ul class="mt-8 flex flex-wrap gap-x-7 gap-y-3">
                     @foreach (['warranty', 'parts', 'service'] as $signal)
-                        <li class="flex items-center gap-2 text-sm text-ink-300">
+                        <li class="flex items-center gap-2 text-sm text-ink-300 sm:text-base lg:text-sm">
                             <x-ui-icon name="check-circle" class="size-4 shrink-0 text-accent-400" />
                             {{ __('ui.hero_trust.'.$signal) }}
                         </li>
                     @endforeach
                 </ul>
+            </div>
+
+            {{--
+                The machine, framed 3:2. `aspect-3/2` reserves the box before
+                the image decodes, so the hero cannot shift once it lands —
+                which is the whole of the CLS budget on this page.
+            --}}
+            <div class="lg:col-span-5">
+                <figure class="relative">
+                    <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-ink-950 shadow-[0_30px_60px_-20px_rgb(0_0_0/0.8)]">
+                        <img src="{{ asset('images/hero-machine.svg') }}"
+                             alt="{{ __('ui.hero_image_alt') }}"
+                             width="1200"
+                             height="800"
+                             fetchpriority="high"
+                             decoding="async"
+                             class="aspect-3/2 w-full object-cover">
+
+                        {{-- Reads as a lens edge rather than a flat border. --}}
+                        <div class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_1px_0_rgb(255_255_255/0.12)]"></div>
+                    </div>
+
+                    <figcaption class="mt-4 flex items-center gap-2 text-xs text-ink-400">
+                        <span class="h-px w-6 bg-accent-400"></span>
+                        {{ __('ui.hero_image_caption') }}
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    {{-- ------------------------------------------------------------------ --}}
+    {{-- Who we are                                                         --}}
+    {{-- ------------------------------------------------------------------ --}}
+    <section class="border-b border-ink-100 bg-white py-16 sm:py-20 lg:py-24">
+        <div class="container-page grid gap-12 lg:grid-cols-12 lg:gap-16">
+            <div class="lg:col-span-5">
+                <p class="eyebrow">{{ __('ui.company.eyebrow') }}</p>
+                <h2 class="mt-4 text-2xl leading-tight font-black tracking-tight text-ink-900 sm:text-3xl lg:text-4xl">
+                    {{ __('ui.company.title') }}
+                </h2>
+
+                <a href="{{ route('about') }}" class="btn-outline btn-sm mt-8 w-full sm:w-auto">
+                    {{ __('ui.company.more') }}
+                    <x-ui-icon name="arrow-left" class="size-3.5 flip-rtl" />
+                </a>
+            </div>
+
+            <div class="lg:col-span-7">
+                <div class="space-y-5 text-base leading-8 text-ink-600 sm:text-lg sm:leading-9">
+                    <p>{{ __('ui.company.lead') }}</p>
+                    <p>{{ __('ui.company.body') }}</p>
+                </div>
+
+                <dl class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
+                    @foreach (['experience', 'clients', 'coverage'] as $fact)
+                        <div class="border-t border-ink-200 pt-4">
+                            <dt class="tabular text-2xl font-black text-ink-900 sm:text-3xl">
+                                {{ __('ui.company.facts.'.$fact.'_value') }}
+                            </dt>
+                            <dd class="mt-1.5 text-sm leading-6 text-ink-500">
+                                {{ __('ui.company.facts.'.$fact.'_label') }}
+                            </dd>
+                        </div>
+                    @endforeach
+                </dl>
             </div>
         </div>
     </section>

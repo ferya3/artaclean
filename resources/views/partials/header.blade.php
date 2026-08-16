@@ -4,7 +4,31 @@
     $navEnvironments = $navigation->environments();
 @endphp
 
-<header x-data="{ mobile: false, mega: null }" class="sticky top-0 z-50 border-b border-ink-100 bg-white/95 backdrop-blur">
+{{--
+    The bar is out of the way on arrival and slides in once the visitor starts
+    scrolling, so the hero owns the first screen. It is `fixed` rather than
+    `sticky` for that reason: a sticky bar still occupies a row in the layout
+    even while hidden, which would push the hero down by its own height.
+
+    `scrolled` is seeded from the live scroll position on init, so a reload
+    partway down a page does not start with the bar missing. It is also forced
+    open whenever the mobile drawer is open or focus enters the bar — otherwise
+    a keyboard user at the top of the page could tab into an invisible menu.
+--}}
+<header x-data="{
+            mobile: false,
+            mega: null,
+            scrolled: false,
+            update() { this.scrolled = window.scrollY > 80 },
+        }"
+        x-init="update()"
+        @scroll.window.passive="update()"
+        @focusin="scrolled = true"
+        @keydown.escape.window="mobile = false; mega = null"
+        :class="(scrolled || mobile) ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'"
+        class="fixed inset-x-0 top-0 z-50 border-b border-ink-100 bg-white/95 backdrop-blur
+               transition-[transform,opacity] duration-300 ease-[var(--ease-out-quart)]
+               motion-reduce:transition-none">
     {{-- Utility bar: phone number and language, out of the way but always there. --}}
     <div class="hidden border-b border-ink-100 bg-ink-50 lg:block">
         <div class="container-page flex h-9 items-center justify-between text-xs text-ink-600">
@@ -110,7 +134,7 @@
         </nav>
 
         <div class="flex items-center gap-2">
-            <a href="{{ route('products.index') }}" class="btn-ghost btn-sm hidden sm:inline-flex" aria-label="{{ __('ui.search_placeholder') }}">
+            <a href="{{ route('products.index') }}" class="btn-ghost btn-icon-sm hidden sm:inline-flex" aria-label="{{ __('ui.search_placeholder') }}">
                 <x-ui-icon name="search" class="size-4" />
             </a>
 
@@ -118,41 +142,44 @@
                 {{ __('ui.free_consultation') }}
             </a>
 
+            {{-- 44px square on touch: the one control every mobile visitor aims at. --}}
             <button type="button"
-                    class="btn-ghost btn-sm lg:hidden"
+                    class="btn-ghost btn-icon-sm lg:hidden"
                     @click="mobile = !mobile"
                     :aria-expanded="mobile"
+                    aria-controls="mobile-nav"
                     aria-label="{{ __('nav.open_menu') }}">
-                <x-ui-icon name="menu" class="size-5" x-show="!mobile" />
-                <x-ui-icon name="close" class="size-5" x-cloak x-show="mobile" />
+                <x-ui-icon name="menu" class="size-6" x-show="!mobile" />
+                <x-ui-icon name="close" class="size-6" x-cloak x-show="mobile" />
             </button>
         </div>
     </div>
 
     {{-- Mobile drawer --}}
-    <div x-cloak x-show="mobile" x-transition.opacity class="border-t border-ink-100 bg-white lg:hidden">
+    <div id="mobile-nav" x-cloak x-show="mobile" x-transition.opacity
+         class="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-ink-100 bg-white lg:hidden">
         <div class="container-page space-y-1 py-4">
             <p class="eyebrow pt-2 pb-1">{{ __('nav.categories') }}</p>
             @foreach ($navCategories as $category)
-                <a href="{{ $category->url() }}" class="block rounded-lg px-3 py-2.5 text-sm text-ink-700 hover:bg-ink-50">
+                <a href="{{ $category->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
                     {{ $category->name }}
                 </a>
             @endforeach
 
             <p class="eyebrow pt-4 pb-1">{{ __('nav.environments') }}</p>
             @foreach ($navEnvironments as $environment)
-                <a href="{{ $environment->url() }}" class="block rounded-lg px-3 py-2.5 text-sm text-ink-700 hover:bg-ink-50">
+                <a href="{{ $environment->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
                     {{ $environment->name }}
                 </a>
             @endforeach
 
             <div class="grid gap-1 pt-4">
-                <a href="{{ route('selector') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-brand-700 hover:bg-brand-50">{{ __('nav.selector') }}</a>
-                <a href="{{ route('rental') }}" class="block rounded-lg px-3 py-2.5 text-sm text-ink-700 hover:bg-ink-50">{{ __('nav.rental') }}</a>
-                <a href="{{ route('brands.index') }}" class="block rounded-lg px-3 py-2.5 text-sm text-ink-700 hover:bg-ink-50">{{ __('nav.brands') }}</a>
-                <a href="{{ route('downloads.index') }}" class="block rounded-lg px-3 py-2.5 text-sm text-ink-700 hover:bg-ink-50">{{ __('nav.downloads') }}</a>
-                <a href="{{ route('blog.index') }}" class="block rounded-lg px-3 py-2.5 text-sm text-ink-700 hover:bg-ink-50">{{ __('nav.blog') }}</a>
-                <a href="{{ route('contact') }}" class="block rounded-lg px-3 py-2.5 text-sm text-ink-700 hover:bg-ink-50">{{ __('nav.contact') }}</a>
+                <a href="{{ route('selector') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base font-semibold text-brand-700 hover:bg-brand-50">{{ __('nav.selector') }}</a>
+                <a href="{{ route('rental') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.rental') }}</a>
+                <a href="{{ route('brands.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.brands') }}</a>
+                <a href="{{ route('downloads.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.downloads') }}</a>
+                <a href="{{ route('blog.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.blog') }}</a>
+                <a href="{{ route('contact') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.contact') }}</a>
             </div>
 
             <a href="{{ route('contact') }}" class="btn-primary mt-4 w-full">{{ __('ui.free_consultation') }}</a>

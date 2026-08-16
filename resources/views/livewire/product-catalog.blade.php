@@ -52,9 +52,9 @@
                     <legend class="field-label">{{ __('admin.field.brand') }}</legend>
                     <div class="max-h-56 space-y-1.5 overflow-y-auto pe-1">
                         @foreach ($facets['brands'] as $slug => $facet)
-                            <label class="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700">
+                            <label class="check-row">
                                 <input type="checkbox" value="{{ $slug }}" wire:model.live="brands"
-                                       class="size-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500">
+                                       class="check-box">
                                 <span class="flex-1 truncate">{{ $facet['name'] }}</span>
                                 <span class="tabular text-xs text-ink-400">{{ $facet['count'] }}</span>
                             </label>
@@ -69,9 +69,9 @@
                 <div class="space-y-1.5">
                     @foreach ($powerSourceOptions as $value => $label)
                         @continue(! isset($facets['power_sources'][$value]) && ! in_array($value, $powerSources, true))
-                        <label class="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700">
+                        <label class="check-row">
                             <input type="checkbox" value="{{ $value }}" wire:model.live="powerSources"
-                                   class="size-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500">
+                                   class="check-box">
                             <span class="flex-1">{{ $label }}</span>
                             <span class="tabular text-xs text-ink-400">{{ $facets['power_sources'][$value] ?? 0 }}</span>
                         </label>
@@ -86,9 +86,9 @@
                     <div class="space-y-1.5">
                         @foreach ($operatorTypeOptions as $value => $label)
                             @continue(! isset($facets['operator_types'][$value]) && ! in_array($value, $operatorTypes, true))
-                            <label class="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700">
+                            <label class="check-row">
                                 <input type="checkbox" value="{{ $value }}" wire:model.live="operatorTypes"
-                                       class="size-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500">
+                                       class="check-box">
                                 <span class="flex-1">{{ $label }}</span>
                                 <span class="tabular text-xs text-ink-400">{{ $facets['operator_types'][$value] }}</span>
                             </label>
@@ -138,9 +138,9 @@
                     <legend class="field-label">{{ $attribute->name }}</legend>
                     <div class="space-y-1.5">
                         @foreach ($attribute->values as $value)
-                            <label class="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700">
+                            <label class="check-row">
                                 <input type="checkbox" value="{{ $value->id }}" wire:model.live="attributeValueIds"
-                                       class="size-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500">
+                                       class="check-box">
                                 <span class="flex-1">{{ $value->value }}</span>
                             </label>
                         @endforeach
@@ -150,14 +150,14 @@
 
             {{-- Toggles --}}
             <div class="space-y-2 border-t border-ink-100 pt-5">
-                <label class="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700">
+                <label class="check-row">
                     <input type="checkbox" wire:model.live="rentableOnly"
-                           class="size-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500">
+                           class="check-box">
                     {{ __('ui.selector.rental_only') }}
                 </label>
-                <label class="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700">
+                <label class="check-row">
                     <input type="checkbox" wire:model.live="inStockOnly"
-                           class="size-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500">
+                           class="check-box">
                     {{ __('enums.stock_status.in_stock') }}
                 </label>
             </div>

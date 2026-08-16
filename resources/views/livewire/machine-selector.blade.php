@@ -27,8 +27,8 @@
             </select>
         </div>
 
-        <label class="flex cursor-pointer items-center gap-2.5 text-sm text-ink-700 sm:col-span-2">
-            <input type="checkbox" wire:model="rentalOnly" class="size-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500">
+        <label class="check-row sm:col-span-2">
+            <input type="checkbox" wire:model="rentalOnly" class="check-box">
             {{ __('ui.selector.rental_only') }}
         </label>
 
