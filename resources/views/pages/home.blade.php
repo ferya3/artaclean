@@ -36,20 +36,31 @@
         </div>
 
         {{--
-            Two columns from lg up, stacked on a phone. The copy comes first in
-            source order on every breakpoint: it carries the H1, and on mobile a
-            visitor should be reading the proposition before an illustration
-            pushes it under the fold.
+            Two columns from lg up, one on a phone.
+
+            The copy stays first in source order everywhere — it carries the H1
+            and the LCP text. But on a phone the headline, the sub, three
+            stacked buttons, the figures and the trust list together ran past
+            the fold, so the machine never appeared on the first screen at all:
+            a visitor arriving on the page that is meant to sell equipment saw
+            only type on a dark ground.
+
+            `contents` dissolves the copy column on mobile so its two halves
+            become siblings of the image in the same flex flow. The image then
+            slots between the buttons and the figures via `order`, without
+            moving anything in the source and without a second copy of the
+            markup. From `lg:` the column re-forms and the grid takes over.
         --}}
-        <div class="container-page grid items-center gap-12 pt-24 pb-16 sm:pt-28 lg:grid-cols-12 lg:gap-10 lg:pt-36 lg:pb-28">
-            <div class="lg:col-span-7">
+        <div class="container-page flex flex-col gap-10 pt-16 pb-16 sm:pt-24 lg:grid lg:grid-cols-2 lg:items-center lg:gap-14 lg:pt-32 lg:pb-24">
+            <div class="contents lg:block">
+                <div class="order-1">
                 <p class="eyebrow-light">{{ __('ui.hero_eyebrow') }}</p>
 
-                <h1 class="mt-6 text-[2rem] leading-[1.2] font-black text-white sm:text-5xl sm:leading-[1.15] lg:text-[3.5rem] lg:leading-[1.1]">
+                <h1 class="mt-6 text-[2rem] leading-[1.2] font-black text-white sm:text-5xl sm:leading-[1.15] lg:text-[3.25rem] lg:leading-[1.12]">
                     {{ __('ui.hero_title') }}
                 </h1>
 
-                <p class="mt-7 max-w-2xl text-base leading-8 text-ink-300 sm:text-lg sm:leading-9">
+                <p class="mt-7 max-w-xl text-base leading-8 text-ink-300 sm:text-lg sm:leading-9">
                     {{ __('ui.hero_subtitle') }}
                 </p>
 
@@ -74,9 +85,12 @@
                         {{ __('ui.download_catalog') }}
                     </a>
                 </div>
+                </div>
 
+                {{-- Supporting proof: below the machine on a phone, under the copy on desktop. --}}
+                <div class="order-3 lg:mt-14">
                 {{-- Figures first, reassurance underneath. --}}
-                <dl class="mt-14 grid max-w-xl grid-cols-3 border-t border-white/15 pt-8 [&>*+*]:border-s [&>*+*]:border-white/10 [&>*+*]:ps-6">
+                <dl class="grid max-w-xl grid-cols-3 border-t border-white/15 pt-8 [&>*+*]:border-s [&>*+*]:border-white/10 [&>*+*]:ps-6">
                     <div>
                         <dd class="tabular text-3xl leading-none font-black text-white sm:text-4xl">
                             {{ number_format($categories->sum('products_count')) }}<span class="text-accent-400">+</span>
@@ -101,16 +115,25 @@
                         </li>
                     @endforeach
                 </ul>
+                </div>
             </div>
 
             {{--
-                The machine, framed 3:2. `aspect-3/2` reserves the box before
-                the image decodes, so the hero cannot shift once it lands —
-                which is the whole of the CLS budget on this page.
+                The machine, framed 3:2 on a lit backdrop.
+
+                This is the object the eye lands on first, so it has to be the
+                brightest thing on the screen. Panelled dark against a dark hero
+                it disappeared — the type was carrying the whole first
+                impression on its own. A light panel on a near-black ground
+                reads as a lit product shot, which is exactly how every serious
+                manufacturer in this category photographs a machine.
+
+                `aspect-3/2` reserves the box before the image decodes, so the
+                hero cannot shift once it lands.
             --}}
-            <div class="lg:col-span-5">
+            <div class="relative order-2 lg:order-none">
                 <figure class="relative">
-                    <div class="relative overflow-hidden rounded-2xl border border-white/10 bg-ink-950 shadow-[0_30px_60px_-20px_rgb(0_0_0/0.8)]">
+                    <div class="relative overflow-hidden rounded-2xl bg-white shadow-[0_40px_80px_-24px_rgb(0_0_0/0.75)] ring-1 ring-white/15">
                         <img src="{{ asset('images/hero-machine.svg') }}"
                              alt="{{ __('ui.hero_image_alt') }}"
                              width="1200"
@@ -118,16 +141,32 @@
                              fetchpriority="high"
                              decoding="async"
                              class="aspect-3/2 w-full object-cover">
-
-                        {{-- Reads as a lens edge rather than a flat border. --}}
-                        <div class="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_1px_0_rgb(255_255_255/0.12)]"></div>
                     </div>
 
-                    <figcaption class="mt-4 flex items-center gap-2 text-xs text-ink-400">
-                        <span class="h-px w-6 bg-accent-400"></span>
-                        {{ __('ui.hero_image_caption') }}
-                    </figcaption>
+                    {{--
+                        The headline figure, lifted off the panel. A buyer sizes
+                        a machine on productivity before anything else, so it
+                        earns the one spot the eye is already resting on.
+                    --}}
+                    <div class="absolute -bottom-5 start-4 flex items-center gap-3 rounded-xl bg-ink-950/95 px-4 py-3 shadow-[0_18px_40px_-12px_rgb(0_0_0/0.7)] ring-1 ring-white/10 backdrop-blur sm:start-6 sm:gap-4 sm:px-5">
+                        <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-400 text-ink-950">
+                            <x-ui-icon name="check-circle" class="size-5" />
+                        </span>
+                        <span>
+                            <span class="tabular block text-lg leading-none font-black text-white sm:text-xl">
+                                ۵٬۰۰۰ <span class="text-sm font-bold text-accent-400">m²/h</span>
+                            </span>
+                            <span class="mt-1 block text-[11px] leading-4 text-ink-400">
+                                {{ __('ui.hero_badge_label') }}
+                            </span>
+                        </span>
+                    </div>
                 </figure>
+
+                <figcaption class="mt-10 flex items-center gap-2 text-xs text-ink-400">
+                    <span class="h-px w-6 bg-accent-400"></span>
+                    {{ __('ui.hero_image_caption') }}
+                </figcaption>
             </div>
         </div>
     </section>

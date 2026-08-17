@@ -59,6 +59,7 @@ return [
 
     'hero_image_alt' => 'Ride-on industrial scrubber dryer cleaning a factory floor',
     'hero_image_caption' => 'Ride-on scrubber dryer, 1,000 mm cleaning path',
+    'hero_badge_label' => 'Productivity in a single shift',
 
     // --- Who we are ----------------------------------------------------------
     'company' => [
