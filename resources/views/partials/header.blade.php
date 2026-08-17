@@ -5,10 +5,18 @@
 @endphp
 
 {{--
-    The bar is out of the way on arrival and slides in once the visitor starts
-    scrolling, so the hero owns the first screen. It is `fixed` rather than
-    `sticky` for that reason: a sticky bar still occupies a row in the layout
-    even while hidden, which would push the hero down by its own height.
+    On the home page the bar is out of the way on arrival and slides in once
+    the visitor starts scrolling, so the hero owns the first screen. It is
+    `fixed` rather than `sticky` for that reason: a sticky bar still occupies a
+    row in the layout even while hidden, which would push the hero down by its
+    own height.
+
+    Everywhere else it is pinned from the first paint. Hiding it was only ever
+    justified by the hero underneath it, and there is no hero on an inner page —
+    only a title sitting against the top edge of the window. Those pages are
+    also where search traffic lands, this site being built to be found on
+    category and product URLs, so arriving there with no logo, no navigation and
+    no phone number was the worst possible first screen to hand a buyer.
 
     `scrolled` is seeded from the live scroll position on init, so a reload
     partway down a page does not start with the bar missing. It is also forced
@@ -18,6 +26,7 @@
 <header x-data="{
             mobile: false,
             mega: null,
+            pinned: {{ request()->routeIs('home') ? 'false' : 'true' }},
             scrolled: false,
             update() { this.scrolled = window.scrollY > 80 },
         }"
@@ -25,7 +34,7 @@
         @scroll.window.passive="update()"
         @focusin="scrolled = true"
         @keydown.escape.window="mobile = false; mega = null"
-        :class="(scrolled || mobile) ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'"
+        :class="(pinned || scrolled || mobile) ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'"
         class="fixed inset-x-0 top-0 z-50 border-b border-ink-100 bg-white/95 backdrop-blur
                transition-[transform,opacity] duration-300 ease-[var(--ease-out-quart)]
                motion-reduce:transition-none">

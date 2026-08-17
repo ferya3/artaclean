@@ -26,7 +26,16 @@
 
     @include('partials.header')
 
-    <main id="main">
+    {{--
+        The bar is `fixed`, so it is out of the flow and cannot push anything
+        down itself. On every page but the home one it is pinned open from the
+        first paint, and the content has to start below it rather than under it.
+
+        The two values are the bar's own measured height: one row at 65px until
+        `lg`, where the utility row appears and takes it to 118px. They have to
+        move with `h-16 lg:h-20` and the `lg:block` on that row.
+    --}}
+    <main id="main" @class(['pt-[65px] lg:pt-[118px]' => ! request()->routeIs('home')])>
         {{ $slot ?? '' }}
         @yield('content')
     </main>
