@@ -205,31 +205,27 @@
                 <h2 class="mt-4 text-2xl leading-tight font-black tracking-tight text-ink-900 sm:text-3xl lg:text-4xl">
                     {{ __('ui.company.title') }}
                 </h2>
+            </div>
 
+            <div class="lg:col-span-7">
+                {{--
+                    Justified by request. Persian sets well this way — the script
+                    has no capitals and joins along a baseline, so an even
+                    right-hand edge reads as a printed column rather than as
+                    stretched type — but only while the measure stays wide
+                    enough. `text-pretty` is dropped here because a justified
+                    line is spaced to the margin either way.
+                --}}
+                <div class="space-y-5 text-justify text-base leading-8 text-ink-600 sm:text-lg sm:leading-9">
+                    <p class="[text-wrap:auto]">{{ __('ui.company.lead') }}</p>
+                    <p class="[text-wrap:auto]">{{ __('ui.company.body') }}</p>
+                </div>
+
+                {{-- The action sits under what it follows on from, not beside it. --}}
                 <a href="{{ route('about') }}" class="btn-outline btn-sm mt-8 w-full sm:w-auto">
                     {{ __('ui.company.more') }}
                     <x-ui-icon name="arrow-left" class="size-3.5 flip-rtl" />
                 </a>
-            </div>
-
-            <div class="lg:col-span-7">
-                <div class="space-y-5 text-base leading-8 text-ink-600 sm:text-lg sm:leading-9">
-                    <p>{{ __('ui.company.lead') }}</p>
-                    <p>{{ __('ui.company.body') }}</p>
-                </div>
-
-                <dl class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
-                    @foreach (['experience', 'clients', 'coverage'] as $fact)
-                        <div class="border-t border-ink-200 pt-4">
-                            <dt class="tabular text-2xl font-black text-ink-900 sm:text-3xl">
-                                {{ __('ui.company.facts.'.$fact.'_value') }}
-                            </dt>
-                            <dd class="mt-1.5 text-sm leading-6 text-ink-500">
-                                {{ __('ui.company.facts.'.$fact.'_label') }}
-                            </dd>
-                        </div>
-                    @endforeach
-                </dl>
             </div>
         </div>
     </section>
@@ -245,43 +241,93 @@
                                :href="route('products.index')" />
 
             {{--
-                Each tile carries the silhouette of the machine it sells. Nine
-                identical cards forced a buyer to read nine headings in
-                sequence; a distinct shape lets them find the right one at a
-                glance, which is the entire job of a category grid. The index
-                number stays as a quiet drawing-sheet reference behind it.
+                A carousel rather than a grid, by request: nine tiles stacked
+                into one column is most of a phone screen spent before the page
+                gets anywhere, and it pushed everything below the categories out
+                of reach.
+
+                Each card carries the silhouette of the machine it sells, so the
+                set can be scanned by shape instead of by reading nine headings
+                in sequence. Where a category has a photograph it takes the same
+                frame — the drawing is the fallback, not the design.
             --}}
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach ($categories as $category)
-                    <a href="{{ $category->url() }}"
-                       class="card-hover tick-frame group relative flex flex-col overflow-hidden p-6">
-                        <span class="absolute top-5 end-5 tabular text-2xl leading-none font-black text-ink-100 transition-colors duration-300 group-hover:text-brand-100">
-                            {{ str_pad((string) ($loop->index + 1), 2, '0', STR_PAD_LEFT) }}
-                        </span>
+            <div x-data="categoryCarousel()">
+                {{-- The track needs the vertical room for the lift and its shadow. --}}
+                <div x-ref="carousel" class="carousel-raise swiper -my-4 py-4">
+                    <div class="swiper-wrapper">
+                        @foreach ($categories as $category)
+                            <div class="swiper-slide h-auto">
+                                <a href="{{ $category->url() }}"
+                                   class="card-hover tick-frame group flex h-full flex-col overflow-hidden">
+                                    <span class="relative block aspect-4/3 overflow-hidden bg-linear-to-b from-ink-50 to-white">
+                                        @if ($category->image)
+                                            <img src="{{ Storage::url($category->image) }}"
+                                                 alt="{{ $category->name }}"
+                                                 loading="lazy"
+                                                 decoding="async"
+                                                 class="size-full object-cover transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.06]">
+                                        @else
+                                            <span class="absolute inset-0 blueprint-ink opacity-60"></span>
+                                            <span class="relative grid size-full place-items-center text-ink-300 transition-[transform,color] duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.06] group-hover:text-brand-500">
+                                                <x-machine-icon :slug="$category->slug" class="size-20 sm:size-24" />
+                                            </span>
+                                        @endif
 
-                        <span class="mb-5 grid size-14 place-items-center rounded-xl bg-brand-50 text-brand-700
-                                     transition-[background-color,color,transform] duration-300 ease-[var(--ease-out-quart)]
-                                     group-hover:-translate-y-0.5 group-hover:bg-brand-600 group-hover:text-white">
-                            <x-machine-icon :slug="$category->slug" class="size-8" />
-                        </span>
+                                        {{-- The drawing-sheet reference, kept quiet. --}}
+                                        <span class="absolute top-3.5 end-4 tabular text-xl leading-none font-black text-ink-300/80 transition-colors duration-300 group-hover:text-brand-400">
+                                            {{ str_pad((string) ($loop->index + 1), 2, '0', STR_PAD_LEFT) }}
+                                        </span>
+                                    </span>
 
-                        <h3 class="pe-12 text-base leading-7 font-bold text-ink-900 transition-colors group-hover:text-brand-700">
-                            {{ $category->name }}
-                        </h3>
+                                    <span class="flex flex-1 flex-col border-t border-ink-100 p-5">
+                                        <h3 class="text-base leading-7 font-bold text-ink-900 transition-colors group-hover:text-brand-700">
+                                            {{ $category->name }}
+                                        </h3>
 
-                        @if ($category->short_description)
-                            <p class="mt-2 line-clamp-2 text-sm leading-6 text-ink-500">{{ $category->short_description }}</p>
-                        @endif
+                                        @if ($category->short_description)
+                                            <p class="mt-2 line-clamp-2 text-sm leading-6 text-ink-500">{{ $category->short_description }}</p>
+                                        @endif
 
-                        <span class="mt-5 flex items-center justify-between border-t border-ink-100 pt-4">
-                            <span class="tabular text-xs font-medium text-ink-400">
-                                {{ __('ui.results_count', ['count' => $category->products_count]) }}
-                            </span>
-                            <x-ui-icon name="arrow-left"
-                                       class="size-4 shrink-0 text-ink-300 transition-[transform,color] duration-300 ease-[var(--ease-out-quart)] group-hover:-translate-x-1 group-hover:text-brand-600 flip-rtl rtl:group-hover:translate-x-1" />
-                        </span>
-                    </a>
-                @endforeach
+                                        <span class="mt-5 flex items-center justify-between border-t border-ink-100 pt-4">
+                                            <span class="tabular text-xs font-medium text-ink-400">
+                                                {{ __('ui.results_count', ['count' => $category->products_count]) }}
+                                            </span>
+                                            <x-ui-icon name="arrow-left"
+                                                       class="size-4 shrink-0 text-ink-300 transition-[transform,color] duration-300 ease-[var(--ease-out-quart)] group-hover:-translate-x-1 group-hover:text-brand-600 flip-rtl rtl:group-hover:translate-x-1" />
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{--
+                    Controls under the track, not over the cards: on a phone an
+                    arrow floating on the card covers the very name the card is
+                    there to show, and the thumb has to reach across the artwork
+                    to press it.
+                --}}
+                <div class="mt-8 flex items-center justify-center gap-5">
+                    <button x-ref="prev" type="button" class="btn-outline btn-icon shrink-0 rounded-full"
+                            aria-label="{{ __('ui.previous') }}">
+                        <x-ui-icon name="arrow-right" class="size-4 flip-rtl" />
+                    </button>
+
+                    <div x-ref="pagination"
+                         class="flex-none"
+                         style="position: static; width: auto;
+                                --swiper-pagination-color: var(--color-brand-600);
+                                --swiper-pagination-bullet-inactive-color: var(--color-ink-400);
+                                --swiper-pagination-bullet-inactive-opacity: 0.5;
+                                --swiper-pagination-bullet-size: 8px;
+                                --swiper-pagination-bullet-horizontal-gap: 4px"></div>
+
+                    <button x-ref="next" type="button" class="btn-outline btn-icon shrink-0 rounded-full"
+                            aria-label="{{ __('ui.next') }}">
+                        <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
+                    </button>
+                </div>
             </div>
         </div>
     </section>

@@ -83,6 +83,44 @@ document.addEventListener('alpine:init', () => {
         },
     }));
 
+    /**
+     * The category carousel.
+     *
+     * Centred rather than left-aligned: the slide in the middle is the one
+     * being offered, and the CSS in `.carousel-raise` stands it up while its
+     * neighbours sit back and lower. `loop` matters more here than elsewhere —
+     * a centred track without it opens with dead space on one side.
+     *
+     * Its controls live under the track rather than over the cards, so nothing
+     * covers a category name and the arrows stay reachable on a phone.
+     */
+    Alpine.data('categoryCarousel', () => ({
+        swiper: null,
+
+        init() {
+            this.swiper = new Swiper(this.$refs.carousel, {
+                slidesPerView: 1.15,
+                spaceBetween: 16,
+                centeredSlides: true,
+                loop: true,
+                speed: 500,
+                dir: document.documentElement.dir === 'rtl' ? 'rtl' : 'ltr',
+                pagination: { el: this.$refs.pagination, clickable: true },
+                navigation: { nextEl: this.$refs.next, prevEl: this.$refs.prev },
+                a11y: { enabled: true },
+                breakpoints: {
+                    640: { slidesPerView: 2.2, spaceBetween: 20 },
+                    1024: { slidesPerView: 3.2, spaceBetween: 24 },
+                    1280: { slidesPerView: 4, spaceBetween: 24 },
+                },
+            });
+        },
+
+        destroy() {
+            this.swiper?.destroy();
+        },
+    }));
+
     /** Horizontal carousels for product rows, brands and articles. */
     Alpine.data('carousel', (options = {}) => ({
         swiper: null,

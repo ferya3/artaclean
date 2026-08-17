@@ -543,6 +543,32 @@
         );
     }
 
+    /*
+     * A centred carousel where the middle slide stands up and the ones either
+     * side sit back and a little lower.
+     *
+     * The recede is deliberately gentle — scale and a few pixels of drop, not a
+     * heavy fade. The neighbours still have to be readable enough to be worth
+     * swiping to; dimmed hard they stop reading as cards and start reading as
+     * something switched off.
+     *
+     * The transform is on the slide rather than the card so the card keeps its
+     * own hover lift, and the track needs vertical padding to give both the
+     * drop and the shadow somewhere to go.
+     */
+    .carousel-raise .swiper-slide {
+        transform: scale(0.94) translateY(0.5rem);
+        opacity: 0.7;
+        transition:
+            transform 0.5s var(--ease-out-quart),
+            opacity 0.5s var(--ease-out-quart);
+    }
+
+    .carousel-raise .swiper-slide-active {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
     /* Swiper's arrows are replaced with buttons that match the design system. */
     .swiper-button-next::after,
     .swiper-button-prev::after {
