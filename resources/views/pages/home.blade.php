@@ -51,25 +51,45 @@
             moving anything in the source and without a second copy of the
             markup. From `lg:` the column re-forms and the grid takes over.
         --}}
-        <div class="container-page flex flex-col gap-10 pt-16 pb-16 sm:pt-24 lg:grid lg:grid-cols-2 lg:items-center lg:gap-14 lg:pt-32 lg:pb-24">
+        <div class="container-page flex flex-col gap-8 pt-12 pb-14 sm:gap-10 sm:pt-24 sm:pb-16 lg:grid lg:grid-cols-2 lg:items-center lg:gap-14 lg:pt-32 lg:pb-24">
             <div class="contents lg:block">
                 <div class="order-1">
                 <p class="eyebrow-light">{{ __('ui.hero_eyebrow') }}</p>
 
-                <h1 class="mt-6 text-[2rem] leading-[1.2] font-black text-white sm:text-5xl sm:leading-[1.15] lg:text-[3.25rem] lg:leading-[1.12]">
+                {{--
+                    Type scale is set for the phone first.
+
+                    Material 3 puts a headline at 28-32px on a handset; the
+                    previous 32px at 1.2 leading pushed a three-line Persian
+                    title to 115px and shoved everything below it off the
+                    screen. 28px at 1.3 reads as confidently and costs a third
+                    less height. Persian needs looser leading than Latin —
+                    diacritics sit above the line — but the body was set at 2.0,
+                    far past what that needs; 1.75 is the readable floor and
+                    saves another line's worth of space.
+                --}}
+                <h1 class="mt-5 text-[1.75rem] leading-[1.3] font-black text-white sm:mt-6 sm:text-[2.5rem] sm:leading-[1.2] lg:text-[3.25rem] lg:leading-[1.12]">
                     {{ __('ui.hero_title') }}
                 </h1>
 
-                <p class="mt-7 max-w-xl text-base leading-8 text-ink-300 sm:text-lg sm:leading-9">
+                <p class="mt-5 max-w-xl text-base leading-7 text-ink-300 sm:mt-7 sm:text-lg sm:leading-9">
                     {{ __('ui.hero_subtitle') }}
                 </p>
 
                 {{--
-                    Full-width stacked buttons on a phone: a wrapped row of
-                    pills leaves half-width targets and ragged edges, and the
-                    primary action should not have to be aimed at.
+                    Hidden on a phone by request. Three stacked 52px buttons
+                    plus gaps cost ~340px of the first screen, which was the
+                    single biggest reason the machine never appeared on it.
+
+                    The mobile path forward is not lost: the WhatsApp button is
+                    fixed to the viewport, the bar slides in with its
+                    consultation CTA as soon as the visitor scrolls, and the
+                    category grid is the next thing under the hero.
+
+                    From sm: up the row returns, laid out horizontally where it
+                    costs one line rather than three.
                 --}}
-                <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <div class="mt-10 hidden flex-col gap-3 sm:flex sm:flex-row sm:flex-wrap">
                     <a href="{{ route('products.index') }}" class="btn-accent btn-lg w-full sm:w-auto">
                         {{ __('ui.view_products') }}
                         <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
@@ -148,15 +168,20 @@
                         a machine on productivity before anything else, so it
                         earns the one spot the eye is already resting on.
                     --}}
-                    <div class="absolute -bottom-5 start-4 flex items-center gap-3 rounded-xl bg-ink-950/95 px-4 py-3 shadow-[0_18px_40px_-12px_rgb(0_0_0/0.7)] ring-1 ring-white/10 backdrop-blur sm:start-6 sm:gap-4 sm:px-5">
-                        <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-400 text-ink-950">
-                            <x-ui-icon name="check-circle" class="size-5" />
+                    {{--
+                        Kept small on a phone: at full size it sat across the
+                        machine's near wheel and hid the part of the silhouette
+                        that identifies it as a ride-on.
+                    --}}
+                    <div class="absolute -bottom-4 start-3 flex items-center gap-2.5 rounded-xl bg-ink-950/95 px-3 py-2 shadow-[0_18px_40px_-12px_rgb(0_0_0/0.7)] ring-1 ring-white/10 backdrop-blur sm:-bottom-5 sm:start-6 sm:gap-4 sm:px-5 sm:py-3">
+                        <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-accent-400 text-ink-950 sm:size-10">
+                            <x-ui-icon name="check-circle" class="size-4 sm:size-5" />
                         </span>
                         <span>
-                            <span class="tabular block text-lg leading-none font-black text-white sm:text-xl">
-                                ۵٬۰۰۰ <span class="text-sm font-bold text-accent-400">m²/h</span>
+                            <span class="tabular block text-base leading-none font-black text-white sm:text-xl">
+                                ۵٬۰۰۰ <span class="text-xs font-bold text-accent-400 sm:text-sm">m²/h</span>
                             </span>
-                            <span class="mt-1 block text-[11px] leading-4 text-ink-400">
+                            <span class="mt-1 block text-[10px] leading-4 text-ink-400 sm:text-[11px]">
                                 {{ __('ui.hero_badge_label') }}
                             </span>
                         </span>
