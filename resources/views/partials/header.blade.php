@@ -31,6 +31,8 @@
             update() { this.scrolled = window.scrollY > 80 },
         }"
         x-init="update()"
+        {{-- The page behind a drawer must not scroll with it. --}}
+        x-effect="document.body.classList.toggle('overflow-hidden', mobile)"
         @scroll.window.passive="update()"
         @focusin="scrolled = true"
         @keydown.escape.window="mobile = false; mega = null"
@@ -62,15 +64,37 @@
         </div>
     </div>
 
-    <div class="container-page flex h-16 items-center justify-between gap-4 lg:h-20">
+    <div class="container-page relative flex h-16 items-center justify-between gap-4 lg:h-20">
+        {{--
+            The menu button opens the bar at the start edge — the right, in
+            Persian. That is the edge the drawer travels in from, so the thumb
+            that opens it is already on the side the panel arrives from.
+        --}}
+        <button type="button"
+                class="btn-ghost btn-icon-sm lg:hidden"
+                @click="mobile = true"
+                :aria-expanded="mobile"
+                aria-controls="mobile-nav"
+                aria-label="{{ __('nav.open_menu') }}">
+            <x-ui-icon name="menu" class="size-6" />
+        </button>
+
         {{--
             The mark is three raked sweep strokes on a dark tile with an accent
             base — a cleaning pass rendered as a diagram, which sits closer to
             the product than a lettered square did. The strokes are deliberately
             slanted: drawn level they read as a hamburger menu button, which is
             the last thing a logo should be mistaken for.
+
+            Centred on a phone, and back at the start from `lg:` where the
+            navigation needs the middle of the bar. The centring is done with
+            physical `left-1/2` rather than a logical offset on purpose: paired
+            with a physical translate it lands on the true centre in both
+            directions, where a logical pair has to be flipped per direction to
+            mean the same thing.
         --}}
-        <a href="{{ route('home') }}" class="group flex shrink-0 items-center gap-2.5">
+        <a href="{{ route('home') }}"
+           class="group absolute left-1/2 flex shrink-0 -translate-x-1/2 items-center gap-2.5 lg:static lg:translate-x-0">
             <span class="relative grid size-9 place-items-center overflow-hidden rounded-lg bg-ink-900 shadow-[var(--shadow-e1)] transition-transform duration-300 ease-[var(--ease-out-quart)] group-hover:-translate-y-px">
                 <svg viewBox="0 0 24 24" class="size-[18px] text-white" fill="none" stroke="currentColor"
                      stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -150,48 +174,98 @@
             <a href="{{ route('contact') }}" class="btn-primary btn-sm hidden sm:inline-flex">
                 {{ __('ui.free_consultation') }}
             </a>
-
-            {{-- 44px square on touch: the one control every mobile visitor aims at. --}}
-            <button type="button"
-                    class="btn-ghost btn-icon-sm lg:hidden"
-                    @click="mobile = !mobile"
-                    :aria-expanded="mobile"
-                    aria-controls="mobile-nav"
-                    aria-label="{{ __('nav.open_menu') }}">
-                <x-ui-icon name="menu" class="size-6" x-show="!mobile" />
-                <x-ui-icon name="close" class="size-6" x-cloak x-show="mobile" />
-            </button>
         </div>
     </div>
 
-    {{-- Mobile drawer --}}
-    <div id="mobile-nav" x-cloak x-show="mobile" x-transition.opacity
-         class="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-ink-100 bg-white lg:hidden">
-        <div class="container-page space-y-1 py-4">
-            <p class="eyebrow pt-2 pb-1">{{ __('nav.categories') }}</p>
-            @foreach ($navCategories as $category)
-                <a href="{{ $category->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
-                    {{ $category->name }}
-                </a>
-            @endforeach
+    {{--
+        The mobile menu is a drawer off the start edge — the right, in Persian —
+        rather than a panel unfolding under the bar. It travels on a transform
+        with a backdrop fading in behind it, which is what the old version was
+        missing: it only crossfaded its opacity, so it arrived fully formed with
+        nothing to say where it had come from.
 
-            <p class="eyebrow pt-4 pb-1">{{ __('nav.environments') }}</p>
-            @foreach ($navEnvironments as $environment)
-                <a href="{{ $environment->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
-                    {{ $environment->name }}
-                </a>
-            @endforeach
+        It is teleported to the body because the header carries a transform at
+        all times — that transform is what slides the bar in and out — and a
+        transformed ancestor becomes the containing block for `fixed`
+        descendants. Left inside the header, a fixed drawer would be positioned
+        against the header rather than the viewport, and would ride up with it.
 
-            <div class="grid gap-1 pt-4">
-                <a href="{{ route('selector') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base font-semibold text-brand-700 hover:bg-brand-50">{{ __('nav.selector') }}</a>
-                <a href="{{ route('rental') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.rental') }}</a>
-                <a href="{{ route('brands.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.brands') }}</a>
-                <a href="{{ route('downloads.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.downloads') }}</a>
-                <a href="{{ route('blog.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.blog') }}</a>
-                <a href="{{ route('contact') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.contact') }}</a>
+        The travel is written per direction. `translate-x-full` is physical, so
+        on its own it would send the panel off the left in an English page and
+        off the right in a Persian one; the pair below keeps it leaving by the
+        same edge it is anchored to either way.
+    --}}
+    <template x-teleport="body">
+        <div class="lg:hidden">
+            <div x-cloak
+                 x-show="mobile"
+                 x-transition:enter="transition-opacity duration-300 ease-[var(--ease-out-quart)]"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition-opacity duration-200 ease-[var(--ease-out-quart)]"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @click="mobile = false"
+                 class="fixed inset-0 z-[55] bg-ink-950/60 backdrop-blur-sm"
+                 aria-hidden="true"></div>
+
+            <div id="mobile-nav"
+                 x-cloak
+                 x-show="mobile"
+                 x-transition:enter="transition-transform duration-300 ease-[var(--ease-out-quart)]"
+                 x-transition:enter-start="rtl:translate-x-full ltr:-translate-x-full"
+                 x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transition-transform duration-200 ease-[var(--ease-out-quart)]"
+                 x-transition:leave-start="translate-x-0"
+                 x-transition:leave-end="rtl:translate-x-full ltr:-translate-x-full"
+                 class="fixed inset-y-0 start-0 z-[60] flex w-[86%] max-w-sm flex-col bg-white shadow-[var(--shadow-e3)]"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-label="{{ __('nav.menu') }}">
+
+                <div class="flex h-16 shrink-0 items-center justify-between border-b border-ink-100 px-5">
+                    <span class="text-sm font-bold text-ink-900">{{ __('nav.menu') }}</span>
+                    <button type="button" @click="mobile = false" class="btn-ghost btn-icon-sm -me-2"
+                            aria-label="{{ __('nav.close_menu') }}">
+                        <x-ui-icon name="close" class="size-6" />
+                    </button>
+                </div>
+
+                <div class="flex-1 space-y-1 overflow-y-auto overscroll-contain px-5 py-4">
+                    <p class="eyebrow pt-2 pb-1">{{ __('nav.categories') }}</p>
+                    @foreach ($navCategories as $category)
+                        <a href="{{ $category->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
+                            {{ $category->name }}
+                        </a>
+                    @endforeach
+
+                    <p class="eyebrow pt-4 pb-1">{{ __('nav.environments') }}</p>
+                    @foreach ($navEnvironments as $environment)
+                        <a href="{{ $environment->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
+                            {{ $environment->name }}
+                        </a>
+                    @endforeach
+
+                    <div class="grid gap-1 pt-4">
+                        <a href="{{ route('selector') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base font-semibold text-brand-700 hover:bg-brand-50">{{ __('nav.selector') }}</a>
+                        <a href="{{ route('rental') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.rental') }}</a>
+                        <a href="{{ route('brands.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.brands') }}</a>
+                        <a href="{{ route('downloads.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.downloads') }}</a>
+                        <a href="{{ route('blog.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.blog') }}</a>
+                        <a href="{{ route('contact') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.contact') }}</a>
+                    </div>
+                </div>
+
+                {{-- The two ways to start a conversation, held out of the scroll. --}}
+                <div class="shrink-0 border-t border-ink-100 p-5">
+                    <a href="{{ route('contact') }}" class="btn-primary w-full">{{ __('ui.free_consultation') }}</a>
+                    <a href="tel:{{ config('site.phone_e164') }}"
+                       class="mt-3 flex items-center justify-center gap-2 text-sm font-medium text-ink-600 hover:text-ink-900">
+                        <x-ui-icon name="phone" class="size-4" />
+                        <span class="tabular">{{ config('site.phone') }}</span>
+                    </a>
+                </div>
             </div>
-
-            <a href="{{ route('contact') }}" class="btn-primary mt-4 w-full">{{ __('ui.free_consultation') }}</a>
         </div>
-    </div>
+    </template>
 </header>
