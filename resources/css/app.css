@@ -568,13 +568,28 @@
     }
 
     /*
-     * The drawer's contents arrive one after another once the panel itself has
-     * finished travelling — the 300ms lead-in is the drawer's own enter
-     * duration, so the first row starts moving exactly as the panel stops.
+     * The drawer's rows come in one after another, each travelling left to
+     * right the way the panel itself does.
+     *
+     * The timing is a chain, and every link is the same length:
+     *
+     *   the panel finishes  ->  row 0 starts
+     *   row 0 finishes      ->  row 1 starts
+     *   row 1 finishes      ->  row 2 starts   ... and on down the list
+     *
+     * So the delay step is not a number picked to look right — it is the row
+     * duration itself, which is why both come from one custom property. Change
+     * `--menu-row` and the hand-off stays exact. The 300ms lead-in is likewise
+     * the drawer's own enter duration, so row 0 starts on the frame the panel
+     * stops.
+     *
+     * That makes each row's own travel short by necessity: with no overlap
+     * between them, the row duration is also the interval, so anything longer
+     * turns a list this length into a wait.
      *
      * Each row carries its position in `--i`, counted straight through the
-     * headings and every group, so the cascade runs unbroken from the top of
-     * the list to the bottom rather than restarting at each section.
+     * headings and every group, so the chain runs unbroken from the top of the
+     * list to the bottom rather than restarting at each section.
      *
      * `backwards` fill is what holds a row invisible through its delay; without
      * it every row would be painted in place first and then jump back to the
@@ -584,9 +599,13 @@
      * subtree that goes from `display: none` to rendered starts its animations
      * from the beginning — so this replays on every open.
      */
+    .menu-stagger {
+        --menu-row: 120ms;
+    }
+
     .menu-stagger > * {
-        animation: menu-row-in 0.4s var(--ease-out-quart) backwards;
-        animation-delay: calc(300ms + var(--i, 0) * 40ms);
+        animation: menu-row-in var(--menu-row) var(--ease-out-quart) backwards;
+        animation-delay: calc(300ms + var(--i, 0) * var(--menu-row));
     }
 
     @keyframes menu-row-in {
