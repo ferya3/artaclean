@@ -568,25 +568,24 @@
     }
 
     /*
-     * The drawer's contents arrive one after another once the panel itself has
-     * finished travelling — the 300ms lead-in is the drawer's own enter
-     * duration, so the first row starts moving exactly as the panel stops.
+     * The drawer's contents sweep in from the left together, once the panel
+     * itself has finished travelling. The 300ms lead-in is the drawer's own
+     * enter duration, so the rows start moving exactly as the panel stops.
      *
-     * Each row carries its position in `--i`, counted straight through the
-     * headings and every group, so the cascade runs unbroken from the top of
-     * the list to the bottom rather than restarting at each section.
+     * They move as one deliberately: the earlier version walked down the list
+     * a row at a time, which made the reader wait on the menu rather than the
+     * other way round.
      *
-     * `backwards` fill is what holds a row invisible through its delay; without
-     * it every row would be painted in place first and then jump back to the
-     * start of its own animation.
+     * `backwards` fill is what holds them invisible through that delay; without
+     * it they would be painted in place first and then jump back to the start
+     * of the animation.
      *
      * No trigger is needed. `x-show` toggles the drawer's `display`, and a
      * subtree that goes from `display: none` to rendered starts its animations
      * from the beginning — so this replays on every open.
      */
-    .menu-stagger > * {
-        animation: menu-row-in 0.4s var(--ease-out-quart) backwards;
-        animation-delay: calc(300ms + var(--i, 0) * 40ms);
+    .menu-reveal > * {
+        animation: menu-row-in 0.4s var(--ease-out-quart) 300ms backwards;
     }
 
     @keyframes menu-row-in {
@@ -601,12 +600,12 @@
     }
 
     /*
-     * The global reduced-motion rule only collapses durations, which would
-     * leave these rows sitting invisible through a delay of up to a second.
-     * They have to lose the animation outright.
+     * The global reduced-motion rule only collapses durations, not delays,
+     * which would leave these rows sitting invisible for the lead-in. They
+     * have to lose the animation outright.
      */
     @media (prefers-reduced-motion: reduce) {
-        .menu-stagger > * {
+        .menu-reveal > * {
             animation: none;
         }
     }
