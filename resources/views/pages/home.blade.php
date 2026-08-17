@@ -253,7 +253,7 @@
             --}}
             <div x-data="categoryCarousel()">
                 {{-- The track needs the vertical room for the lift and its shadow. --}}
-                <div x-ref="carousel" class="carousel-raise swiper -my-4 py-4">
+                <div x-ref="carousel" class="carousel-raise swiper -my-6 py-6">
                     <div class="swiper-wrapper">
                         @foreach ($categories as $category)
                             <div class="swiper-slide h-auto">

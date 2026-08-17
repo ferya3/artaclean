@@ -99,7 +99,11 @@ document.addEventListener('alpine:init', () => {
 
         init() {
             this.swiper = new Swiper(this.$refs.carousel, {
-                slidesPerView: 1.15,
+                // The fractional part is how much of the neighbouring card
+                // shows. Kept generous on purpose: a sliver reads as a
+                // rendering seam, while a third of a card reads as the next
+                // one along and invites the swipe.
+                slidesPerView: 1.4,
                 spaceBetween: 16,
                 centeredSlides: true,
                 loop: true,
@@ -109,9 +113,9 @@ document.addEventListener('alpine:init', () => {
                 navigation: { nextEl: this.$refs.next, prevEl: this.$refs.prev },
                 a11y: { enabled: true },
                 breakpoints: {
-                    640: { slidesPerView: 2.2, spaceBetween: 20 },
-                    1024: { slidesPerView: 3.2, spaceBetween: 24 },
-                    1280: { slidesPerView: 4, spaceBetween: 24 },
+                    640: { slidesPerView: 2.5, spaceBetween: 20 },
+                    1024: { slidesPerView: 3.5, spaceBetween: 24 },
+                    1280: { slidesPerView: 4.4, spaceBetween: 24 },
                 },
             });
         },

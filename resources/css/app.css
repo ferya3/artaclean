@@ -543,32 +543,6 @@
         );
     }
 
-    /*
-     * A centred carousel where the middle slide stands up and the ones either
-     * side sit back and a little lower.
-     *
-     * The recede is deliberately gentle — scale and a few pixels of drop, not a
-     * heavy fade. The neighbours still have to be readable enough to be worth
-     * swiping to; dimmed hard they stop reading as cards and start reading as
-     * something switched off.
-     *
-     * The transform is on the slide rather than the card so the card keeps its
-     * own hover lift, and the track needs vertical padding to give both the
-     * drop and the shadow somewhere to go.
-     */
-    .carousel-raise .swiper-slide {
-        transform: scale(0.94) translateY(0.5rem);
-        opacity: 0.7;
-        transition:
-            transform 0.5s var(--ease-out-quart),
-            opacity 0.5s var(--ease-out-quart);
-    }
-
-    .carousel-raise .swiper-slide-active {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-    }
-
     /* Swiper's arrows are replaced with buttons that match the design system. */
     .swiper-button-next::after,
     .swiper-button-prev::after {
@@ -592,4 +566,43 @@
     [dir='rtl'] .flip-rtl {
         transform: scaleX(-1);
     }
+}
+
+/*
+|-----------------------------------------------------------------------------
+| Centred carousel — deliberately outside the cascade layers
+|-----------------------------------------------------------------------------
+|
+| The middle slide stands up and the ones either side sit back and a little
+| lower. The recede is gentle on purpose: the neighbours still have to look
+| like cards worth swiping to, and dimmed hard they read as switched off
+| instead.
+|
+| These rules cannot live in `@layer utilities` with the rest. Swiper's own
+| stylesheet is unlayered, and unlayered CSS beats layered CSS whatever the
+| specificity — so `.swiper-backface-hidden .swiper-slide { transform:
+| translateZ(0) }` in swiper.css silently flattened the transform while the
+| opacity beside it still applied, which is a confusing way to be wrong. Same
+| reason the hero's pagination carries inline custom properties.
+|
+| The transform is on the slide rather than on the card so the card keeps its
+| own hover lift, and the track carries vertical padding to give the lift, the
+| drop and their shadows somewhere to go.
+*/
+.carousel-raise.swiper .swiper-slide {
+    transform: scale(0.94) translateY(0.5rem);
+    opacity: 0.8;
+    transition:
+        transform 0.5s var(--ease-out-quart),
+        opacity 0.5s var(--ease-out-quart);
+}
+
+/*
+ * Lifted clear of the line the others rest on, rather than merely left at rest
+ * on it — that roughly doubles the separation between the active card and its
+ * neighbours without having to shrink them further.
+ */
+.carousel-raise.swiper .swiper-slide-active {
+    transform: scale(1) translateY(-0.5rem);
+    opacity: 1;
 }
