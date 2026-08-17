@@ -90,10 +90,16 @@
      * A three-step elevation ramp. Each step pairs a tight contact shadow with
      * a wide, heavily-offset ambient one — a single blurred drop shadow reads
      * as haze rather than as a raised surface.
+     *
+     * Cast in ink-950 rather than in a neutral near-black. A shadow is the
+     * brand hue seen through the surface above it, so a blue-grey one under a
+     * petrol card is the same mismatch the ink ramp exists to avoid — quiet
+     * enough to miss on any single card, and the reason a page of them reads
+     * very slightly cold.
      */
-    --shadow-e1: 0 1px 2px rgb(15 19 25 / 0.05), 0 1px 3px -1px rgb(15 19 25 / 0.06);
-    --shadow-e2: 0 1px 2px rgb(15 19 25 / 0.04), 0 10px 24px -12px rgb(15 19 25 / 0.18);
-    --shadow-e3: 0 2px 4px rgb(15 19 25 / 0.05), 0 24px 48px -20px rgb(15 19 25 / 0.26);
+    --shadow-e1: 0 1px 2px rgb(7 20 23 / 0.05), 0 1px 3px -1px rgb(7 20 23 / 0.06);
+    --shadow-e2: 0 1px 2px rgb(7 20 23 / 0.04), 0 10px 24px -12px rgb(7 20 23 / 0.18);
+    --shadow-e3: 0 2px 4px rgb(7 20 23 / 0.05), 0 24px 48px -20px rgb(7 20 23 / 0.26);
 
     /* Retained under their old names so existing markup keeps working. */
     --shadow-card: var(--shadow-e2);
@@ -217,21 +223,27 @@
      * button; the shadow tightens on press so the surface reads as travelling
      * down rather than just changing colour.
      */
+    /*
+     * The lift shadow is the button's own hue, not a grey one: that is what
+     * makes a raised control look lit rather than cut out. This one was still
+     * throwing the previous palette's blue — a saturated cobalt glow under a
+     * petrol button, the single loudest thing left over from that palette.
+     */
     .btn-primary {
-        @apply bg-brand-600 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_1px_2px_rgb(15_19_25/0.16)]
-               hover:-translate-y-px hover:bg-brand-700 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_6px_16px_-6px_rgb(28_102_241/0.6)]
-               active:translate-y-0 active:bg-brand-800 active:shadow-[inset_0_1px_2px_rgb(15_19_25/0.24)];
+        @apply bg-brand-600 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_1px_2px_rgb(7_20_23/0.16)]
+               hover:-translate-y-px hover:bg-brand-700 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.18),0_6px_16px_-6px_rgb(15_122_148/0.6)]
+               active:translate-y-0 active:bg-brand-800 active:shadow-[inset_0_1px_2px_rgb(7_20_23/0.24)];
     }
 
     .btn-dark {
-        @apply bg-ink-900 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_1px_2px_rgb(15_19_25/0.16)]
-               hover:-translate-y-px hover:bg-ink-800 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_6px_16px_-6px_rgb(15_19_25/0.5)]
+        @apply bg-ink-900 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_1px_2px_rgb(7_20_23/0.16)]
+               hover:-translate-y-px hover:bg-ink-800 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_6px_16px_-6px_rgb(7_20_23/0.5)]
                active:translate-y-0;
     }
 
     .btn-accent {
-        @apply bg-accent-400 text-ink-950 shadow-[inset_0_1px_0_rgb(255_255_255/0.4),0_1px_2px_rgb(15_19_25/0.16)]
-               hover:-translate-y-px hover:bg-accent-300 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.4),0_6px_16px_-6px_rgb(234_169_0/0.7)]
+        @apply bg-accent-400 text-ink-950 shadow-[inset_0_1px_0_rgb(255_255_255/0.4),0_1px_2px_rgb(7_20_23/0.16)]
+               hover:-translate-y-px hover:bg-accent-300 hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.4),0_6px_16px_-6px_rgb(245_158_11/0.7)]
                active:translate-y-0 active:bg-accent-500;
     }
 
@@ -291,7 +303,7 @@
      */
     .field {
         @apply min-h-12 w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-base text-ink-900
-               shadow-[inset_0_1px_2px_rgb(15_19_25/0.04)] transition-colors placeholder:text-ink-400
+               shadow-[inset_0_1px_2px_rgb(7_20_23/0.04)] transition-colors placeholder:text-ink-400
                focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none
                sm:min-h-11 sm:text-sm;
     }
@@ -428,8 +440,8 @@
 
     .blueprint-ink {
         background-image:
-            linear-gradient(to right, rgb(15 19 25 / 0.04) 1px, transparent 1px),
-            linear-gradient(to bottom, rgb(15 19 25 / 0.04) 1px, transparent 1px);
+            linear-gradient(to right, rgb(7 20 23 / 0.04) 1px, transparent 1px),
+            linear-gradient(to bottom, rgb(7 20 23 / 0.04) 1px, transparent 1px);
         background-size: 56px 56px;
     }
 

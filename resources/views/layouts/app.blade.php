@@ -7,7 +7,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0f1319">
+    {{-- ink-950: the hue the header and the dark panels are actually built on. --}}
+    <meta name="theme-color" content="#071417">
 
     @include('partials.seo')
 

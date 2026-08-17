@@ -1,9 +1,48 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <rect width="1200" height="630" fill="#0f1319"/>
-  <rect width="40" height="40" x="80" y="80" rx="9" fill="#fff"/>
-  <path d="M89 111 100 87l11 24h-6l-5-11-5 11h-6Z" fill="#0f1319"/>
-  <text x="136" y="112" font-family="system-ui, sans-serif" font-size="30" font-weight="800" fill="#fff">ArtaClean</text>
-  <text x="80" y="330" font-family="system-ui, sans-serif" font-size="62" font-weight="800" fill="#fff">Industrial cleaning</text>
-  <text x="80" y="410" font-family="system-ui, sans-serif" font-size="62" font-weight="800" fill="#3286fc">equipment</text>
-  <text x="80" y="500" font-family="system-ui, sans-serif" font-size="28" fill="#8593a5">Scrubbers · Sweepers · Vacuums · Steam cleaners</text>
+  <!--
+    The share card. It was still built on the discarded palette — a blue-grey
+    ground and a cobalt headline — so a link shared into Telegram or WhatsApp
+    showed a different brand from the one the site opens with.
+
+    Now it is the hero, compressed: petrol ground, blueprint grid for scale, a
+    brand key light, and the accent rationed to a single rule.
+  -->
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" fill="none" stroke="#fff" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="key" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#1d9db6" stop-opacity="0.34"/>
+      <stop offset="0.55" stop-color="#1d9db6" stop-opacity="0.09"/>
+      <stop offset="1" stop-color="#1d9db6" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="tile">
+      <rect x="80" y="76" width="48" height="48" rx="11"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1200" height="630" fill="#071417"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="1010" cy="120" r="380" fill="url(#key)"/>
+
+  <!-- Lockup, same mark as the site header. -->
+  <rect x="80" y="76" width="48" height="48" rx="11" fill="#0e1f23"/>
+  <g clip-path="url(#tile)">
+    <rect x="80" y="120" width="48" height="4" fill="#fbbf24"/>
+  </g>
+  <path d="M89.6 113.6 100.2 92.4M100.2 113.6 110.8 92.4M110.8 113.6 118.4 97.6"
+        fill="none" stroke="#fff" stroke-width="3.8" stroke-linecap="round"/>
+  <text x="142" y="110" font-family="system-ui, sans-serif" font-size="30" font-weight="800"
+        letter-spacing="-0.5" fill="#fff">ArtaClean</text>
+
+  <!-- The eyebrow rule the site sets above every section heading. -->
+  <rect x="80" y="268" width="56" height="2" fill="#f59e0b"/>
+
+  <text x="80" y="348" font-family="system-ui, sans-serif" font-size="62" font-weight="800"
+        letter-spacing="-1" fill="#fff">Industrial cleaning</text>
+  <text x="80" y="428" font-family="system-ui, sans-serif" font-size="62" font-weight="800"
+        letter-spacing="-1" fill="#3bbad0">equipment</text>
+  <text x="80" y="516" font-family="system-ui, sans-serif" font-size="28" fill="#adc3c7">Scrubbers · Sweepers · Vacuums · Steam cleaners</text>
+
+  <rect x="0" y="628" width="1200" height="2" fill="#fbbf24" fill-opacity="0.5"/>
 </svg>
