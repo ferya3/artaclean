@@ -237,6 +237,38 @@ Notes:
 * **`provision.sh` finishes with a health check** against `/up` and prints the
   three logs to read if it does not answer 200.
 
+### Installing from a restricted network
+
+From some networks — Iranian hosts in particular — two of the services a Laravel
+install depends on are unreachable while everything else answers fine:
+
+| Host | Used for | Typical result |
+|---|---|---|
+| `repo.packagist.org` | Composer package metadata | `composer install` hangs, then times out |
+| `codeload.github.com` | the zip archives Composer pulls dist files from | same |
+
+Pointing Composer at a full mirror replaces both at once — the mirror serves the
+metadata *and* the dist archives, so `codeload` is never contacted.
+`deploy/bootstrap-restricted-network.sh` does this and then hands over to
+`provision.sh`. It is the only file you need on the server:
+
+```bash
+sudo DOMAIN=artaclean.ir SEED=true bash bootstrap-restricted-network.sh
+```
+
+It waits out the automatic-updater lock that a fresh cloud image holds for its
+first few minutes, shallow-clones the repository, installs Composer, picks the
+first mirror that answers, and starts provisioning. Re-running it is safe.
+
+The mirror is set **globally**, so later `deploy/deploy.sh` runs go through it
+too — it is configured once per machine, not once per release. Force a specific
+one with `COMPOSER_MIRROR=https://your-mirror/`.
+
+> Uploading this file from Windows: use WinSCP's **Binary** transfer mode. Text
+> mode rewrites the line endings to CRLF, and bash then fails with
+> `bad interpreter: No such file or directory`. If that happens, repair it in
+> place with `sed -i 's/\r$//' bootstrap-restricted-network.sh`.
+
 ### If the site does not come up
 
 Work down this list; each step tells you which layer is at fault.
