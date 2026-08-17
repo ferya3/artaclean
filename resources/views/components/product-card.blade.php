@@ -3,19 +3,40 @@
 <article class="card-hover tick-frame group flex h-full flex-col overflow-hidden">
     <a href="{{ $product->url() }}"
        class="relative block aspect-4/3 overflow-hidden bg-linear-to-b from-ink-50 to-white">
-        {{--
-            A soft radial floor under the machine. Product shots arrive on
-            transparent or white backgrounds, and a flat grey panel leaves them
-            looking cut out; this seats them without needing a shadow baked
-            into every image.
-        --}}
-        <span class="pointer-events-none absolute inset-x-6 bottom-5 h-10 rounded-[50%] bg-ink-900/8 blur-xl"></span>
+        @if ($product->cover_image)
+            {{--
+                A soft radial floor under the machine. Product shots arrive on
+                transparent or white backgrounds, and a flat grey panel leaves
+                them looking cut out; this seats them without needing a shadow
+                baked into every image.
+            --}}
+            <span class="pointer-events-none absolute inset-x-6 bottom-5 h-10 rounded-[50%] bg-ink-900/8 blur-xl"></span>
 
-        <img src="{{ $product->coverUrl() }}"
-             alt="{{ $product->name }}"
-             loading="lazy"
-             decoding="async"
-             class="relative size-full object-contain p-6 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.06]">
+            <img src="{{ $product->coverUrl() }}"
+                 alt="{{ $product->name }}"
+                 loading="lazy"
+                 decoding="async"
+                 class="relative size-full object-contain p-6 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.06]">
+        @else
+            {{--
+                No photograph yet, so the card draws the class of machine this
+                product actually is, the way the category grid does.
+
+                The shared placeholder is one walk-behind scrubber, and it was
+                being served for everything: a row of industrial vacuums came up
+                under three identical scrubber drawings. That is worse than an
+                empty panel — it tells the buyer the wrong thing about the
+                machine before they have read its name. `machine-icon` already
+                falls back to a generic outline for a category it has no glyph
+                for, so an unmapped or missing category still lands somewhere
+                sensible.
+            --}}
+            <span class="relative grid size-full place-items-center">
+                <span class="absolute inset-0 blueprint-ink opacity-60"></span>
+                <x-machine-icon :slug="$product->category?->slug"
+                                class="relative size-24 text-ink-300 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.06] sm:size-28" />
+            </span>
+        @endif
 
         @if ($product->is_rentable)
             <span class="absolute top-3.5 start-3.5 rounded-md bg-accent-400 px-2 py-1 text-[11px] leading-none font-bold text-ink-950 shadow-[var(--shadow-e1)]">
