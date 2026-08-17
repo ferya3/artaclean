@@ -51,6 +51,38 @@ document.addEventListener('alpine:init', () => {
         },
     }));
 
+    /**
+     * The hero gallery: one machine at a time, swiped left and right.
+     *
+     * Autoplay is skipped when the visitor has asked for reduced motion — a
+     * hero that moves on its own is exactly the kind of unrequested animation
+     * that setting exists to stop.
+     */
+    Alpine.data('heroGallery', () => ({
+        swiper: null,
+
+        init() {
+            const rtl = document.documentElement.dir === 'rtl';
+            const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            this.swiper = new Swiper(this.$refs.carousel, {
+                slidesPerView: 1,
+                spaceBetween: 0,
+                loop: true,
+                dir: rtl ? 'rtl' : 'ltr',
+                speed: 550,
+                autoplay: still ? false : { delay: 6000, disableOnInteraction: true },
+                pagination: { el: this.$refs.pagination, clickable: true },
+                navigation: { nextEl: this.$refs.next, prevEl: this.$refs.prev },
+                a11y: { enabled: true },
+            });
+        },
+
+        destroy() {
+            this.swiper?.destroy();
+        },
+    }));
+
     /** Horizontal carousels for product rows, brands and articles. */
     Alpine.data('carousel', (options = {}) => ({
         swiper: null,

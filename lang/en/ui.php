@@ -17,6 +17,8 @@ return [
     'submit' => 'Submit request',
     'calculate' => 'Calculate',
     'close' => 'Close',
+    'previous' => 'Previous',
+    'next' => 'Next',
     'clear' => 'Clear',
     'filters' => 'Filters',
     'clear_filters' => 'Clear filters',
@@ -43,23 +45,35 @@ return [
         'power' => 'Most powerful',
     ],
 
-    'hero_eyebrow' => 'Industrial cleaning equipment',
-    'hero_title' => 'Machines specified for your floor, not buried in a PDF',
-    'hero_subtitle' => 'Scrubbers, sweepers, industrial vacuums and steam cleaners — full specifications, side-by-side comparison and same-day pricing.',
-    'hero_stat_products' => 'machine models',
-    'hero_stat_brands' => 'trusted brands',
-    'hero_stat_support' => 'technical support',
+    'hero_title' => 'Industrial cleaning equipment',
 
-    // Three reassurances a procurement manager checks before enquiring.
-    'hero_trust' => [
-        'warranty' => 'Manufacturer warranty',
-        'parts' => 'Spare parts in stock',
-        'service' => 'On-site service and training',
+    // A single short line under the title. Keep it to one sentence.
+    'hero_slogan' => 'We measure your floor first, then specify the machine.',
+
+    // The three machines in the hero gallery, in slide order.
+    'hero_slides' => [
+        'ride_on' => [
+            'name' => 'Ride-on scrubber dryer',
+            'alt' => 'Ride-on industrial scrubber dryer cleaning a factory floor',
+            'figure' => '5,000',
+            'unit' => 'm²/h',
+            'metric' => 'Productivity in a single shift',
+        ],
+        'walk_behind' => [
+            'name' => 'Walk-behind scrubber',
+            'alt' => 'Walk-behind industrial scrubber dryer cleaning a floor',
+            'figure' => '2,100',
+            'unit' => 'm²/h',
+            'metric' => 'Productivity in a single shift',
+        ],
+        'vacuum' => [
+            'name' => 'Wet and dry industrial vacuum',
+            'alt' => 'Industrial wet and dry vacuum with a stainless drum and suction hose',
+            'figure' => '250',
+            'unit' => 'mbar',
+            'metric' => 'Suction power',
+        ],
     ],
-
-    'hero_image_alt' => 'Ride-on industrial scrubber dryer cleaning a factory floor',
-    'hero_image_caption' => 'Ride-on scrubber dryer, 1,000 mm cleaning path',
-    'hero_badge_label' => 'Productivity in a single shift',
 
     // --- Who we are ----------------------------------------------------------
     'company' => [
