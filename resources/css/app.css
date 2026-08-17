@@ -600,7 +600,7 @@
      * from the beginning — so this replays on every open.
      */
     .menu-stagger {
-        --menu-row: 70ms;
+        --menu-row: 40ms;
 
         /*
          * Rows enter from the edge the reader starts at, which is the edge the
