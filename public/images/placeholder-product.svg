@@ -1,7 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360">
-  <rect width="480" height="360" fill="#f6f7f8"/>
-  <g fill="none" stroke="#b0b9c6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="m300 150-60-34-60 34m120 0-60 35m60-35v70l-60 35m0-70-60-35m60 35v70m0 0-60-35v-70"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" role="img" aria-label="Machine photograph pending">
+  <defs>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f8f8"/>
+      <stop offset="1" stop-color="#e2ecee"/>
+    </linearGradient>
+    <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe0e3"/>
+      <stop offset="1" stop-color="#aec4c9"/>
+    </linearGradient>
+    <pattern id="weave" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M16 0H0v16" fill="none" stroke="#0f7a94" stroke-opacity="0.06" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="480" height="360" fill="url(#ground)"/>
+  <rect width="480" height="360" fill="url(#weave)"/>
+
+  <!--
+    A generic walk-behind scrubber in silhouette. A card with a bare "no image"
+    box reads as a broken page; a machine shape reads as a machine whose
+    photograph has not been uploaded yet.
+  -->
+  <g stroke="#7c979d" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M172 176h108a20 20 0 0 1 20 20v34H172Z" fill="url(#shell)"/>
+    <path d="M280 176l38-58"/>
+    <path d="M300 118h40"/>
+    <path d="M158 230h150v22H158Z" fill="url(#shell)"/>
+    <path d="M148 268h132"/>
+    <circle cx="196" cy="266" r="14" fill="#cfe0e3"/>
+    <circle cx="278" cy="266" r="14" fill="#cfe0e3"/>
   </g>
-  <text x="240" y="290" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" fill="#8593a5">No image</text>
+
+  <ellipse cx="238" cy="292" rx="112" ry="10" fill="#0e1f23" opacity="0.08"/>
 </svg>

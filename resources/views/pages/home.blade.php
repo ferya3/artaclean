@@ -182,10 +182,11 @@
                                :href="route('products.index')" />
 
             {{--
-                Nine categories once carried the same generic icon, which read
-                as filler. A drawing-sheet index number is honest about being
-                navigation, gives each tile its own anchor, and leaves the room
-                the icon was taking to the description a buyer actually reads.
+                Each tile carries the silhouette of the machine it sells. Nine
+                identical cards forced a buyer to read nine headings in
+                sequence; a distinct shape lets them find the right one at a
+                glance, which is the entire job of a category grid. The index
+                number stays as a quiet drawing-sheet reference behind it.
             --}}
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($categories as $category)
@@ -193,6 +194,12 @@
                        class="card-hover tick-frame group relative flex flex-col overflow-hidden p-6">
                         <span class="absolute top-5 end-5 tabular text-2xl leading-none font-black text-ink-100 transition-colors duration-300 group-hover:text-brand-100">
                             {{ str_pad((string) ($loop->index + 1), 2, '0', STR_PAD_LEFT) }}
+                        </span>
+
+                        <span class="mb-5 grid size-14 place-items-center rounded-xl bg-brand-50 text-brand-700
+                                     transition-[background-color,color,transform] duration-300 ease-[var(--ease-out-quart)]
+                                     group-hover:-translate-y-0.5 group-hover:bg-brand-600 group-hover:text-white">
+                            <x-machine-icon :slug="$category->slug" class="size-8" />
                         </span>
 
                         <h3 class="pe-12 text-base leading-7 font-bold text-ink-900 transition-colors group-hover:text-brand-700">
@@ -238,12 +245,24 @@
                                  loading="lazy"
                                  class="absolute inset-0 size-full object-cover opacity-60 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-105">
                         @else
-                            {{-- With no photograph, the tile still needs texture and depth. --}}
-                            <div class="absolute inset-0 blueprint-fine opacity-70"></div>
-                            <div class="absolute -top-16 -end-10 size-56 glow-brand opacity-70 transition-opacity duration-500 group-hover:opacity-100"></div>
+                            {{--
+                                No photograph, so the tile is built rather than
+                                filled: a petrol gradient instead of flat black,
+                                a blueprint weave for texture, and the site's own
+                                silhouette ghosted in behind the label. Eight
+                                identical dark rectangles read as broken images;
+                                these read as a set.
+                            --}}
+                            <div class="absolute inset-0 bg-linear-to-br from-brand-800 via-ink-900 to-ink-950"></div>
+                            <div class="absolute inset-0 blueprint-fine opacity-60"></div>
+                            <div class="absolute -top-16 -end-10 size-56 glow-brand opacity-80 transition-opacity duration-500 group-hover:opacity-100"></div>
+
+                            <div class="absolute top-4 end-5 text-brand-200/35 transition-[color,transform] duration-500 ease-[var(--ease-out-quart)] group-hover:-translate-y-0.5 group-hover:text-brand-200/60">
+                                <x-environment-icon :slug="$environment->slug" class="size-14" />
+                            </div>
                         @endif
 
-                        <div class="absolute inset-0 bg-linear-to-t from-ink-950 via-ink-950/45 to-transparent"></div>
+                        <div class="absolute inset-0 bg-linear-to-t from-ink-950 via-ink-950/35 to-transparent"></div>
 
                         {{-- A hairline that fills with the accent as the tile is hovered. --}}
                         <span class="absolute inset-x-5 bottom-0 h-0.5 origin-left scale-x-0 bg-accent-400 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-x-100 rtl:origin-right"></span>
@@ -314,7 +333,16 @@
                                    :href="route('products.index')" />
 
                 <div x-data="carousel()" class="relative">
-                    <div x-ref="carousel" class="swiper !overflow-visible">
+                    {{--
+                        The track must clip horizontally. Left visible, the
+                        wrapper is as wide as all eight slides at once, and that
+                        width becomes the document's — on a phone it rendered the
+                        entire site in a 390px strip beside 1,500px of blank
+                        page. The padding/negative-margin pair gives the card
+                        hover lift and its shadow room to breathe vertically
+                        without reopening the horizontal axis.
+                    --}}
+                    <div x-ref="carousel" class="swiper -my-3 py-3">
                         <div class="swiper-wrapper">
                             @foreach ($featured as $product)
                                 <div class="swiper-slide h-auto">
