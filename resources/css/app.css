@@ -571,21 +571,23 @@
      * The drawer's rows come in one after another, each travelling in from the
      * edge the panel itself arrives from.
      *
-     * The timing is a chain, and every link is the same length:
+     * Two numbers drive it, and the distance between them is the whole effect.
      *
-     *   the panel finishes  ->  row 0 starts
-     *   row 0 finishes      ->  row 1 starts
-     *   row 1 finishes      ->  row 2 starts   ... and on down the list
+     *   `--menu-row-step`   how long after one row sets off before the next does
+     *   `--menu-row-travel` how long a row takes to arrive
      *
-     * So the delay step is not a number picked to look right — it is the row
-     * duration itself, which is why both come from one custom property. Change
-     * `--menu-row` and the hand-off stays exact. The 300ms lead-in is likewise
-     * the drawer's own enter duration, so row 0 starts on the frame the panel
-     * stops.
+     * The travel is several times the step, so a row is still moving while the
+     * next few set off, and that overlap is what makes the list fall. Handing
+     * each row off strictly — the next starting only once the one above has
+     * landed — was the version that had no rain in it: with never more than one
+     * row moving, a list cannot pour, it can only tick.
      *
-     * That makes each row's own travel short by necessity: with no overlap
-     * between them, the row duration is also the interval, so anything longer
-     * turns a list this length into a wait.
+     * About four rows are in flight at once. Many more and the leading edge is
+     * lost and the list reads as a single blur sliding down; many fewer and the
+     * overlap stops registering at all.
+     *
+     * The 300ms lead-in is the drawer's own enter duration, so the first row
+     * sets off on the frame the panel stops.
      *
      * Each row carries its position in `--i`, counted straight through the
      * headings and every group, so the chain runs unbroken from the top of the
@@ -600,7 +602,8 @@
      * from the beginning — so this replays on every open.
      */
     .menu-stagger {
-        --menu-row: 40ms;
+        --menu-row-step: 60ms;
+        --menu-row-travel: 260ms;
 
         /*
          * Rows enter from the edge the reader starts at, which is the edge the
@@ -616,8 +619,8 @@
     }
 
     .menu-stagger > * {
-        animation: menu-row-in var(--menu-row) var(--ease-out-quart) backwards;
-        animation-delay: calc(300ms + var(--i, 0) * var(--menu-row));
+        animation: menu-row-in var(--menu-row-travel) var(--ease-out-quart) backwards;
+        animation-delay: calc(300ms + var(--i, 0) * var(--menu-row-step));
     }
 
     @keyframes menu-row-in {
