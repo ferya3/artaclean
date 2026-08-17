@@ -6,12 +6,26 @@
     </div>
 
     <div class="container-page pb-16">
+        {{--
+            `min-w-0` on the columns is load-bearing, not tidying.
+
+            A grid item defaults to `min-width: auto`, so it refuses to shrink
+            below the min-content width of what is inside it. The gallery's
+            Swiper then measures that already-blown-out column, writes the
+            figure back as an inline slide width, and the page settles at
+            around 1,450px on a 390px phone — the whole product page rendered in
+            a strip beside a field of empty white, which in RTL is the side the
+            document scrolls to.
+
+            Letting the columns shrink to zero breaks the loop at its source:
+            Swiper then measures the real 358px and sizes its slides to match.
+        --}}
         <div class="grid gap-10 lg:grid-cols-12 lg:gap-14">
 
             {{-- ---------------------------------------------------------- --}}
             {{-- Gallery                                                    --}}
             {{-- ---------------------------------------------------------- --}}
-            <div class="lg:col-span-7">
+            <div class="min-w-0 lg:col-span-7">
                 @php
                     $gallery = $product->galleryImages;
                     $frames = $product->frames360;
@@ -59,10 +73,20 @@
                                         </div>
                                     </div>
                                 @empty
+                                    {{--
+                                        Same treatment as the card that linked
+                                        here: the machine class this product
+                                        actually is, not the one generic
+                                        scrubber. Following a vacuum's
+                                        silhouette on the catalog through to a
+                                        scrubber on its own page is the version
+                                        of this that reads as a bug.
+                                    --}}
                                     <div class="swiper-slide">
-                                        <div class="aspect-4/3">
-                                            <img src="{{ $product->coverUrl() }}" alt="{{ $product->name }}"
-                                                 fetchpriority="high" class="size-full object-contain p-6">
+                                        <div class="relative grid aspect-4/3 place-items-center">
+                                            <span class="absolute inset-0 blueprint-ink opacity-60"></span>
+                                            <x-machine-icon :slug="$product->category?->slug"
+                                                            class="relative size-28 text-ink-300 sm:size-36" />
                                         </div>
                                     </div>
                                 @endforelse
@@ -150,7 +174,7 @@
             {{-- ---------------------------------------------------------- --}}
             {{-- Buy box                                                    --}}
             {{-- ---------------------------------------------------------- --}}
-            <div class="lg:col-span-5">
+            <div class="min-w-0 lg:col-span-5">
                 @if ($product->brand)
                     <a href="{{ $product->brand->url() }}" class="text-sm font-semibold text-brand-600 hover:text-brand-800">
                         {{ $product->brand->name }}
@@ -284,7 +308,7 @@
     {{-- ---------------------------------------------------------------- --}}
     <section class="border-t border-ink-100 bg-ink-50 py-16">
         <div class="container-page grid gap-10 lg:grid-cols-3">
-            <div class="lg:col-span-2">
+            <div class="min-w-0 lg:col-span-2">
                 <h2 class="mb-6 text-xl font-bold text-ink-900">{{ __('ui.product.full_specs') }}</h2>
 
                 <div class="overflow-hidden rounded-[var(--radius-card)] border border-ink-100 bg-white">
