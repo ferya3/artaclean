@@ -568,8 +568,8 @@
     }
 
     /*
-     * The drawer's rows come in one after another, each travelling left to
-     * right the way the panel itself does.
+     * The drawer's rows come in one after another, each travelling in from the
+     * edge the panel itself arrives from.
      *
      * The timing is a chain, and every link is the same length:
      *
@@ -600,7 +600,19 @@
      * from the beginning — so this replays on every open.
      */
     .menu-stagger {
-        --menu-row: 120ms;
+        --menu-row: 70ms;
+
+        /*
+         * Rows enter from the edge the reader starts at, which is the edge the
+         * panel itself arrives from: the right in Persian, the left in English.
+         * The offset is a variable rather than two keyframe sets because only
+         * its sign differs, and the keyframe resolves it against each row.
+         */
+        --menu-row-from: -1rem;
+    }
+
+    [dir='rtl'] .menu-stagger {
+        --menu-row-from: 1rem;
     }
 
     .menu-stagger > * {
@@ -611,7 +623,7 @@
     @keyframes menu-row-in {
         from {
             opacity: 0;
-            transform: translateX(-1rem);
+            transform: translateX(var(--menu-row-from));
         }
         to {
             opacity: 1;
