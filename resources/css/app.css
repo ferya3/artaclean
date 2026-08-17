@@ -566,6 +566,50 @@
     [dir='rtl'] .flip-rtl {
         transform: scaleX(-1);
     }
+
+    /*
+     * The drawer's contents arrive one after another once the panel itself has
+     * finished travelling — the 300ms lead-in is the drawer's own enter
+     * duration, so the first row starts moving exactly as the panel stops.
+     *
+     * Each row carries its position in `--i`, counted straight through the
+     * headings and every group, so the cascade runs unbroken from the top of
+     * the list to the bottom rather than restarting at each section.
+     *
+     * `backwards` fill is what holds a row invisible through its delay; without
+     * it every row would be painted in place first and then jump back to the
+     * start of its own animation.
+     *
+     * No trigger is needed. `x-show` toggles the drawer's `display`, and a
+     * subtree that goes from `display: none` to rendered starts its animations
+     * from the beginning — so this replays on every open.
+     */
+    .menu-stagger > * {
+        animation: menu-row-in 0.4s var(--ease-out-quart) backwards;
+        animation-delay: calc(300ms + var(--i, 0) * 40ms);
+    }
+
+    @keyframes menu-row-in {
+        from {
+            opacity: 0;
+            transform: translateX(-1rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /*
+     * The global reduced-motion rule only collapses durations, which would
+     * leave these rows sitting invisible through a delay of up to a second.
+     * They have to lose the animation outright.
+     */
+    @media (prefers-reduced-motion: reduce) {
+        .menu-stagger > * {
+            animation: none;
+        }
+    }
 }
 
 /*

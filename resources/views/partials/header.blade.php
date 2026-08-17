@@ -231,29 +231,46 @@
                     </button>
                 </div>
 
-                <div class="flex-1 space-y-1 overflow-y-auto overscroll-contain px-5 py-4">
-                    <p class="eyebrow pt-2 pb-1">{{ __('nav.categories') }}</p>
+                {{--
+                    `$row` counts straight through the headings and all three
+                    groups, so the cascade is one run down the list rather than
+                    three that each start over. The secondary links lose their
+                    wrapping grid for the same reason: a wrapper would animate
+                    as a single row and land its six links together.
+                --}}
+                @php $row = 0; @endphp
+
+                <div class="menu-stagger flex-1 space-y-1 overflow-y-auto overscroll-contain px-5 py-4">
+                    <p class="eyebrow pt-2 pb-1" style="--i: {{ $row++ }}">{{ __('nav.categories') }}</p>
                     @foreach ($navCategories as $category)
-                        <a href="{{ $category->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
+                        <a href="{{ $category->url() }}" style="--i: {{ $row++ }}"
+                           class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
                             {{ $category->name }}
                         </a>
                     @endforeach
 
-                    <p class="eyebrow pt-4 pb-1">{{ __('nav.environments') }}</p>
+                    <p class="eyebrow pt-4 pb-1" style="--i: {{ $row++ }}">{{ __('nav.environments') }}</p>
                     @foreach ($navEnvironments as $environment)
-                        <a href="{{ $environment->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
+                        <a href="{{ $environment->url() }}" style="--i: {{ $row++ }}"
+                           class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
                             {{ $environment->name }}
                         </a>
                     @endforeach
 
-                    <div class="grid gap-1 pt-4">
-                        <a href="{{ route('selector') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base font-semibold text-brand-700 hover:bg-brand-50">{{ __('nav.selector') }}</a>
-                        <a href="{{ route('rental') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.rental') }}</a>
-                        <a href="{{ route('brands.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.brands') }}</a>
-                        <a href="{{ route('downloads.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.downloads') }}</a>
-                        <a href="{{ route('blog.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.blog') }}</a>
-                        <a href="{{ route('contact') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.contact') }}</a>
-                    </div>
+                    {{--
+                        Carries the gap the removed wrapper used to hold, and
+                        earns it by marking where the machine lists stop and the
+                        rest of the site starts. It takes a place in the
+                        cascade like any other row.
+                    --}}
+                    <span class="my-3 block h-px bg-ink-100" style="--i: {{ $row++ }}"></span>
+
+                    <a href="{{ route('selector') }}" style="--i: {{ $row++ }}" class="flex min-h-12 items-center rounded-lg px-3 text-base font-semibold text-brand-700 hover:bg-brand-50">{{ __('nav.selector') }}</a>
+                    <a href="{{ route('rental') }}" style="--i: {{ $row++ }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.rental') }}</a>
+                    <a href="{{ route('brands.index') }}" style="--i: {{ $row++ }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.brands') }}</a>
+                    <a href="{{ route('downloads.index') }}" style="--i: {{ $row++ }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.downloads') }}</a>
+                    <a href="{{ route('blog.index') }}" style="--i: {{ $row++ }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.blog') }}</a>
+                    <a href="{{ route('contact') }}" style="--i: {{ $row++ }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.contact') }}</a>
                 </div>
 
                 {{-- The two ways to start a conversation, held out of the scroll. --}}
