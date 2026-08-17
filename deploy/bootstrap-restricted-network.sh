@@ -90,7 +90,35 @@ log "Installing git"
 apt-get update -qq
 apt-get install -y -qq git curl ca-certificates
 
-if [[ -d "${APP_ROOT}/.git" ]]; then
+# A source archive sitting next to this script wins over cloning. On some
+# networks an ordinary HTTPS GET to github.com succeeds while git's own
+# transport — which fetches /info/refs?service=git-upload-pack — times out, so
+# "curl reaches GitHub" is not evidence that a clone will work. Upload the
+# tarball beside this file and the whole question goes away.
+ARCHIVE="${SOURCE_ARCHIVE:-}"
+
+if [[ -z "$ARCHIVE" ]]; then
+    for candidate in \
+        "$(dirname "$(readlink -f "$0")")/artaclean-source.tar.gz" \
+        /root/artaclean-source.tar.gz \
+        ./artaclean-source.tar.gz
+    do
+        [[ -f "$candidate" ]] && { ARCHIVE="$candidate"; break; }
+    done
+fi
+
+if [[ -n "$ARCHIVE" ]]; then
+    log "Installing from ${ARCHIVE}"
+    [[ -f "$ARCHIVE" ]] || die "No archive at ${ARCHIVE}."
+
+    mkdir -p "$APP_ROOT"
+    tar -xzf "$ARCHIVE" -C "$APP_ROOT"
+
+    # Later releases cannot be `git pull`ed on a host that cannot reach git.
+    # Upload a newer archive and re-run this script instead.
+    warn "Installed from an archive, so this checkout has no git history."
+    warn "  To update later: upload a newer archive and re-run this script."
+elif [[ -d "${APP_ROOT}/.git" ]]; then
     log "Repository already present — fetching the latest commit"
     git config --global --add safe.directory "$APP_ROOT" 2>/dev/null || true
     git -C "$APP_ROOT" pull --ff-only || warn "Could not fast-forward; continuing with what is on disk."
@@ -99,8 +127,18 @@ else
     mkdir -p "$(dirname "$APP_ROOT")"
 
     # A shallow clone is a fraction of the transfer, which matters a great deal
-    # on a link that is already the weak point of this install.
-    git clone --depth 1 "$REPO_URL" "$APP_ROOT"
+    # on a link that is already the weak point of this install. Keep the timeout
+    # short: where git is blocked it hangs for five minutes and then fails, and
+    # failing fast leaves room to say something useful about it.
+    if ! GIT_HTTP_LOW_SPEED_LIMIT=1000 GIT_HTTP_LOW_SPEED_TIME=20 \
+         git clone --depth 1 "$REPO_URL" "$APP_ROOT"; then
+        rm -rf "$APP_ROOT"
+        warn "git could not reach ${REPO_URL}."
+        warn "An HTTPS GET to github.com may still succeed here — git's transport"
+        warn "is a separate path and is the one being blocked."
+        die "Upload artaclean-source.tar.gz next to this script and re-run."
+    fi
+
     git config --global --add safe.directory "$APP_ROOT" 2>/dev/null || true
 fi
 
