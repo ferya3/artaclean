@@ -17,6 +17,8 @@ return [
     'submit' => 'Submit request',
     'calculate' => 'Calculate',
     'close' => 'Close',
+    'previous' => 'Previous',
+    'next' => 'Next',
     'clear' => 'Clear',
     'filters' => 'Filters',
     'clear_filters' => 'Clear filters',
@@ -43,18 +45,51 @@ return [
         'power' => 'Most powerful',
     ],
 
-    'hero_eyebrow' => 'Industrial cleaning equipment',
-    'hero_title' => 'Machines specified for your floor, not buried in a PDF',
-    'hero_subtitle' => 'Scrubbers, sweepers, industrial vacuums and steam cleaners — full specifications, side-by-side comparison and same-day pricing.',
-    'hero_stat_products' => 'machine models',
-    'hero_stat_brands' => 'trusted brands',
-    'hero_stat_support' => 'technical support',
+    'hero_title' => 'Industrial cleaning equipment',
 
-    // Three reassurances a procurement manager checks before enquiring.
-    'hero_trust' => [
-        'warranty' => 'Manufacturer warranty',
-        'parts' => 'Spare parts in stock',
-        'service' => 'On-site service and training',
+    // A single short line under the title. Keep it to one sentence.
+    'hero_slogan' => 'We measure your floor first, then specify the machine.',
+
+    // The three machines in the hero gallery, in slide order.
+    'hero_slides' => [
+        'ride_on' => [
+            'name' => 'Ride-on scrubber dryer',
+            'alt' => 'Ride-on industrial scrubber dryer cleaning a factory floor',
+            'figure' => '5,000',
+            'unit' => 'm²/h',
+            'metric' => 'Productivity in a single shift',
+        ],
+        'walk_behind' => [
+            'name' => 'Walk-behind scrubber',
+            'alt' => 'Walk-behind industrial scrubber dryer cleaning a floor',
+            'figure' => '2,100',
+            'unit' => 'm²/h',
+            'metric' => 'Productivity in a single shift',
+        ],
+        'vacuum' => [
+            'name' => 'Wet and dry industrial vacuum',
+            'alt' => 'Industrial wet and dry vacuum with a stainless drum and suction hose',
+            'figure' => '250',
+            'unit' => 'mbar',
+            'metric' => 'Suction power',
+        ],
+    ],
+
+    // --- Who we are ----------------------------------------------------------
+    'company' => [
+        'eyebrow' => 'About ArtaClean',
+        'title' => 'Industrial cleaning equipment, from specification to service',
+        'lead' => 'ArtaClean imports and supplies industrial cleaning machinery: scrubber dryers, sweepers, industrial vacuums, polishers, pressure washers and steam cleaners. The job does not end at the sale — it starts with a site visit and a floor measurement, and continues through operator training and spare parts supply.',
+        'body' => 'Our view is simple: most bad purchases in this industry happen because the buyer ends up with a machine larger or smaller than the site needs. So before recommending anything we work out the real cleanable area, the floor type, the length of the shift and the obstacles in the route — and specify the machine from that, not the other way round.',
+        'more' => 'More about us',
+        'facts' => [
+            'experience_value' => '15+ years',
+            'experience_label' => 'supplying and servicing industrial cleaning equipment',
+            'clients_value' => '400+ sites',
+            'clients_label' => 'factories, warehouses, hospitals and malls',
+            'coverage_value' => '31 provinces',
+            'coverage_label' => 'after-sales service and spare parts coverage',
+        ],
     ],
 
     'categories_title' => 'Product categories',

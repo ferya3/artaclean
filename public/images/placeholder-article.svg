@@ -1,5 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
-  <rect width="800" height="450" fill="#eceef1"/>
-  <rect x="300" y="150" width="200" height="150" rx="10" fill="none" stroke="#b0b9c6" stroke-width="6"/>
-  <path d="M330 260l40-45 35 40 30-25 35 30" fill="none" stroke="#b0b9c6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450" role="img" aria-label="Article illustration pending">
+  <defs>
+    <linearGradient id="sheet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#effbfc"/>
+      <stop offset="1" stop-color="#d6f4f7"/>
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0v20" fill="none" stroke="#0f7a94" stroke-opacity="0.08" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#sheet)"/>
+  <rect width="800" height="450" fill="url(#grid)"/>
+
+  <!--
+    A specification sheet rather than a broken-image glyph: the articles are
+    buying guides, so the placeholder previews the genre.
+  -->
+  <g transform="translate(250 78)">
+    <rect x="0" y="0" width="300" height="294" rx="14" fill="#ffffff" stroke="#79d5e3" stroke-width="3"/>
+    <rect x="34" y="40" width="150" height="14" rx="7" fill="#0f7a94" opacity="0.55"/>
+    <rect x="34" y="72" width="232" height="9" rx="4.5" fill="#79d5e3" opacity="0.7"/>
+    <rect x="34" y="94" width="196" height="9" rx="4.5" fill="#79d5e3" opacity="0.7"/>
+
+    <g stroke="#adc3c7" stroke-width="2">
+      <path d="M34 132h232M34 172h232M34 212h232M34 252h232"/>
+    </g>
+    <g fill="#0f7a94" opacity="0.28">
+      <rect x="34" y="142" width="96" height="10" rx="5"/>
+      <rect x="34" y="182" width="120" height="10" rx="5"/>
+      <rect x="34" y="222" width="80" height="10" rx="5"/>
+    </g>
+    <g fill="#f59e0b" opacity="0.75">
+      <rect x="206" y="142" width="60" height="10" rx="5"/>
+      <rect x="206" y="182" width="60" height="10" rx="5"/>
+      <rect x="206" y="222" width="60" height="10" rx="5"/>
+    </g>
+  </g>
 </svg>

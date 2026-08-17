@@ -7,9 +7,9 @@
                        icon="scale" />
     @else
         <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
-            <label class="flex cursor-pointer items-center gap-2.5 text-sm font-medium text-ink-700">
+            <label class="check-row font-medium">
                 <input type="checkbox" wire:model.live="differencesOnly"
-                       class="size-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500">
+                       class="check-box">
                 {{ __('ui.compare_page.differences_only') }}
                 <span class="tabular text-xs text-ink-400">
                     ({{ __('ui.compare_page.showing', ['shown' => count($rows), 'total' => $totalRows]) }})

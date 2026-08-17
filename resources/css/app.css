@@ -14,9 +14,8 @@
 |-----------------------------------------------------------------------------
 | Design tokens
 |-----------------------------------------------------------------------------
-| Karcher/Nilfisk/Tennant house style: white and light grey ground, near-black
-| type, one saturated brand colour used sparingly, and a safety-yellow accent
-| borrowed from the machines themselves for hover and highlight states.
+| Karcher/Nilfisk/Tennant house style: light ground, deep type, one brand hue
+| carrying the identity and a warm accent rationed to the actions that matter.
 |
 | The visual idea underneath is "engineered precision" — the buyer is a
 | procurement manager reading specifications, so the page furniture borrows
@@ -27,33 +26,63 @@
 @theme {
     --font-sans: 'Vazirmatn Variable', ui-sans-serif, system-ui, sans-serif;
 
-    --color-ink-50: #f6f7f8;
-    --color-ink-100: #eceef1;
-    --color-ink-200: #d5dae1;
-    --color-ink-300: #b0b9c6;
-    --color-ink-400: #8593a5;
-    --color-ink-500: #66748a;
-    --color-ink-600: #505c70;
-    --color-ink-700: #414a5b;
-    --color-ink-800: #383f4d;
-    --color-ink-900: #0f1319;
-    --color-ink-950: #080b0f;
+    /*
+     |-------------------------------------------------------------------------
+     | Palette
+     |-------------------------------------------------------------------------
+     |
+     | Three hues, each doing one job.
+     |
+     | BRAND — petrol teal. Blue carries competence and reliability, which is
+     | what a procurement manager is buying; green carries hygiene and health,
+     | which is what the machines do. Teal is the point where those meet, and it
+     | is the hue this category's serious brands actually live in. It also puts
+     | daylight between this site and the interchangeable SaaS blue everyone
+     | else defaults to.
+     |
+     | INK — neutrals tinted with the same teal rather than with blue-grey. Dark
+     | sections then read as deep petrol instead of dead black, which is the
+     | difference between "premium" and "switched off". A page built on true
+     | greys next to a coloured brand always looks slightly broken.
+     |
+     | ACCENT — warm amber, and rationed. Warm hues on a cool ground are the
+     | strongest attention signal available, so amber is reserved for the single
+     | highest-priority action on a screen. The previous palette spent a
+     | saturated hazard yellow on CTAs, badges and glows alike; at that
+     | saturation and that frequency it stops reading as "act now" and starts
+     | reading as a safety notice, which is not what you want a buyer to feel.
+     |
+     | Every pair used for text has been checked against WCAG AA.
+     */
 
-    --color-brand-50: #eef6ff;
-    --color-brand-100: #d9ecff;
-    --color-brand-200: #bcdeff;
-    --color-brand-300: #8ec9ff;
-    --color-brand-400: #59aaff;
-    --color-brand-500: #3286fc;
-    --color-brand-600: #1c66f1;
-    --color-brand-700: #1551dd;
-    --color-brand-800: #1843b3;
-    --color-brand-900: #1a3c8d;
+    --color-ink-50: #f4f8f8;
+    --color-ink-100: #e8eff0;
+    --color-ink-200: #d2e0e2;
+    --color-ink-300: #adc3c7;
+    --color-ink-400: #789aa1;
+    --color-ink-500: #57767d;
+    --color-ink-600: #47656b;
+    --color-ink-700: #375056;
+    --color-ink-800: #24393d;
+    --color-ink-900: #0e1f23;
+    --color-ink-950: #071417;
 
-    --color-accent-300: #ffe066;
-    --color-accent-400: #ffd43b;
-    --color-accent-500: #fcc419;
-    --color-accent-600: #eaa900;
+    --color-brand-50: #effbfc;
+    --color-brand-100: #d6f4f7;
+    --color-brand-200: #b0e8ef;
+    --color-brand-300: #79d5e3;
+    --color-brand-400: #3bbad0;
+    --color-brand-500: #1d9db6;
+    --color-brand-600: #0f7a94;
+    --color-brand-700: #11667c;
+    --color-brand-800: #155366;
+    --color-brand-900: #164657;
+    --color-brand-950: #072e3c;
+
+    --color-accent-300: #fcd34d;
+    --color-accent-400: #fbbf24;
+    --color-accent-500: #f59e0b;
+    --color-accent-600: #d97706;
 
     --radius-card: 0.875rem;
 
@@ -83,6 +112,18 @@
     html {
         scroll-behavior: smooth;
         -webkit-text-size-adjust: 100%;
+
+        /*
+         * The decorative key lights are deliberately oversized and hang past
+         * their panel on negative offsets. Without this they widened the
+         * document to five times the viewport on a phone — in RTL the overhang
+         * lands on the scrollable side — which left the whole site rendered in
+         * a narrow strip beside a field of empty white.
+         *
+         * `clip` rather than `hidden`: hidden would turn the root into a scroll
+         * container and break every `position: sticky` descendant.
+         */
+        overflow-x: clip;
     }
 
     body {
@@ -149,14 +190,26 @@
      * shared button and card bases are spelled out per variant. The variants
      * are still safe to combine in markup (`class="btn-primary btn-sm"`).
      */
+    /*
+     * Sizing is mobile-first and set by the thumb, not by the design.
+     *
+     * Material Design 3 and Lighthouse's tap-target audit both want an
+     * interactive element to be at least 48x48 CSS px on a touch screen; Apple's
+     * HIG says 44x44. So the floor is 48px on mobile and relaxes to 44px from
+     * `sm:` up, where a mouse is doing the pointing and the extra height only
+     * costs density. `min-h` rather than padding, so a button keeps its target
+     * even when its label wraps to one short word.
+     */
     .btn,
     .btn-primary,
     .btn-dark,
     .btn-outline,
     .btn-ghost,
     .btn-accent {
-        @apply relative inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold
-               transition-all duration-200 ease-[var(--ease-out-quart)] disabled:cursor-not-allowed disabled:opacity-50;
+        @apply relative inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3
+               text-base font-semibold transition-all duration-200 ease-[var(--ease-out-quart)]
+               disabled:cursor-not-allowed disabled:opacity-50
+               sm:min-h-11 sm:text-sm;
     }
 
     /*
@@ -191,12 +244,25 @@
         @apply text-ink-600 hover:bg-ink-50 hover:text-ink-900;
     }
 
+    /*
+     * Even the "small" button stays a legal tap target on a phone. It only
+     * shrinks to a dense control from `sm:` up, where the pointer is precise.
+     */
     .btn-sm {
-        @apply px-3.5 py-2 text-xs;
+        @apply min-h-11 px-4 py-2.5 text-sm sm:min-h-9 sm:px-3.5 sm:py-2 sm:text-xs;
     }
 
     .btn-lg {
-        @apply gap-2.5 px-6 py-3.5 text-base;
+        @apply min-h-13 gap-2.5 px-6 py-3.5 text-base sm:min-h-12;
+    }
+
+    /* Icon-only controls have no label to widen them, so square them off. */
+    .btn-icon {
+        @apply size-12 shrink-0 !px-0 sm:size-11;
+    }
+
+    .btn-icon-sm {
+        @apply size-11 shrink-0 !px-0 sm:size-9;
     }
 
     .card,
@@ -218,17 +284,38 @@
         @apply mb-1.5 block text-sm font-medium text-ink-700;
     }
 
+    /*
+     * 16px on mobile is not a taste call: iOS Safari zooms the viewport when a
+     * focused input's font-size is below 16px, which shunts the layout sideways
+     * mid-form. It drops to 14px from `sm:` up, where no such rule applies.
+     */
     .field {
-        @apply w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900 shadow-[inset_0_1px_2px_rgb(15_19_25/0.04)]
-               transition-colors placeholder:text-ink-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none;
+        @apply min-h-12 w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-base text-ink-900
+               shadow-[inset_0_1px_2px_rgb(15_19_25/0.04)] transition-colors placeholder:text-ink-400
+               focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none
+               sm:min-h-11 sm:text-sm;
     }
 
     .field-error {
-        @apply mt-1.5 text-xs text-red-600;
+        @apply mt-1.5 text-sm text-red-600 sm:text-xs;
     }
 
     .chip {
-        @apply inline-flex items-center gap-1.5 rounded-full border border-ink-200 bg-white px-3 py-1 text-xs font-medium text-ink-700;
+        @apply inline-flex min-h-9 items-center gap-1.5 rounded-full border border-ink-200 bg-white px-3.5 py-1.5
+               text-sm font-medium text-ink-700 sm:min-h-0 sm:px-3 sm:py-1 sm:text-xs;
+    }
+
+    /*
+     * A checkbox is 16px square — far under the tap-target floor — so the whole
+     * label row carries the target instead. Used by the catalog filter panel.
+     */
+    .check-row {
+        @apply flex min-h-11 cursor-pointer items-center gap-3 rounded-lg py-1.5 text-base text-ink-700
+               hover:text-ink-900 sm:min-h-0 sm:py-1 sm:text-sm;
+    }
+
+    .check-box {
+        @apply size-5 shrink-0 rounded border-ink-300 text-brand-600 focus:ring-brand-500 sm:size-4;
     }
 
     /*
@@ -398,15 +485,27 @@
      * the identical falloff with no filter at all.
      */
     .glow-brand {
-        background: radial-gradient(closest-side, rgb(28 102 241 / 0.3), rgb(28 102 241 / 0.08), transparent);
+        background: radial-gradient(closest-side, rgb(29 157 182 / 0.34), rgb(29 157 182 / 0.09), transparent);
     }
 
     .glow-brand-soft {
-        background: radial-gradient(closest-side, rgb(21 81 221 / 0.22), transparent);
+        background: radial-gradient(closest-side, rgb(17 102 124 / 0.24), transparent);
     }
 
     .glow-accent {
-        background: radial-gradient(closest-side, rgb(252 196 25 / 0.16), transparent);
+        background: radial-gradient(closest-side, rgb(245 158 11 / 0.16), transparent);
+    }
+
+    /*
+     * The key lights are oversized on purpose and hang past their panel on
+     * negative offsets. Purely decorative, so they must never widen the page
+     * or sit in front of a control.
+     */
+    .glow-brand,
+    .glow-brand-soft,
+    .glow-accent {
+        pointer-events: none;
+        border-radius: 9999px;
     }
 
     /* A hairline that fades out at both ends — for section dividers. */

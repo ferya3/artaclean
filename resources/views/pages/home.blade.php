@@ -35,61 +35,201 @@
             <div class="absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent"></div>
         </div>
 
-        <div class="container-page py-24 sm:py-32 lg:py-40">
-            <div class="max-w-3xl">
-                <p class="eyebrow-light">{{ __('ui.hero_eyebrow') }}</p>
+        {{--
+            Two columns from lg up, one on a phone.
 
-                <h1 class="mt-6 text-[2rem] leading-[1.2] font-black text-white sm:text-5xl sm:leading-[1.15] lg:text-[3.5rem] lg:leading-[1.1]">
-                    {{ __('ui.hero_title') }}
-                </h1>
+            The copy is deliberately down to three things: the heading, one
+            slogan and the single action a buyer of this equipment actually
+            wants. The figures and the reassurance list that used to sit here
+            were the reason the machine never made the first screen on a phone —
+            the request was to trade them for the enquiry button, which is the
+            better bargain anyway: proof belongs further down the page, the
+            action belongs where the eye already is.
 
-                <p class="mt-7 max-w-2xl text-base leading-8 text-ink-300 sm:text-lg sm:leading-9">
-                    {{ __('ui.hero_subtitle') }}
-                </p>
+            `contents` dissolves the copy column on mobile so its two halves
+            become siblings of the gallery in the same flex flow. The gallery
+            then slots between the slogan and the button via `order`, without
+            moving anything in the source and without a second copy of the
+            markup. From `lg:` the column re-forms and the grid takes over.
+        --}}
+        <div class="container-page flex flex-col gap-9 pt-12 pb-14 sm:gap-10 sm:pt-24 sm:pb-16 lg:grid lg:grid-cols-2 lg:items-center lg:gap-14 lg:pt-32 lg:pb-24">
+            <div class="contents lg:block">
+                <div class="order-1">
+                    {{--
+                        Type scale is set for the phone first. Material 3 puts a
+                        headline at 28-32px on a handset; this one is short
+                        enough to hold 32px without wrapping past two lines.
+                    --}}
+                    <h1 class="text-[2rem] leading-[1.25] font-black text-white sm:text-[2.75rem] sm:leading-[1.15] lg:text-[3.5rem] lg:leading-[1.1]">
+                        {{ __('ui.hero_title') }}
+                    </h1>
 
-                <div class="mt-10 flex flex-wrap gap-3">
-                    <a href="{{ route('products.index') }}" class="btn-accent btn-lg">
-                        {{ __('ui.view_products') }}
-                        <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
-                    </a>
-                    <a href="{{ route('selector') }}"
-                       class="btn btn-lg border border-white/20 bg-white/5 text-white backdrop-blur-sm hover:-translate-y-px hover:border-white/40 hover:bg-white/10">
-                        <x-ui-icon name="calculator" class="size-4" />
-                        {{ __('ui.calculate') }}
-                    </a>
-                    <a href="{{ route('downloads.index') }}"
-                       class="btn btn-lg text-ink-300 hover:bg-white/5 hover:text-white">
-                        <x-ui-icon name="download" class="size-4" />
-                        {{ __('ui.download_catalog') }}
-                    </a>
+                    {{-- One line. Deliberately the only sentence in the hero. --}}
+                    <p class="mt-4 max-w-lg text-base leading-7 text-ink-200 sm:mt-5 sm:text-xl sm:leading-8">
+                        {{ __('ui.hero_slogan') }}
+                    </p>
                 </div>
 
-                {{-- Figures first, reassurance underneath. --}}
-                <dl class="mt-14 grid max-w-xl grid-cols-3 border-t border-white/15 pt-8 [&>*+*]:border-s [&>*+*]:border-white/10 [&>*+*]:ps-6">
-                    <div>
-                        <dd class="tabular text-3xl leading-none font-black text-white sm:text-4xl">
-                            {{ number_format($categories->sum('products_count')) }}<span class="text-accent-400">+</span>
-                        </dd>
-                        <dt class="mt-2.5 text-xs text-ink-400">{{ __('ui.hero_stat_products') }}</dt>
-                    </div>
-                    <div class="ps-6">
-                        <dd class="tabular text-3xl leading-none font-black text-white sm:text-4xl">{{ $brands->count() }}</dd>
-                        <dt class="mt-2.5 text-xs text-ink-400">{{ __('ui.hero_stat_brands') }}</dt>
-                    </div>
-                    <div class="ps-6">
-                        <dd class="tabular text-3xl leading-none font-black text-white sm:text-4xl">۲۴/۷</dd>
-                        <dt class="mt-2.5 text-xs text-ink-400">{{ __('ui.hero_stat_support') }}</dt>
-                    </div>
-                </dl>
+                {{--
+                    The enquiry, in the space the figures and the trust list used
+                    to hold. On a phone it lands under the gallery: the visitor
+                    sees the machine, then the way to ask what it costs.
+                --}}
+                <div class="order-3 lg:mt-10">
+                    <a href="{{ route('contact') }}" class="btn-accent btn-lg w-full sm:w-auto">
+                        {{ __('ui.request_price') }}
+                        <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
+                    </a>
+                    <p class="mt-3.5 max-w-sm text-xs leading-5 text-ink-400 sm:text-sm sm:leading-6">
+                        {{ __('ui.price_note') }}
+                    </p>
+                </div>
+            </div>
 
-                <ul class="mt-8 flex flex-wrap gap-x-7 gap-y-3">
-                    @foreach (['warranty', 'parts', 'service'] as $signal)
-                        <li class="flex items-center gap-2 text-sm text-ink-300">
-                            <x-ui-icon name="check-circle" class="size-4 shrink-0 text-accent-400" />
-                            {{ __('ui.hero_trust.'.$signal) }}
-                        </li>
+            {{--
+                Three machines, one at a time, swiped left and right.
+
+                Each is framed 3:2 on a lit backdrop. This is the object the eye
+                lands on first, so it has to be the brightest thing on the
+                screen: panelled dark against a dark hero it disappeared, while a
+                light panel on a near-black ground reads as a lit product shot —
+                which is how every serious manufacturer in this category
+                photographs a machine.
+
+                `aspect-3/2` on the images reserves the box before the first one
+                decodes, so the hero cannot shift once it lands. Only the first
+                slide is eager: the other two are a swipe away, not a paint away.
+            --}}
+            @php
+                $heroSlides = [
+                    ['key' => 'ride_on', 'image' => 'hero-machine.svg'],
+                    ['key' => 'walk_behind', 'image' => 'hero-machine-2.svg'],
+                    ['key' => 'vacuum', 'image' => 'hero-machine-3.svg'],
+                ];
+            @endphp
+
+            <div class="relative order-2 lg:order-none" x-data="heroGallery()">
+                <div class="relative overflow-hidden rounded-2xl bg-white shadow-[0_40px_80px_-24px_rgb(0_0_0/0.75)] ring-1 ring-white/15">
+                    <div class="swiper" x-ref="carousel">
+                        <div class="swiper-wrapper">
+                            @foreach ($heroSlides as $slide)
+                                <figure class="swiper-slide relative">
+                                    <img src="{{ asset('images/'.$slide['image']) }}"
+                                         alt="{{ __('ui.hero_slides.'.$slide['key'].'.alt') }}"
+                                         width="1200"
+                                         height="800"
+                                         @if ($loop->first) fetchpriority="high" @else loading="lazy" @endif
+                                         decoding="async"
+                                         class="aspect-3/2 w-full object-cover">
+
+                                    {{-- Which machine this is. --}}
+                                    <figcaption class="absolute top-3 start-3 rounded-lg bg-ink-950/90 px-3 py-1.5 text-[11px] font-bold text-white backdrop-blur sm:top-5 sm:start-5 sm:text-xs">
+                                        {{ __('ui.hero_slides.'.$slide['key'].'.name') }}
+                                    </figcaption>
+
+                                    {{--
+                                        Its headline figure. A buyer sizes a
+                                        machine on productivity or suction before
+                                        anything else, so that number earns the
+                                        one spot the eye is already resting on.
+
+                                        Kept small on a phone: at full size it
+                                        sat across the near wheel and hid the
+                                        part of the silhouette that identifies
+                                        the machine.
+                                    --}}
+                                    <div class="absolute bottom-3 start-3 flex items-center gap-2.5 rounded-xl bg-ink-950/95 px-3 py-2 shadow-[0_18px_40px_-12px_rgb(0_0_0/0.7)] ring-1 ring-white/10 backdrop-blur sm:bottom-5 sm:start-5 sm:gap-4 sm:px-5 sm:py-3">
+                                        <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-accent-400 text-ink-950 sm:size-10">
+                                            <x-ui-icon name="check-circle" class="size-4 sm:size-5" />
+                                        </span>
+                                        <span>
+                                            <span class="tabular block text-base leading-none font-black text-white sm:text-xl">
+                                                {{ __('ui.hero_slides.'.$slide['key'].'.figure') }}
+                                                <span class="text-xs font-bold text-accent-400 sm:text-sm">
+                                                    {{ __('ui.hero_slides.'.$slide['key'].'.unit') }}
+                                                </span>
+                                            </span>
+                                            <span class="mt-1 block text-[10px] leading-4 text-ink-400 sm:text-[11px]">
+                                                {{ __('ui.hero_slides.'.$slide['key'].'.metric') }}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </figure>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{--
+                        Arrows from sm: up only — a phone swipes the track, and
+                        two more tap targets over the machine would cost more
+                        than they give. They sit inside the panel over a light
+                        image, so they are dark rather than outlined.
+                    --}}
+                    <button x-ref="prev" type="button"
+                            class="absolute top-1/2 start-3 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full bg-ink-950/70 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-ink-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-400 sm:grid"
+                            aria-label="{{ __('ui.previous') }}">
+                        <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
+                    </button>
+                    <button x-ref="next" type="button"
+                            class="absolute top-1/2 end-3 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full bg-ink-950/70 text-white ring-1 ring-white/20 backdrop-blur transition hover:bg-ink-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-400 sm:grid"
+                            aria-label="{{ __('ui.next') }}">
+                        <x-ui-icon name="arrow-right" class="size-4 flip-rtl" />
+                    </button>
+                </div>
+
+                {{--
+                    The dots live under the panel rather than over the machine.
+                    Swiper's own stylesheet is unlayered, so its `position:
+                    absolute` and its dark inactive bullets can only be beaten
+                    from the element itself — hence the inline declarations.
+                --}}
+                <div x-ref="pagination"
+                     class="mt-5 text-center sm:text-start"
+                     style="position: static;
+                            --swiper-pagination-color: var(--color-accent-400);
+                            --swiper-pagination-bullet-inactive-color: #ffffff;
+                            --swiper-pagination-bullet-inactive-opacity: 0.35;
+                            --swiper-pagination-bullet-size: 8px;
+                            --swiper-pagination-bullet-horizontal-gap: 5px"></div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ------------------------------------------------------------------ --}}
+    {{-- Who we are                                                         --}}
+    {{-- ------------------------------------------------------------------ --}}
+    <section class="border-b border-ink-100 bg-white py-16 sm:py-20 lg:py-24">
+        <div class="container-page grid gap-12 lg:grid-cols-12 lg:gap-16">
+            <div class="lg:col-span-5">
+                <p class="eyebrow">{{ __('ui.company.eyebrow') }}</p>
+                <h2 class="mt-4 text-2xl leading-tight font-black tracking-tight text-ink-900 sm:text-3xl lg:text-4xl">
+                    {{ __('ui.company.title') }}
+                </h2>
+
+                <a href="{{ route('about') }}" class="btn-outline btn-sm mt-8 w-full sm:w-auto">
+                    {{ __('ui.company.more') }}
+                    <x-ui-icon name="arrow-left" class="size-3.5 flip-rtl" />
+                </a>
+            </div>
+
+            <div class="lg:col-span-7">
+                <div class="space-y-5 text-base leading-8 text-ink-600 sm:text-lg sm:leading-9">
+                    <p>{{ __('ui.company.lead') }}</p>
+                    <p>{{ __('ui.company.body') }}</p>
+                </div>
+
+                <dl class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
+                    @foreach (['experience', 'clients', 'coverage'] as $fact)
+                        <div class="border-t border-ink-200 pt-4">
+                            <dt class="tabular text-2xl font-black text-ink-900 sm:text-3xl">
+                                {{ __('ui.company.facts.'.$fact.'_value') }}
+                            </dt>
+                            <dd class="mt-1.5 text-sm leading-6 text-ink-500">
+                                {{ __('ui.company.facts.'.$fact.'_label') }}
+                            </dd>
+                        </div>
                     @endforeach
-                </ul>
+                </dl>
             </div>
         </div>
     </section>
@@ -105,10 +245,11 @@
                                :href="route('products.index')" />
 
             {{--
-                Nine categories once carried the same generic icon, which read
-                as filler. A drawing-sheet index number is honest about being
-                navigation, gives each tile its own anchor, and leaves the room
-                the icon was taking to the description a buyer actually reads.
+                Each tile carries the silhouette of the machine it sells. Nine
+                identical cards forced a buyer to read nine headings in
+                sequence; a distinct shape lets them find the right one at a
+                glance, which is the entire job of a category grid. The index
+                number stays as a quiet drawing-sheet reference behind it.
             --}}
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($categories as $category)
@@ -116,6 +257,12 @@
                        class="card-hover tick-frame group relative flex flex-col overflow-hidden p-6">
                         <span class="absolute top-5 end-5 tabular text-2xl leading-none font-black text-ink-100 transition-colors duration-300 group-hover:text-brand-100">
                             {{ str_pad((string) ($loop->index + 1), 2, '0', STR_PAD_LEFT) }}
+                        </span>
+
+                        <span class="mb-5 grid size-14 place-items-center rounded-xl bg-brand-50 text-brand-700
+                                     transition-[background-color,color,transform] duration-300 ease-[var(--ease-out-quart)]
+                                     group-hover:-translate-y-0.5 group-hover:bg-brand-600 group-hover:text-white">
+                            <x-machine-icon :slug="$category->slug" class="size-8" />
                         </span>
 
                         <h3 class="pe-12 text-base leading-7 font-bold text-ink-900 transition-colors group-hover:text-brand-700">
@@ -161,12 +308,24 @@
                                  loading="lazy"
                                  class="absolute inset-0 size-full object-cover opacity-60 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-105">
                         @else
-                            {{-- With no photograph, the tile still needs texture and depth. --}}
-                            <div class="absolute inset-0 blueprint-fine opacity-70"></div>
-                            <div class="absolute -top-16 -end-10 size-56 glow-brand opacity-70 transition-opacity duration-500 group-hover:opacity-100"></div>
+                            {{--
+                                No photograph, so the tile is built rather than
+                                filled: a petrol gradient instead of flat black,
+                                a blueprint weave for texture, and the site's own
+                                silhouette ghosted in behind the label. Eight
+                                identical dark rectangles read as broken images;
+                                these read as a set.
+                            --}}
+                            <div class="absolute inset-0 bg-linear-to-br from-brand-800 via-ink-900 to-ink-950"></div>
+                            <div class="absolute inset-0 blueprint-fine opacity-60"></div>
+                            <div class="absolute -top-16 -end-10 size-56 glow-brand opacity-80 transition-opacity duration-500 group-hover:opacity-100"></div>
+
+                            <div class="absolute top-4 end-5 text-brand-200/35 transition-[color,transform] duration-500 ease-[var(--ease-out-quart)] group-hover:-translate-y-0.5 group-hover:text-brand-200/60">
+                                <x-environment-icon :slug="$environment->slug" class="size-14" />
+                            </div>
                         @endif
 
-                        <div class="absolute inset-0 bg-linear-to-t from-ink-950 via-ink-950/45 to-transparent"></div>
+                        <div class="absolute inset-0 bg-linear-to-t from-ink-950 via-ink-950/35 to-transparent"></div>
 
                         {{-- A hairline that fills with the accent as the tile is hovered. --}}
                         <span class="absolute inset-x-5 bottom-0 h-0.5 origin-left scale-x-0 bg-accent-400 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-x-100 rtl:origin-right"></span>
@@ -237,7 +396,16 @@
                                    :href="route('products.index')" />
 
                 <div x-data="carousel()" class="relative">
-                    <div x-ref="carousel" class="swiper !overflow-visible">
+                    {{--
+                        The track must clip horizontally. Left visible, the
+                        wrapper is as wide as all eight slides at once, and that
+                        width becomes the document's — on a phone it rendered the
+                        entire site in a 390px strip beside 1,500px of blank
+                        page. The padding/negative-margin pair gives the card
+                        hover lift and its shadow room to breathe vertically
+                        without reopening the horizontal axis.
+                    --}}
+                    <div x-ref="carousel" class="swiper -my-3 py-3">
                         <div class="swiper-wrapper">
                             @foreach ($featured as $product)
                                 <div class="swiper-slide h-auto">
@@ -250,12 +418,12 @@
                     <button x-ref="prev" type="button"
                             class="btn-outline absolute top-1/2 -start-4 z-10 hidden size-10 -translate-y-1/2 rounded-full !p-0 lg:flex"
                             aria-label="Previous">
-                        <x-ui-icon name="arrow-right" class="size-4 flip-rtl" />
+                        <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
                     </button>
                     <button x-ref="next" type="button"
                             class="btn-outline absolute top-1/2 -end-4 z-10 hidden size-10 -translate-y-1/2 rounded-full !p-0 lg:flex"
                             aria-label="Next">
-                        <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
+                        <x-ui-icon name="arrow-right" class="size-4 flip-rtl" />
                     </button>
                 </div>
             </div>
