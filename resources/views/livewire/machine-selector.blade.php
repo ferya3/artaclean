@@ -158,5 +158,23 @@
                 </div>
             @endif
         </div>
+    @else
+        {{--
+            Before a calculation there is nothing to show, and an empty page
+            under a form reads as a page that is still loading. These three
+            lines say what the calculator is about to do with the number, which
+            is also what makes a visitor trust the answer when it appears.
+        --}}
+        <div class="grid gap-4 sm:grid-cols-3">
+            @foreach (['area', 'efficiency', 'shortlist'] as $index => $step)
+                <div class="card flex h-full flex-col p-6">
+                    <span class="tabular grid size-9 place-items-center rounded-lg bg-brand-50 text-sm font-black text-brand-700">
+                        {{ $index + 1 }}
+                    </span>
+                    <h3 class="mt-4 text-sm font-bold text-ink-900">{{ __('ui.selector.how.'.$step.'_title') }}</h3>
+                    <p class="mt-2 text-sm leading-6 text-ink-500">{{ __('ui.selector.how.'.$step.'_body') }}</p>
+                </div>
+            @endforeach
+        </div>
     @endif
 </div>

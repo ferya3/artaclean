@@ -66,11 +66,17 @@
                 @error('message') <p class="field-error">{{ $message }}</p> @enderror
             </div>
 
-            <div class="flex flex-wrap items-center justify-between gap-3 sm:col-span-2">
-                <p class="text-xs text-ink-400">{{ __('ui.form.privacy') }}</p>
+            {{--
+                This is the page every price enquiry on the site ends at, so
+                the button is sized for it: full width on a phone, and the same
+                accent the hero used to ask for the enquiry in the first place,
+                rather than a small tertiary-looking button in a corner.
+            --}}
+            <div class="flex flex-col-reverse gap-3 border-t border-ink-100 pt-5 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+                <p class="text-xs leading-5 text-ink-400">{{ __('ui.form.privacy') }}</p>
 
-                <button type="submit" class="btn-primary" wire:loading.attr="disabled" wire:target="submit">
-                    <span wire:loading.remove wire:target="submit">{{ __('ui.send') }}</span>
+                <button type="submit" class="btn-accent btn-lg w-full sm:w-auto" wire:loading.attr="disabled" wire:target="submit">
+                    <span wire:loading.remove wire:target="submit">{{ __('ui.submit') }}</span>
                     <span wire:loading wire:target="submit">{{ __('ui.loading') }}</span>
                 </button>
             </div>

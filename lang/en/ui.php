@@ -171,6 +171,15 @@ return [
         'want_advice' => 'Want a specialist to call?',
         'advice_hint' => 'Leave your number and we will call with this calculation in hand.',
         'thanks' => 'Received. A specialist will call you shortly.',
+        // Shown before a calculation has been run.
+        'how' => [
+            'area_title' => 'The real area, not the drawing',
+            'area_body' => 'The figure that counts is the floor actually cleaned; aisles and space under racking are worked out separately.',
+            'efficiency_title' => 'Real-world efficiency',
+            'efficiency_body' => 'Catalogue productivity is never reached on site, so turning, refilling and dumping are built into the sum.',
+            'shortlist_title' => 'A class, then the models in it',
+            'shortlist_body' => 'You get the machine class and the models stocked in it — with the full specifications to compare.',
+        ],
     ],
 
     'form' => [
