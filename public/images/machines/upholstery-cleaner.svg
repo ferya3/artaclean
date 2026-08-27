@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="244 257 766 575" width="1200" height="900" role="img" aria-label="Upholstery and carpet extractor">
+  <defs>
+    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcd34d"/>
+      <stop offset="0.45" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d585f"/>
+      <stop offset="1" stop-color="#1a2d31"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b7d84"/>
+      <stop offset="0.42" stop-color="#a8bfc4"/>
+      <stop offset="1" stop-color="#47656b"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22a3bf"/>
+      <stop offset="1" stop-color="#11667c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Contact shadow: the only thing that seats the machine on the panel. -->
+  <ellipse cx="600" cy="782" rx="190" ry="23" fill="#0e1f23" opacity="0.16"/>
+  <ellipse cx="600" cy="776" rx="118" ry="13" fill="#0e1f23" opacity="0.13"/>
+
+  <!-- Hose to the hand tool -->
+  <path d="M726 452c110 10 152 74 132 148-18 68-70 92-70 146"
+        fill="none" stroke="#24393d" stroke-width="26" stroke-linecap="round"/>
+  <path d="M726 452c110 10 152 74 132 148-18 68-70 92-70 146"
+        fill="none" stroke="#6d8b92" stroke-width="11" stroke-linecap="round" stroke-dasharray="4 22"/>
+
+  <!-- Upholstery tool -->
+  <path d="M788 738l64-34 44 66-70 26Z" fill="url(#body)"/>
+  <path d="M826 766l60-22" stroke="#3bbad0" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Recovery tank (clear, tinted) -->
+  <rect x="404" y="326" width="300" height="150" rx="30" fill="#a8bfc4" opacity="0.55"/>
+  <rect x="404" y="410" width="300" height="66" rx="24" fill="#0f7a94" opacity="0.3"/>
+  <rect x="404" y="326" width="300" height="150" rx="30" fill="none" stroke="#47656b" stroke-width="6" opacity="0.5"/>
+  <rect x="510" y="284" width="90" height="50" rx="16" fill="url(#body)"/>
+
+  <!-- Solution tank / base -->
+  <path d="M392 476h324a34 34 0 0 1 34 34v168a34 34 0 0 1-34 34H392a34 34 0 0 1-34-34V510a34 34 0 0 1 34-34Z" fill="url(#amber)"/>
+  <path d="M392 476h324a34 34 0 0 1 34 34v14H358v-14a34 34 0 0 1 34-34Z" fill="#ffffff" opacity="0.38"/>
+  <rect x="416" y="546" width="132" height="18" rx="9" fill="#7c3d00" opacity="0.24"/>
+  <circle cx="690" cy="640" r="22" fill="url(#body)"/>
+  <path d="M421 698h18v18h-18Z" fill="#24393d"/>
+  <circle cx="430" cy="740" r="26" fill="#12262b"/>
+  <circle cx="430" cy="740" r="10" fill="#8fa9ae"/>
+  <path d="M667 698h18v18h-18Z" fill="#24393d"/>
+  <circle cx="676" cy="740" r="26" fill="#12262b"/>
+  <circle cx="676" cy="740" r="10" fill="#8fa9ae"/>
+</svg>

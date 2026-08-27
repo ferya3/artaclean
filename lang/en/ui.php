@@ -82,6 +82,7 @@ return [
         'lead' => 'ArtaClean imports and supplies industrial cleaning machinery: scrubber dryers, sweepers, industrial vacuums, polishers, pressure washers and steam cleaners. The job does not end at the sale — it starts with a site visit and a floor measurement, and continues through operator training and spare parts supply.',
         'body' => 'Our view is simple: most bad purchases in this industry happen because the buyer ends up with a machine larger or smaller than the site needs. So before recommending anything we work out the real cleanable area, the floor type, the length of the shift and the obstacles in the route — and specify the machine from that, not the other way round.',
         'more' => 'More about us',
+        'pullquote' => 'The right machine is the one sized to your floor — not the biggest in the catalogue, and not the cheapest.',
         'facts' => [
             'experience_value' => '15+ years',
             'experience_label' => 'supplying and servicing industrial cleaning equipment',

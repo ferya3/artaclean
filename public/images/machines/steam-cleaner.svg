@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="219 184 868 651" width="1200" height="900" role="img" aria-label="Industrial steam cleaner">
+  <defs>
+    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcd34d"/>
+      <stop offset="0.45" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d585f"/>
+      <stop offset="1" stop-color="#1a2d31"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b7d84"/>
+      <stop offset="0.42" stop-color="#a8bfc4"/>
+      <stop offset="1" stop-color="#47656b"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22a3bf"/>
+      <stop offset="1" stop-color="#11667c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Contact shadow: the only thing that seats the machine on the panel. -->
+  <ellipse cx="600" cy="782" rx="200" ry="24" fill="#0e1f23" opacity="0.16"/>
+  <ellipse cx="600" cy="776" rx="124" ry="13" fill="#0e1f23" opacity="0.13"/>
+
+  <!-- Steam -->
+  <g fill="none" stroke="#79d5e3" stroke-width="12" stroke-linecap="round" opacity="0.7">
+    <path d="M842 300c34-26 12-62 40-86"/>
+    <path d="M894 336c40-22 20-64 52-86"/>
+  </g>
+
+  <!-- Steam hose and lance -->
+  <path d="M726 452c104 6 146 62 132 132-14 70-64 96-64 152"
+        fill="none" stroke="#24393d" stroke-width="26" stroke-linecap="round"/>
+  <path d="M726 452c104 6 146 62 132 132-14 70-64 96-64 152"
+        fill="none" stroke="#6d8b92" stroke-width="11" stroke-linecap="round" stroke-dasharray="4 22"/>
+  <rect x="752" y="724" width="88" height="30" rx="14" fill="url(#body)"/>
+
+  <!-- Boiler body -->
+  <path d="M396 396h318a36 36 0 0 1 36 36v256a36 36 0 0 1-36 36H396a36 36 0 0 1-36-36V432a36 36 0 0 1 36-36Z" fill="url(#body)"/>
+  <path d="M396 396h318a36 36 0 0 1 36 36v54H360v-54a36 36 0 0 1 36-36Z" fill="url(#amber)"/>
+
+  <!-- Pressure gauge -->
+  <circle cx="470" cy="576" r="52" fill="#0e1f23" opacity="0.4"/>
+  <circle cx="470" cy="576" r="40" fill="#eef6f7"/>
+  <path d="M470 576l24-22" stroke="#d97706" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="470" cy="576" r="6" fill="#24393d"/>
+
+  <!-- Controls -->
+  <rect x="566" y="548" width="128" height="18" rx="9" fill="#ffffff" opacity="0.16"/>
+  <rect x="566" y="584" width="92" height="14" rx="7" fill="#3bbad0" opacity="0.65"/>
+  <circle cx="682" cy="640" r="20" fill="#fbbf24"/>
+  <path d="M425 712h18v18h-18Z" fill="#24393d"/>
+  <circle cx="434" cy="754" r="26" fill="#12262b"/>
+  <circle cx="434" cy="754" r="10" fill="#8fa9ae"/>
+  <path d="M667 712h18v18h-18Z" fill="#24393d"/>
+  <circle cx="676" cy="754" r="26" fill="#12262b"/>
+  <circle cx="676" cy="754" r="10" fill="#8fa9ae"/>
+</svg>

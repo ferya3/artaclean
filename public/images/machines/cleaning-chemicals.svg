@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="173 264 810 607" width="1200" height="900" role="img" aria-label="Industrial cleaning chemicals">
+  <defs>
+    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcd34d"/>
+      <stop offset="0.45" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d585f"/>
+      <stop offset="1" stop-color="#1a2d31"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b7d84"/>
+      <stop offset="0.42" stop-color="#a8bfc4"/>
+      <stop offset="1" stop-color="#47656b"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22a3bf"/>
+      <stop offset="1" stop-color="#11667c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Contact shadow: the only thing that seats the machine on the panel. -->
+  <ellipse cx="600" cy="782" rx="215" ry="24" fill="#0e1f23" opacity="0.16"/>
+  <ellipse cx="600" cy="776" rx="133" ry="13" fill="#0e1f23" opacity="0.13"/>
+
+  <!-- Rear drum -->
+  <path d="M700 386h216a30 30 0 0 1 30 30v302a30 30 0 0 1-30 30H700a30 30 0 0 1-30-30V416a30 30 0 0 1 30-30Z" fill="url(#teal)"/>
+  <rect x="742" y="330" width="80" height="60" rx="14" fill="#24393d"/>
+  <rect x="700" y="470" width="216" height="128" rx="12" fill="#eef6f7" opacity="0.92"/>
+  <g fill="#47656b" opacity="0.55">
+    <rect x="726" y="498" width="136" height="16" rx="8"/>
+    <rect x="726" y="528" width="164" height="12" rx="6"/>
+    <rect x="726" y="552" width="104" height="12" rx="6"/>
+  </g>
+
+  <!-- Front drum -->
+  <path d="M356 424h236a32 32 0 0 1 32 32v290a32 32 0 0 1-32 32H356a32 32 0 0 1-32-32V456a32 32 0 0 1 32-32Z" fill="url(#amber)"/>
+  <path d="M356 424h236a32 32 0 0 1 32 32v16H324v-16a32 32 0 0 1 32-32Z" fill="#ffffff" opacity="0.36"/>
+  <rect x="398" y="366" width="86" height="62" rx="14" fill="#24393d"/>
+  <path d="M484 396h74a26 26 0 0 1 0 52h-12" fill="none" stroke="#24393d" stroke-width="16" stroke-linecap="round"/>
+  <rect x="356" y="520" width="236" height="140" rx="14" fill="#ffffff" opacity="0.9"/>
+  <g fill="#7c3d00" opacity="0.5">
+    <rect x="384" y="550" width="148" height="18" rx="9"/>
+    <rect x="384" y="584" width="180" height="13" rx="6.5"/>
+    <rect x="384" y="610" width="118" height="13" rx="6.5"/>
+  </g>
+
+  <!-- Small bottle -->
+  <path d="M232 566h84a22 22 0 0 1 22 22v168a22 22 0 0 1-22 22h-84a22 22 0 0 1-22-22V588a22 22 0 0 1 22-22Z" fill="url(#steel)"/>
+  <rect x="252" y="528" width="44" height="42" rx="10" fill="#24393d"/>
+  <rect x="228" y="620" width="92" height="72" rx="10" fill="#eef6f7" opacity="0.9"/>
+</svg>

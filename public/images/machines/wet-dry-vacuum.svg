@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="277 284 734 551" width="1200" height="900" role="img" aria-label="Wet and dry vacuum">
+  <defs>
+    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcd34d"/>
+      <stop offset="0.45" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d585f"/>
+      <stop offset="1" stop-color="#1a2d31"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b7d84"/>
+      <stop offset="0.42" stop-color="#a8bfc4"/>
+      <stop offset="1" stop-color="#47656b"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22a3bf"/>
+      <stop offset="1" stop-color="#11667c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Contact shadow: the only thing that seats the machine on the panel. -->
+  <ellipse cx="600" cy="782" rx="220" ry="25" fill="#0e1f23" opacity="0.16"/>
+  <ellipse cx="600" cy="776" rx="136" ry="14" fill="#0e1f23" opacity="0.13"/>
+
+  <path d="M760 400c96 4 138 56 130 128-8 72-56 106-58 168"
+        fill="none" stroke="#24393d" stroke-width="30" stroke-linecap="round"/>
+  <path d="M760 400c96 4 138 56 130 128-8 72-56 106-58 168"
+        fill="none" stroke="#6d8b92" stroke-width="13" stroke-linecap="round" stroke-dasharray="4 24"/>
+
+  <!-- Floor squeegee tool -->
+  <path d="M832 696v34" stroke="#24393d" stroke-width="20" stroke-linecap="round"/>
+  <rect x="744" y="726" width="178" height="28" rx="12" fill="url(#body)"/>
+  <path d="M756 754h154" stroke="#0f7a94" stroke-opacity="0.7" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- Motor head -->
+  <rect x="380" y="374" width="356" height="112" rx="32" fill="url(#amber)"/>
+  <rect x="380" y="374" width="356" height="32" rx="16" fill="#ffffff" opacity="0.42"/>
+  <rect x="500" y="312" width="116" height="66" rx="22" fill="url(#body)"/>
+
+  <!-- Clamp latches -->
+  <rect x="366" y="486" width="32" height="56" rx="11" fill="#24393d"/>
+  <rect x="718" y="486" width="32" height="56" rx="11" fill="#24393d"/>
+
+  <!-- Drum with a water line -->
+  <path d="M384 482h348v226a32 32 0 0 1-32 32H416a32 32 0 0 1-32-32Z" fill="url(#steel)"/>
+  <path d="M384 626h348v82a32 32 0 0 1-32 32H416a32 32 0 0 1-32-32Z" fill="#0f7a94" opacity="0.28"/>
+  <path d="M384 626h348" stroke="#0f7a94" stroke-opacity="0.55" stroke-width="5"/>
+  <g stroke="#ffffff" stroke-opacity="0.3" stroke-width="4">
+    <path d="M456 500v238M558 500v238M660 500v238"/>
+  </g>
+
+  <rect x="404" y="738" width="308" height="24" rx="12" fill="#24393d"/>
+  <path d="M441 740h18v18h-18Z" fill="#24393d"/>
+  <circle cx="450" cy="780" r="24" fill="#12262b"/>
+  <circle cx="450" cy="780" r="10" fill="#8fa9ae"/>
+  <path d="M657 740h18v18h-18Z" fill="#24393d"/>
+  <circle cx="666" cy="780" r="24" fill="#12262b"/>
+  <circle cx="666" cy="780" r="10" fill="#8fa9ae"/>
+</svg>

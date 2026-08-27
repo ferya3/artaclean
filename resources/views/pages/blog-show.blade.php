@@ -15,7 +15,7 @@
                 @if ($article->author)
                     <span>{{ $article->author->name }}</span>
                 @endif
-                <span>{{ $article->published_at?->translatedFormat('j F Y') }}</span>
+                <span>{{ \App\Support\Dates::long($article->published_at) }}</span>
                 <span>{{ __('ui.reading_time', ['minutes' => $article->reading_minutes]) }}</span>
             </div>
         </div>

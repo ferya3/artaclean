@@ -46,7 +46,8 @@
 
                     {{-- Main gallery --}}
                     <div x-show="tab === 'gallery'" x-data="productGallery()" class="relative">
-                        <div x-ref="main" class="swiper overflow-hidden rounded-[var(--radius-card)] border border-ink-100 bg-white">
+                        {{-- The lit panel the cards use, so the detail shot is seated the same way the thumbnails were. --}}
+                        <div x-ref="main" class="swiper overflow-hidden rounded-[var(--radius-card)] border border-ink-100 bg-linear-to-b from-ink-50 to-white">
                             <div class="swiper-wrapper">
                                 @forelse ($gallery as $image)
                                     <div class="swiper-slide">
