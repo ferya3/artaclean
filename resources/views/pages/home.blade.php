@@ -200,31 +200,11 @@
     {{-- ------------------------------------------------------------------ --}}
     <section class="border-b border-ink-100 bg-white py-16 sm:py-20 lg:py-24">
         <div class="container-page grid gap-12 lg:grid-cols-12 lg:gap-16">
-            {{--
-                The figures live in the narrow column rather than under the
-                prose. Stacked against hairlines they give that column a height
-                to match the text beside it — it used to end at the button and
-                leave a third of the section empty — and they read better as a
-                vertical list than as three cramped cells.
-            --}}
             <div class="lg:col-span-5">
                 <p class="eyebrow">{{ __('ui.company.eyebrow') }}</p>
                 <h2 class="mt-4 text-2xl leading-tight font-black tracking-tight text-ink-900 sm:text-3xl lg:text-4xl">
                     {{ __('ui.company.title') }}
                 </h2>
-
-                <dl class="mt-9 space-y-5 border-t border-ink-200">
-                    @foreach (['experience', 'clients', 'coverage'] as $fact)
-                        <div class="flex items-baseline gap-4 border-b border-ink-100 pb-5">
-                            <dt class="tabular w-36 shrink-0 text-xl leading-tight font-black text-ink-900 sm:w-44 sm:text-2xl">
-                                {{ __('ui.company.facts.'.$fact.'_value') }}
-                            </dt>
-                            <dd class="text-sm leading-6 text-ink-500">
-                                {{ __('ui.company.facts.'.$fact.'_label') }}
-                            </dd>
-                        </div>
-                    @endforeach
-                </dl>
 
                 <a href="{{ route('about') }}" class="btn-outline btn-sm mt-8 w-full sm:w-auto">
                     {{ __('ui.company.more') }}
@@ -234,20 +214,22 @@
 
             <div class="lg:col-span-7">
                 <div class="space-y-5 text-base leading-8 text-ink-600 sm:text-lg sm:leading-9">
-                    <p class="text-ink-700">{{ __('ui.company.lead') }}</p>
+                    <p>{{ __('ui.company.lead') }}</p>
                     <p>{{ __('ui.company.body') }}</p>
                 </div>
 
-                {{--
-                    A pull quote closes the column: the sentence the whole
-                    section is arguing for, set apart so a skimmer who reads
-                    nothing else still leaves with it.
-                --}}
-                <figure class="mt-9 border-s-2 border-accent-400 ps-5">
-                    <blockquote class="text-base leading-8 font-bold text-ink-900 sm:text-lg sm:leading-9">
-                        {{ __('ui.company.pullquote') }}
-                    </blockquote>
-                </figure>
+                <dl class="mt-10 grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-3">
+                    @foreach (['experience', 'clients', 'coverage'] as $fact)
+                        <div class="border-t border-ink-200 pt-4">
+                            <dt class="tabular text-2xl font-black text-ink-900 sm:text-3xl">
+                                {{ __('ui.company.facts.'.$fact.'_value') }}
+                            </dt>
+                            <dd class="mt-1.5 text-sm leading-6 text-ink-500">
+                                {{ __('ui.company.facts.'.$fact.'_label') }}
+                            </dd>
+                        </div>
+                    @endforeach
+                </dl>
             </div>
         </div>
     </section>
@@ -263,48 +245,40 @@
                                :href="route('products.index')" />
 
             {{--
-                Each tile leads with the machine it sells, drawn on the same
-                stage as the product photography. Nine identical cards forced a
-                buyer to read nine headings in sequence; a distinct shape lets
-                them find the right one at a glance, which is the entire job of
-                a category grid. The index number stays as a quiet drawing-sheet
-                reference behind it.
+                Each tile carries the silhouette of the machine it sells. Nine
+                identical cards forced a buyer to read nine headings in
+                sequence; a distinct shape lets them find the right one at a
+                glance, which is the entire job of a category grid. The index
+                number stays as a quiet drawing-sheet reference behind it.
             --}}
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($categories as $category)
                     <a href="{{ $category->url() }}"
-                       class="card-hover tick-frame group relative flex flex-col overflow-hidden">
-                        <span class="relative block aspect-16/10 overflow-hidden bg-linear-to-b from-ink-50 to-white">
-                            {{-- The same soft floor the product cards use, so the two sets sit together. --}}
-                            <span class="pointer-events-none absolute inset-x-10 bottom-6 h-8 rounded-[50%] bg-ink-900/8 blur-xl"></span>
-
-                            <img src="{{ $category->illustrationUrl() }}"
-                                 alt=""
-                                 loading="lazy"
-                                 decoding="async"
-                                 class="relative size-full object-contain p-5 transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-[1.05]">
-
-                            <span class="absolute top-4 end-5 tabular text-2xl leading-none font-black text-ink-200/90 transition-colors duration-300 group-hover:text-brand-200">
-                                {{ str_pad((string) ($loop->index + 1), 2, '0', STR_PAD_LEFT) }}
-                            </span>
+                       class="card-hover tick-frame group relative flex flex-col overflow-hidden p-6">
+                        <span class="absolute top-5 end-5 tabular text-2xl leading-none font-black text-ink-100 transition-colors duration-300 group-hover:text-brand-100">
+                            {{ str_pad((string) ($loop->index + 1), 2, '0', STR_PAD_LEFT) }}
                         </span>
 
-                        <span class="flex flex-1 flex-col border-t border-ink-100 p-5">
-                            <h3 class="text-base leading-7 font-bold text-ink-900 transition-colors group-hover:text-brand-700">
-                                {{ $category->name }}
-                            </h3>
+                        <span class="mb-5 grid size-14 place-items-center rounded-xl bg-brand-50 text-brand-700
+                                     transition-[background-color,color,transform] duration-300 ease-[var(--ease-out-quart)]
+                                     group-hover:-translate-y-0.5 group-hover:bg-brand-600 group-hover:text-white">
+                            <x-machine-icon :slug="$category->slug" class="size-8" />
+                        </span>
 
-                            @if ($category->short_description)
-                                <p class="mt-2 line-clamp-2 text-sm leading-6 text-ink-500">{{ $category->short_description }}</p>
-                            @endif
+                        <h3 class="pe-12 text-base leading-7 font-bold text-ink-900 transition-colors group-hover:text-brand-700">
+                            {{ $category->name }}
+                        </h3>
 
-                            <span class="mt-auto flex items-center justify-between pt-5">
-                                <span class="tabular text-xs font-medium text-ink-400">
-                                    {{ __('ui.results_count', ['count' => $category->products_count]) }}
-                                </span>
-                                <x-ui-icon name="arrow-left"
-                                           class="size-4 shrink-0 text-ink-300 transition-[transform,color] duration-300 ease-[var(--ease-out-quart)] group-hover:-translate-x-1 group-hover:text-brand-600 flip-rtl rtl:group-hover:translate-x-1" />
+                        @if ($category->short_description)
+                            <p class="mt-2 line-clamp-2 text-sm leading-6 text-ink-500">{{ $category->short_description }}</p>
+                        @endif
+
+                        <span class="mt-5 flex items-center justify-between border-t border-ink-100 pt-4">
+                            <span class="tabular text-xs font-medium text-ink-400">
+                                {{ __('ui.results_count', ['count' => $category->products_count]) }}
                             </span>
+                            <x-ui-icon name="arrow-left"
+                                       class="size-4 shrink-0 text-ink-300 transition-[transform,color] duration-300 ease-[var(--ease-out-quart)] group-hover:-translate-x-1 group-hover:text-brand-600 flip-rtl rtl:group-hover:translate-x-1" />
                         </span>
                     </a>
                 @endforeach
@@ -346,19 +320,8 @@
                             <div class="absolute inset-0 blueprint-fine opacity-60"></div>
                             <div class="absolute -top-16 -end-10 size-56 glow-brand opacity-80 transition-opacity duration-500 group-hover:opacity-100"></div>
 
-                            {{--
-                                Centred and large rather than tucked in a
-                                corner: at a third of the tile's width the
-                                silhouette is what tells a visitor which
-                                building this is, so it has to carry the tile
-                                rather than decorate it. It warms to the accent
-                                on hover, which is the only colour move the
-                                whole grid makes.
-                            --}}
-                            <div class="absolute inset-x-0 top-0 flex h-[62%] items-center justify-center text-brand-100/45
-                                        transition-[color,transform] duration-500 ease-[var(--ease-out-quart)]
-                                        group-hover:-translate-y-1 group-hover:text-accent-300/75">
-                                <x-environment-icon :slug="$environment->slug" class="size-20" />
+                            <div class="absolute top-4 end-5 text-brand-200/35 transition-[color,transform] duration-500 ease-[var(--ease-out-quart)] group-hover:-translate-y-0.5 group-hover:text-brand-200/60">
+                                <x-environment-icon :slug="$environment->slug" class="size-14" />
                             </div>
                         @endif
 
@@ -482,33 +445,18 @@
                 </div>
 
                 {{--
-                    A logo wall, not a line of loose words. Each name sits in
-                    its own framed tile of the same size, which is what makes a
-                    set of wordmarks read as a roster of brands the way real
-                    logos would; the frame also gives the row something to
-                    respond to on hover.
+                    Without real logo files this row is wordmarks, so it is set
+                    as one: even optical weight, generous tracking, and a single
+                    hover that brings the name to full ink.
                 --}}
-                {{-- Written out rather than interpolated: Tailwind only ships classes it can read in the source. --}}
-                @php
-                    $brandColumns = match (true) {
-                        $brands->count() >= 7 => 'lg:grid-cols-7',
-                        $brands->count() === 6 => 'lg:grid-cols-6',
-                        $brands->count() === 5 => 'lg:grid-cols-5',
-                        default => 'lg:grid-cols-4',
-                    };
-                @endphp
-
-                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 {{ $brandColumns }}">
+                <div class="flex flex-wrap items-center justify-center gap-x-12 gap-y-7">
                     @foreach ($brands as $brand)
                         <a href="{{ $brand->url() }}"
-                           class="group flex h-20 items-center justify-center rounded-[var(--radius-card)] border border-ink-100 bg-white px-3
-                                  transition-[transform,border-color,box-shadow] duration-300 ease-[var(--ease-out-quart)]
-                                  hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-[var(--shadow-e2)]">
+                           class="group grayscale opacity-70 transition duration-300 ease-[var(--ease-out-quart)] hover:opacity-100 hover:grayscale-0">
                             @if ($brand->logo)
-                                <img src="{{ Storage::url($brand->logo) }}" alt="{{ $brand->name }}" loading="lazy"
-                                     class="h-8 w-auto object-contain opacity-70 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0">
+                                <img src="{{ Storage::url($brand->logo) }}" alt="{{ $brand->name }}" loading="lazy" class="h-8 w-auto object-contain">
                             @else
-                                <span class="text-center text-base leading-6 font-black tracking-tight text-ink-500 transition-colors group-hover:text-brand-700">
+                                <span class="text-base font-black tracking-tight text-ink-500 transition-colors group-hover:text-ink-900">
                                     {{ $brand->name }}
                                 </span>
                             @endif

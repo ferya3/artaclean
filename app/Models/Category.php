@@ -22,9 +22,6 @@ class Category extends Model
 
     protected array $translatable = ['name', 'short_description', 'description', 'seo_title', 'seo_description'];
 
-    /** @var array<int, string>|null Slugs that have a machine illustration on disk. */
-    private static ?array $illustrations = null;
-
     protected function casts(): array
     {
         return [
@@ -110,26 +107,6 @@ class Category extends Model
     public function url(): string
     {
         return route('category.show', $this->slug);
-    }
-
-    /**
-     * The drawing that stands in for this category's machine.
-     *
-     * Every category ships one, so a product still waiting on its photographs
-     * shows the machine it actually is rather than the single grey silhouette
-     * the whole catalogue used to share. Files are listed once per request:
-     * a catalogue page renders this a few dozen times.
-     */
-    public function illustrationUrl(): string
-    {
-        self::$illustrations ??= array_map(
-            static fn (string $path): string => pathinfo($path, PATHINFO_FILENAME),
-            glob(public_path('images/machines/*.svg')) ?: [],
-        );
-
-        return in_array($this->slug, self::$illustrations, true)
-            ? asset("images/machines/{$this->slug}.svg")
-            : asset('images/placeholder-product.svg');
     }
 
     /** @return array<int, array{title: string, url: string|null}> */

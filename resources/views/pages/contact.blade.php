@@ -51,23 +51,6 @@
                 <x-ui-icon name="whatsapp" class="size-5" />
                 {{ __('ui.whatsapp_chat') }}
             </a>
-
-            {{--
-                What happens after the form is sent. A buyer hesitating over a
-                phone number wants to know who calls, when, and what they will
-                be asked — three lines that cost nothing and answer all of it.
-            --}}
-            <ol class="card space-y-4 p-5">
-                <li class="text-sm font-bold text-ink-900">{{ __('contact.next_title') }}</li>
-                @foreach (['one', 'two', 'three'] as $index => $step)
-                    <li class="flex gap-3">
-                        <span class="tabular mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-brand-50 text-xs font-black text-brand-700">
-                            {{ $index + 1 }}
-                        </span>
-                        <span class="text-sm leading-6 text-ink-600">{{ __('contact.next_steps.'.$step) }}</span>
-                    </li>
-                @endforeach
-            </ol>
         </aside>
     </div>
 @endsection

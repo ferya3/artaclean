@@ -195,12 +195,9 @@ class Product extends Model
 
     public function coverUrl(): string
     {
-        if ($this->cover_image) {
-            return Storage::url($this->cover_image);
-        }
-
-        // Until the photographs land, show this category's machine.
-        return $this->category?->illustrationUrl() ?? asset('images/placeholder-product.svg');
+        return $this->cover_image
+            ? Storage::url($this->cover_image)
+            : asset('images/placeholder-product.svg');
     }
 
     /**

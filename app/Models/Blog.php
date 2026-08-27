@@ -66,11 +66,8 @@ class Blog extends Model
 
     public function coverUrl(): string
     {
-        if ($this->cover_image) {
-            return Storage::url($this->cover_image);
-        }
-
-        // An article about scrubbers should at least show a scrubber.
-        return $this->category?->illustrationUrl() ?? asset('images/placeholder-article.svg');
+        return $this->cover_image
+            ? Storage::url($this->cover_image)
+            : asset('images/placeholder-article.svg');
     }
 }

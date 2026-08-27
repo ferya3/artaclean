@@ -58,11 +58,6 @@ class Download extends Model
 
     public function humanSize(): ?string
     {
-        if (! $this->file_size) {
-            return null;
-        }
-
-        // maxPrecision, not precision: a 625 KB file should not read "625.0 KB".
-        return Number::fileSize($this->file_size, maxPrecision: 1);
+        return $this->file_size ? Number::fileSize($this->file_size, precision: 1) : null;
     }
 }
