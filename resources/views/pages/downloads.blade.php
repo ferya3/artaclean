@@ -22,7 +22,13 @@
 
                         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach ($files as $file)
-                                <a href="{{ $file->url() }}" class="card-hover flex items-center gap-3 p-4">
+                                {{--
+                                    `min-w-0`: a grid item refuses to shrink
+                                    below its min-content width by default, so
+                                    a long file name plus the lead chip pushed
+                                    the card past the viewport on a phone.
+                                --}}
+                                <a href="{{ $file->url() }}" class="card-hover flex min-w-0 items-center gap-3 p-4">
                                     <span class="grid size-11 shrink-0 place-items-center rounded-lg bg-ink-50 text-ink-500">
                                         <x-ui-icon name="download" class="size-5" />
                                     </span>
