@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="Walk-behind industrial scrubber dryer">
+  <defs>
+    <linearGradient id="cyc2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#eafafc"/>
+      <stop offset="1" stop-color="#c3e9f0"/>
+    </linearGradient>
+    <radialGradient id="spot2" cx="0.5" cy="0.3" r="0.75">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tank2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcd34d"/>
+      <stop offset="0.45" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="body2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#375056"/>
+      <stop offset="1" stop-color="#1c2f34"/>
+    </linearGradient>
+    <linearGradient id="wet2" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#0f7a94" stop-opacity="0.28"/>
+      <stop offset="0.65" stop-color="#0f7a94" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#0f7a94" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#cyc2)"/>
+  <ellipse cx="600" cy="300" rx="700" ry="420" fill="url(#spot2)"/>
+
+  <g stroke="#0f7a94" stroke-opacity="0.14" stroke-width="2">
+    <path d="M0 700h1200M0 758h1200"/>
+    <path d="M210 690v110M520 690v110M830 690v110M1120 690v110"/>
+  </g>
+
+  <path d="M860 706H120l26 62h740Z" fill="url(#wet2)"/>
+  <path d="M860 706H120" stroke="#0f7a94" stroke-opacity="0.30" stroke-width="3"/>
+
+  <g transform="translate(340 150) scale(1.06)">
+
+    <!-- Push handle, angled back over the operator's side -->
+    <path d="M330 300 470 96" stroke="#24393d" stroke-width="22" stroke-linecap="round"/>
+    <path d="M424 84h96" stroke="#5b7d84" stroke-width="20" stroke-linecap="round"/>
+
+    <!-- Control pod on the handle -->
+    <rect x="392" y="120" width="104" height="58" rx="12" fill="url(#body2)"/>
+    <rect x="410" y="138" width="52" height="10" rx="5" fill="#3bbad0"/>
+    <rect x="410" y="156" width="70" height="7" rx="3.5" fill="#79d5e3" opacity="0.6"/>
+
+    <!-- Far wheel -->
+    <circle cx="96" cy="440" r="48" fill="#12262b"/>
+    <circle cx="96" cy="440" r="21" fill="#5b7d84"/>
+
+    <!-- Trailing squeegee -->
+    <path d="M20 470h120" stroke="#24393d" stroke-width="15" stroke-linecap="round"/>
+    <path d="M26 486h108" stroke="#0f7a94" stroke-opacity="0.7" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Recovery tank body -->
+    <path d="M118 246h216a30 30 0 0 1 30 30v76H118Z" fill="url(#body2)"/>
+
+    <!-- Solution tank -->
+    <path d="M104 352h244a28 28 0 0 1 28 28v54a28 28 0 0 1-28 28H104a28 28 0 0 1-28-28v-54a28 28 0 0 1 28-28Z" fill="url(#tank2)"/>
+    <path d="M104 352h244a28 28 0 0 1 28 28v8H76v-8a28 28 0 0 1 28-28Z" fill="#ffffff" opacity="0.4"/>
+    <rect x="126" y="396" width="112" height="14" rx="7" fill="#7c3d00" opacity="0.28"/>
+
+    <!-- Single brush disc, edge on -->
+    <rect x="150" y="462" width="160" height="30" rx="12" fill="#24393d"/>
+    <ellipse cx="230" cy="506" rx="82" ry="17" fill="#8fa9ae"/>
+    <ellipse cx="230" cy="502" rx="48" ry="9" fill="#24393d" opacity="0.55"/>
+
+    <!-- Near wheel -->
+    <circle cx="352" cy="440" r="48" fill="#12262b"/>
+    <circle cx="352" cy="440" r="21" fill="#5b7d84"/>
+  </g>
+
+  <ellipse cx="600" cy="704" rx="250" ry="24" fill="#0e1f23" opacity="0.22"/>
+  <ellipse cx="600" cy="700" rx="150" ry="13" fill="#0e1f23" opacity="0.18"/>
+</svg>

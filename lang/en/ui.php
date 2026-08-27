@@ -17,6 +17,8 @@ return [
     'submit' => 'Submit request',
     'calculate' => 'Calculate',
     'close' => 'Close',
+    'previous' => 'Previous',
+    'next' => 'Next',
     'clear' => 'Clear',
     'filters' => 'Filters',
     'clear_filters' => 'Clear filters',
@@ -43,23 +45,35 @@ return [
         'power' => 'Most powerful',
     ],
 
-    'hero_eyebrow' => 'Industrial cleaning equipment',
-    'hero_title' => 'Machines specified for your floor, not buried in a PDF',
-    'hero_subtitle' => 'Scrubbers, sweepers, industrial vacuums and steam cleaners — full specifications, side-by-side comparison and same-day pricing.',
-    'hero_stat_products' => 'machine models',
-    'hero_stat_brands' => 'trusted brands',
-    'hero_stat_support' => 'technical support',
+    'hero_title' => 'Industrial cleaning equipment',
 
-    // Three reassurances a procurement manager checks before enquiring.
-    'hero_trust' => [
-        'warranty' => 'Manufacturer warranty',
-        'parts' => 'Spare parts in stock',
-        'service' => 'On-site service and training',
+    // A single short line under the title. Keep it to one sentence.
+    'hero_slogan' => 'We measure your floor first, then specify the machine.',
+
+    // The three machines in the hero gallery, in slide order.
+    'hero_slides' => [
+        'ride_on' => [
+            'name' => 'Ride-on scrubber dryer',
+            'alt' => 'Ride-on industrial scrubber dryer cleaning a factory floor',
+            'figure' => '5,000',
+            'unit' => 'm²/h',
+            'metric' => 'Productivity in a single shift',
+        ],
+        'walk_behind' => [
+            'name' => 'Walk-behind scrubber',
+            'alt' => 'Walk-behind industrial scrubber dryer cleaning a floor',
+            'figure' => '2,100',
+            'unit' => 'm²/h',
+            'metric' => 'Productivity in a single shift',
+        ],
+        'vacuum' => [
+            'name' => 'Wet and dry industrial vacuum',
+            'alt' => 'Industrial wet and dry vacuum with a stainless drum and suction hose',
+            'figure' => '250',
+            'unit' => 'mbar',
+            'metric' => 'Suction power',
+        ],
     ],
-
-    'hero_image_alt' => 'Ride-on industrial scrubber dryer cleaning a factory floor',
-    'hero_image_caption' => 'Ride-on scrubber dryer, 1,000 mm cleaning path',
-    'hero_badge_label' => 'Productivity in a single shift',
 
     // --- Who we are ----------------------------------------------------------
     'company' => [
@@ -68,6 +82,7 @@ return [
         'lead' => 'ArtaClean imports and supplies industrial cleaning machinery: scrubber dryers, sweepers, industrial vacuums, polishers, pressure washers and steam cleaners. The job does not end at the sale — it starts with a site visit and a floor measurement, and continues through operator training and spare parts supply.',
         'body' => 'Our view is simple: most bad purchases in this industry happen because the buyer ends up with a machine larger or smaller than the site needs. So before recommending anything we work out the real cleanable area, the floor type, the length of the shift and the obstacles in the route — and specify the machine from that, not the other way round.',
         'more' => 'More about us',
+        'pullquote' => 'The right machine is the one sized to your floor — not the biggest in the catalogue, and not the cheapest.',
         'facts' => [
             'experience_value' => '15+ years',
             'experience_label' => 'supplying and servicing industrial cleaning equipment',
@@ -156,6 +171,15 @@ return [
         'want_advice' => 'Want a specialist to call?',
         'advice_hint' => 'Leave your number and we will call with this calculation in hand.',
         'thanks' => 'Received. A specialist will call you shortly.',
+        // Shown before a calculation has been run.
+        'how' => [
+            'area_title' => 'The real area, not the drawing',
+            'area_body' => 'The figure that counts is the floor actually cleaned; aisles and space under racking are worked out separately.',
+            'efficiency_title' => 'Real-world efficiency',
+            'efficiency_body' => 'Catalogue productivity is never reached on site, so turning, refilling and dumping are built into the sum.',
+            'shortlist_title' => 'A class, then the models in it',
+            'shortlist_body' => 'You get the machine class and the models stocked in it — with the full specifications to compare.',
+        ],
     ],
 
     'form' => [

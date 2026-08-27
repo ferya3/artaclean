@@ -1,14 +1,30 @@
 @props(['article'])
 
+{{--
+    An article with no photograph of its own falls back to the drawing of the
+    machine it is about. That drawing is a product illustration on a
+    transparent ground, so it is contained on a lit panel rather than cropped
+    to fill the band the way a photograph is.
+--}}
+@php $hasPhoto = (bool) $article->cover_image; @endphp
+
 <article class="card-hover tick-frame group flex h-full flex-col overflow-hidden">
-    <a href="{{ $article->url() }}" class="relative block aspect-16/9 overflow-hidden bg-ink-100">
+    <a href="{{ $article->url() }}"
+       class="relative block aspect-16/9 overflow-hidden {{ $hasPhoto ? 'bg-ink-100' : 'bg-linear-to-b from-ink-50 to-white' }}">
+        @unless ($hasPhoto)
+            <span class="pointer-events-none absolute inset-x-12 bottom-5 h-7 rounded-[50%] bg-ink-900/8 blur-xl"></span>
+        @endunless
+
         <img src="{{ $article->coverUrl() }}"
              alt="{{ $article->title }}"
              loading="lazy"
              decoding="async"
-             class="size-full object-cover transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-105">
-        {{-- Keeps the category chip legible over a light photograph. --}}
-        <span class="absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-ink-950/35 to-transparent"></span>
+             class="relative size-full transition-transform duration-500 ease-[var(--ease-out-quart)] group-hover:scale-105 {{ $hasPhoto ? 'object-cover' : 'object-contain p-6' }}">
+
+        @if ($hasPhoto)
+            {{-- Keeps the category chip legible over a light photograph. --}}
+            <span class="absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-ink-950/35 to-transparent"></span>
+        @endif
     </a>
 
     <div class="flex flex-1 flex-col p-5">
@@ -25,7 +41,7 @@
         @endif
 
         <p class="mt-auto pt-4 text-xs text-ink-400">
-            {{ $article->published_at?->translatedFormat('j F Y') }}
+            {{ \App\Support\Dates::long($article->published_at) }}
             · {{ __('ui.reading_time', ['minutes' => $article->reading_minutes]) }}
         </p>
     </div>

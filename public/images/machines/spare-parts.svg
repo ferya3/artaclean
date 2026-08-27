@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="172 216 959 719" width="1200" height="900" role="img" aria-label="Spare parts for cleaning machines">
+  <defs>
+    <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcd34d"/>
+      <stop offset="0.45" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d585f"/>
+      <stop offset="1" stop-color="#1a2d31"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5b7d84"/>
+      <stop offset="0.42" stop-color="#a8bfc4"/>
+      <stop offset="1" stop-color="#47656b"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22a3bf"/>
+      <stop offset="1" stop-color="#11667c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Contact shadow: the only thing that seats the machine on the panel. -->
+  <ellipse cx="600" cy="782" rx="240" ry="22" fill="#0e1f23" opacity="0.16"/>
+  <ellipse cx="600" cy="776" rx="149" ry="12" fill="#0e1f23" opacity="0.13"/>
+
+  <!-- Brush disc, seen at an angle -->
+  <ellipse cx="392" cy="596" rx="176" ry="62" fill="#24393d"/>
+  <ellipse cx="392" cy="576" rx="176" ry="62" fill="url(#steel)"/>
+  <g stroke="#24393d" stroke-opacity="0.45" stroke-width="7">
+    <path d="M256 560c40 26 232 26 272 0M280 596c40 22 184 22 224 0"/>
+  </g>
+  <ellipse cx="392" cy="576" rx="52" ry="19" fill="url(#amber)"/>
+
+  <!-- Pleated filter cartridge -->
+  <path d="M636 372h176v268a26 26 0 0 1-26 26H662a26 26 0 0 1-26-26Z" fill="#eef6f7"/>
+  <g stroke="#a8bfc4" stroke-width="7">
+    <path d="M666 386v276M696 386v276M726 386v276M756 386v276M786 386v276"/>
+  </g>
+  <rect x="620" y="348" width="208" height="42" rx="14" fill="url(#teal)"/>
+  <rect x="620" y="640" width="208" height="42" rx="14" fill="url(#body)"/>
+
+  <!-- Squeegee blade -->
+  <path d="M872 640h216l-22 44H894Z" fill="url(#amber)"/>
+  <path d="M872 640h216" stroke="#7c3d00" stroke-opacity="0.3" stroke-width="8"/>
+  <rect x="884" y="596" width="192" height="34" rx="12" fill="url(#body)"/>
+</svg>
