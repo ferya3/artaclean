@@ -139,6 +139,7 @@ return [
         'rental_available' => 'This machine is available to rent',
         'rental_periods' => 'Rental periods',
         'ask_expert' => 'Ask a specialist',
+        'parts' => 'Parts that fit this machine',
         'no_downloads' => 'No files published for this machine yet.',
     ],
 

@@ -43,7 +43,7 @@ class EloquentProductRepository implements ProductRepository
 
         return Product::query()
             ->active()
-            ->with(['brand', 'category', 'specs'])
+            ->with(['brand', 'category', 'specs', 'environments'])
             ->whereIn('id', $ids)
             // Keep the order the visitor added them in.
             ->get()
@@ -54,7 +54,7 @@ class EloquentProductRepository implements ProductRepository
     public function paginateFiltered(ProductFilters $filters, int $perPage = 12): LengthAwarePaginator
     {
         return $this->baseQuery($filters)
-            ->with(['brand', 'category'])
+            ->with(['brand', 'category', 'environments'])
             ->tap(fn (Builder $query) => $this->applySort($query, $filters->sort))
             ->paginate($perPage, ['*'], 'page', $filters->page)
             ->withQueryString();
@@ -65,7 +65,7 @@ class EloquentProductRepository implements ProductRepository
         return Product::query()
             ->active()
             ->featured()
-            ->with(['brand', 'category'])
+            ->with(['brand', 'category', 'environments'])
             ->ordered()
             ->limit($limit)
             ->get();
@@ -75,7 +75,7 @@ class EloquentProductRepository implements ProductRepository
     {
         return Product::query()
             ->active()
-            ->with(['brand', 'category'])
+            ->with(['brand', 'category', 'environments'])
             ->latest('id')
             ->limit($limit)
             ->get();
@@ -85,7 +85,7 @@ class EloquentProductRepository implements ProductRepository
     {
         return Product::query()
             ->active()
-            ->with(['brand', 'category'])
+            ->with(['brand', 'category', 'environments'])
             ->where('category_id', $product->category_id)
             ->whereKeyNot($product->getKey())
             // Closest productivity rating first — that is the axis a buyer is
@@ -99,7 +99,7 @@ class EloquentProductRepository implements ProductRepository
     {
         return Product::query()
             ->active()
-            ->with(['brand', 'category'])
+            ->with(['brand', 'category', 'environments'])
             ->whereHas('environments', fn (Builder $q) => $q->where('environments.id', $environmentId))
             ->join('environment_product', 'environment_product.product_id', '=', 'products.id')
             ->where('environment_product.environment_id', $environmentId)

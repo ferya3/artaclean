@@ -59,7 +59,11 @@
         <div>
             <h2 class="mb-4 text-xs font-semibold tracking-[0.12em] text-white uppercase">{{ __('nav.quick_links') }}</h2>
             <ul class="space-y-2.5 text-sm">
+                <li><a href="{{ route('advisor') }}" class="hover:text-white">{{ __('nav.advisor') }}</a></li>
                 <li><a href="{{ route('selector') }}" class="hover:text-white">{{ __('nav.selector') }}</a></li>
+                <li><a href="{{ route('services.index') }}" class="hover:text-white">{{ __('nav.services') }}</a></li>
+                <li><a href="{{ route('spare-parts') }}" class="hover:text-white">{{ __('nav.spare_parts') }}</a></li>
+                <li><a href="{{ route('knowledge') }}" class="hover:text-white">{{ __('nav.knowledge') }}</a></li>
                 <li><a href="{{ route('rental') }}" class="hover:text-white">{{ __('nav.rental') }}</a></li>
                 <li><a href="{{ route('brands.index') }}" class="hover:text-white">{{ __('nav.brands') }}</a></li>
                 <li><a href="{{ route('downloads.index') }}" class="hover:text-white">{{ __('nav.downloads') }}</a></li>

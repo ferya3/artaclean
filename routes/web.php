@@ -12,6 +12,7 @@ use App\Http\Controllers\Web\EnvironmentController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\KnowledgeController;
 use App\Http\Controllers\Web\PageController;
+use App\Http\Controllers\Web\PartsController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\RentalController;
 use App\Http\Controllers\Web\SelectorController;
@@ -35,6 +36,9 @@ Route::get('/machine-selector', SelectorController::class)->name('selector');
 // --- Services --------------------------------------------------------------
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/{service:slug}', [ServiceController::class, 'show'])->name('service.show');
+
+// --- Spare parts -----------------------------------------------------------
+Route::get('/spare-parts', PartsController::class)->name('spare-parts');
 
 // --- Knowledge -------------------------------------------------------------
 Route::get('/knowledge', [KnowledgeController::class, 'index'])->name('knowledge');

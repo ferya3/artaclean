@@ -11,7 +11,14 @@
             {{-- ---------------------------------------------------------- --}}
             {{-- Gallery                                                    --}}
             {{-- ---------------------------------------------------------- --}}
-            <div class="lg:col-span-7">
+            {{--
+                `min-w-0` is load-bearing: a grid item will not shrink below
+                its content, and Swiper sizes its slides from the container it
+                finds itself in. Without it the two feed each other and the
+                gallery — and the page with it — grows without limit on a
+                phone, half a second at a time.
+            --}}
+            <div class="min-w-0 lg:col-span-7">
                 @php
                     $gallery = $product->galleryImages;
                     $frames = $product->frames360;
@@ -281,6 +288,45 @@
     </div>
 
     {{-- ---------------------------------------------------------------- --}}
+    {{-- Headline figures                                                 --}}
+    {{-- ---------------------------------------------------------------- --}}
+    {{--
+        The four numbers that decide the purchase, at the size they decide it.
+        They count up as they arrive, which is the difference between a figure
+        being read and a figure being skimmed past — and they hold still for
+        anyone who has asked for less motion.
+    --}}
+    @php
+        $figures = collect([
+            ['value' => $product->productivity_sqm_h, 'unit' => 'm²/h', 'label' => __('specs.productivity_sqm_h')],
+            ['value' => $product->tank_capacity_l, 'unit' => 'L', 'label' => __('specs.tank_capacity_l')],
+            ['value' => $product->cleaning_width_mm, 'unit' => 'mm', 'label' => __('specs.cleaning_width_mm')],
+            ['value' => $product->suction_mbar, 'unit' => 'mbar', 'label' => __('specs.suction_mbar')],
+            ['value' => $product->water_pressure_bar, 'unit' => 'bar', 'label' => __('specs.water_pressure_bar')],
+            ['value' => $product->battery_runtime_min, 'unit' => 'min', 'label' => __('specs.battery_runtime_min')],
+            ['value' => $product->power_watt, 'unit' => 'W', 'label' => __('specs.power_watt')],
+        ])->filter(fn ($figure) => (int) $figure['value'] > 0)->take(4)->values();
+    @endphp
+
+    @if ($figures->count() >= 3)
+        <section class="border-t border-ink-100 bg-ink-950 py-14 sm:py-16">
+            <div class="container-page">
+                <dl class="grid grid-cols-2 gap-8 lg:grid-cols-4">
+                    @foreach ($figures as $figure)
+                        <div x-data="countUp({{ (int) $figure['value'] }})" class="text-center">
+                            <dd class="tabular text-3xl leading-none font-black text-white sm:text-4xl lg:text-5xl">
+                                <span x-text="formatted">{{ number_format((int) $figure['value']) }}</span>
+                                <span class="block pt-2 text-sm font-bold text-accent-400 sm:text-base">{{ $figure['unit'] }}</span>
+                            </dd>
+                            <dt class="mt-3 text-xs leading-5 text-ink-400 sm:text-sm">{{ $figure['label'] }}</dt>
+                        </div>
+                    @endforeach
+                </dl>
+            </div>
+        </section>
+    @endif
+
+    {{-- ---------------------------------------------------------------- --}}
     {{-- Specs, downloads, description                                    --}}
     {{-- ---------------------------------------------------------------- --}}
     <section class="border-t border-ink-100 bg-ink-50 py-16">
@@ -398,6 +444,26 @@
     {{-- ---------------------------------------------------------------- --}}
     {{-- Related machines                                                 --}}
     {{-- ---------------------------------------------------------------- --}}
+    {{--
+        The parts that fit. A buyer specifying a machine for a five year life
+        wants to see the consumables exist before they commit, and an owner
+        looking for a squeegee should not have to search the catalogue by
+        guesswork.
+    --}}
+    @if ($product->compatibleParts->isNotEmpty())
+        <section class="border-t border-ink-100 py-14">
+            <div class="container-page">
+                <x-section-heading :title="__('ui.product.parts')" :href="route('spare-parts')" />
+
+                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    @foreach ($product->compatibleParts as $part)
+                        <x-product-card :product="$part" :show-compare="false" />
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
     @if ($related->isNotEmpty())
         <section class="section pt-0">
             <div class="container-page">

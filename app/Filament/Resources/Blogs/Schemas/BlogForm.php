@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Blogs\Schemas;
 
+use App\Enums\KnowledgeType;
 use App\Filament\Support\TranslatableFields;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
@@ -36,6 +37,11 @@ class BlogForm
                 TextInput::make('reading_minutes')->label(__('admin.field.reading_minutes'))->numeric()->default(3),
                 FileUpload::make('cover_image')->label(__('admin.field.cover_image'))->image()->directory('blog'),
                 DateTimePicker::make('published_at')->label(__('admin.field.published_at'))->default(now()),
+                Select::make('type')
+                    ->label(__('admin.field.knowledge_type'))
+                    ->options(KnowledgeType::options())
+                    ->default(KnowledgeType::Article->value)
+                    ->required(),
                 Toggle::make('is_published')->label(__('admin.field.is_published')),
 
                 // Linking an article to machines gives the product page its

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Categories\Schemas;
 
+use App\Enums\NavGroup;
 use App\Filament\Support\TranslatableFields;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -48,6 +49,9 @@ class CategoryForm
             ]),
 
             Section::make(__('admin.section.settings'))->columns(3)->schema([
+                Select::make('nav_group')
+                    ->label(__('admin.field.nav_group'))
+                    ->options(NavGroup::options()),
                 TextInput::make('sort_order')->label(__('admin.field.sort_order'))->numeric()->default(0),
                 Toggle::make('is_active')->label(__('admin.field.is_active'))->default(true),
                 Toggle::make('show_in_menu')->label(__('admin.field.show_in_menu'))->default(true),

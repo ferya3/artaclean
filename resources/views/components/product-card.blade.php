@@ -56,6 +56,27 @@
             </dl>
         @endif
 
+        {{--
+            Which sites this machine is for. A procurement manager scanning a
+            row of cards is matching them against one building, and this is the
+            line that lets them discard three of four without opening any of
+            them. Only rendered when the relation is already loaded, so a card
+            can never cost a query per row.
+        --}}
+        @if ($product->relationLoaded('environments') && $product->environments->isNotEmpty())
+            <div class="mt-4">
+                <p class="text-[11px] text-ink-400">{{ __('ui.product.suitable_for') }}</p>
+                <p class="mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-5 text-ink-600">
+                    @foreach ($product->environments->take(3) as $environment)
+                        <span>{{ $environment->name }}</span>
+                        @if (! $loop->last)
+                            <span class="text-ink-300">•</span>
+                        @endif
+                    @endforeach
+                </p>
+            </div>
+        @endif
+
         <div class="mt-auto pt-5">
             @if ($product->showsPrice())
                 <p class="tabular mb-3 text-lg leading-none font-black text-ink-900">

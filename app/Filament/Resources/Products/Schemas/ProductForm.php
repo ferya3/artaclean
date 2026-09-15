@@ -7,7 +7,9 @@ namespace App\Filament\Resources\Products\Schemas;
 use App\Enums\OperatorType;
 use App\Enums\PowerSource;
 use App\Enums\RentalPeriod;
+use App\Enums\SoilType;
 use App\Enums\StockStatus;
+use App\Enums\SurfaceType;
 use App\Filament\Support\TranslatableFields;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
@@ -73,6 +75,19 @@ class ProductForm
                             Select::make('operator_type')
                                 ->label(__('specs.operator_type'))
                                 ->options(OperatorType::class),
+                            // What the machine takes off, and off what. The
+                            // advisor treats both as hard filters, so a machine
+                            // left blank here never gets recommended.
+                            Select::make('soil_types')
+                                ->label(__('admin.field.soil_types'))
+                                ->multiple()
+                                ->options(SoilType::options())
+                                ->columnSpan(['default' => 3, 'lg' => 1]),
+                            Select::make('surface_types')
+                                ->label(__('admin.field.surface_types'))
+                                ->multiple()
+                                ->options(SurfaceType::options())
+                                ->columnSpan(['default' => 3, 'lg' => 2]),
                             TextInput::make('power_watt')->label(__('specs.power_watt'))->numeric()->suffix('W'),
                             TextInput::make('voltage')->label(__('specs.voltage'))->numeric()->suffix('V'),
                             TextInput::make('tank_capacity_l')->label(__('specs.tank_capacity_l'))->numeric()->suffix('L'),
@@ -207,6 +222,17 @@ class ProductForm
                         ->multiple()
                         ->preload()
                         ->helperText(__('admin.help.environments')),
+
+                    // Filled in on a part or an accessory, not on a machine:
+                    // it is what the spare parts finder searches.
+                    Select::make('fitsMachines')
+                        ->label(__('admin.field.fits_machines'))
+                        ->relationship('fitsMachines', 'slug')
+                        ->getOptionLabelFromRecordUsing(fn ($record) => $record->name)
+                        ->multiple()
+                        ->searchable()
+                        ->preload()
+                        ->helperText(__('admin.help.fits_machines')),
                 ]),
 
                 Tabs\Tab::make(__('admin.tab.seo'))->schema([

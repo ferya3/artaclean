@@ -83,6 +83,62 @@ document.addEventListener('alpine:init', () => {
         },
     }));
 
+    /**
+     * Counts a headline figure up when it scrolls into view.
+     *
+     * The numbers on a product page are the purchase decision, and a figure
+     * that arrives rather than simply being there is read rather than skimmed.
+     * It runs once, and not at all for a visitor who has asked for less
+     * motion — they get the final value immediately, which is the point of
+     * the setting.
+     */
+    Alpine.data('countUp', (target, duration = 1100) => ({
+        value: 0,
+        done: false,
+
+        init() {
+            const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            if (still || typeof IntersectionObserver === 'undefined') {
+                this.value = target;
+                this.done = true;
+
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting || this.done) return;
+
+                    this.done = true;
+                    observer.disconnect();
+                    this.run(duration);
+                });
+            }, { threshold: 0.4 });
+
+            observer.observe(this.$el);
+        },
+
+        run(duration) {
+            const start = performance.now();
+
+            const step = (now) => {
+                const progress = Math.min((now - start) / duration, 1);
+                // Ease out: the figure decelerates into its final value rather
+                // than stopping dead on it.
+                this.value = Math.round(target * (1 - Math.pow(1 - progress, 3)));
+
+                if (progress < 1) requestAnimationFrame(step);
+            };
+
+            requestAnimationFrame(step);
+        },
+
+        get formatted() {
+            return this.value.toLocaleString(document.documentElement.lang || 'en');
+        },
+    }));
+
     /** Horizontal carousels for product rows, brands and articles. */
     Alpine.data('carousel', (options = {}) => ({
         swiper: null,

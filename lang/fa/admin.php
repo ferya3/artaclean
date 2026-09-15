@@ -22,6 +22,8 @@ return [
         'brand' => 'برند',
         'brands' => 'برندها',
         'environment' => 'محیط کاربری',
+        'service' => 'خدمت',
+        'services' => 'خدمات',
         'environments' => 'محیط‌های کاربری',
         'attribute' => 'ویژگی',
         'attributes' => 'ویژگی‌ها',
@@ -203,6 +205,13 @@ return [
         'is_published' => 'منتشر شده',
         'published_at' => 'تاریخ انتشار',
         'reading_minutes' => 'زمان مطالعه (دقیقه)',
+        'bullets' => 'موارد کلیدی',
+        'icon_hint' => 'نام آیکون سایت؛ مثلاً wrench یا clock.',
+        'soil_types' => 'انواع آلودگی',
+        'surface_types' => 'انواع سطح',
+        'nav_group' => 'گروه منو',
+        'knowledge_type' => 'نوع مطلب',
+        'fits_machines' => 'سازگار با دستگاه‌های',
     ],
 
     'value' => [
@@ -224,6 +233,7 @@ return [
         'dealer_user' => 'کاربری که با آن وارد پنل نمایندگی می‌شود.',
         'dealer_link' => 'برای دسترسی به پنل نمایندگی الزامی است.',
         'frames_360' => 'فریم‌ها را به ترتیب چرخش آپلود کنید.',
+        'fits_machines' => 'برای قطعات و لوازم جانبی پر کنید: این قطعه روی کدام دستگاه‌ها نصب می‌شود.',
     ],
 
     'action' => [

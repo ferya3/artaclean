@@ -10,6 +10,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Environment;
 use App\Models\Product;
+use App\Models\Service;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
@@ -52,7 +53,8 @@ class SitemapController extends Controller
         $urls->push($this->url(route('home'), '1.0', 'daily'));
 
         foreach ([
-            'products.index', 'selector', 'rental', 'environments.index',
+            'products.index', 'advisor', 'selector', 'rental', 'environments.index',
+            'services.index', 'knowledge', 'spare-parts',
             'brands.index', 'blog.index', 'downloads.index', 'faq', 'contact', 'about',
         ] as $name) {
             $urls->push($this->url(route($name), '0.8', 'weekly'));
@@ -81,6 +83,12 @@ class SitemapController extends Controller
                 $urls->push($this->url($product->url(), '0.9', 'weekly', $product->updated_at?->toAtomString()));
             }
         });
+
+        Service::query()->active()->get()->each(
+            fn (Service $service) => $urls->push(
+                $this->url($service->url(), '0.7', 'monthly', $service->updated_at?->toAtomString())
+            )
+        );
 
         Blog::query()->published()->get()->each(
             fn (Blog $blog) => $urls->push(

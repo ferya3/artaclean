@@ -39,4 +39,6 @@ return [
     'service_title' => ':name for industrial cleaning equipment',
     'knowledge_title' => 'Buying guides and technical knowledge',
     'knowledge_description' => 'Buying guides, machine comparisons, finished projects and maintenance advice.',
+    'parts_title' => 'Spare parts for industrial cleaning machines',
+    'parts_description' => 'Squeegees, brushes, pads, filters and batteries — find the part by machine model.',
 ];

@@ -22,6 +22,8 @@ return [
         'brand' => 'Brand',
         'brands' => 'Brands',
         'environment' => 'Environment',
+        'service' => 'Service',
+        'services' => 'Services',
         'environments' => 'Environments',
         'attribute' => 'Attribute',
         'attributes' => 'Attributes',
@@ -203,6 +205,13 @@ return [
         'is_published' => 'Published',
         'published_at' => 'Published at',
         'reading_minutes' => 'Reading time (minutes)',
+        'bullets' => 'Key points',
+        'icon_hint' => 'A site icon name, e.g. wrench or clock.',
+        'soil_types' => 'Soil types',
+        'surface_types' => 'Surface types',
+        'nav_group' => 'Menu group',
+        'knowledge_type' => 'Article type',
+        'fits_machines' => 'Fits machines',
     ],
 
     'value' => [
@@ -224,6 +233,7 @@ return [
         'dealer_user' => 'The account used to sign in to the dealer panel.',
         'dealer_link' => 'Required for dealer panel access.',
         'frames_360' => 'Upload frames in rotation order.',
+        'fits_machines' => 'For parts and accessories: the machines this part fits.',
     ],
 
     'action' => [
