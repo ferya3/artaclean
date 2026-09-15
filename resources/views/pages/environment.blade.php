@@ -32,6 +32,52 @@
         </div>
     </section>
 
+    {{--
+        Problem first, product second.
+
+        Someone who lands on "cleaning a factory" is not browsing a catalogue;
+        they have something specific on the floor. Naming the soils this kind
+        of site actually has, and putting the machine families that deal with
+        each one directly under them, is the whole difference between a
+        supplier's website and a buying adviser.
+    --}}
+    @if ($soils !== [])
+        <section class="border-b border-ink-100 bg-ink-50 py-12 sm:py-14">
+            <div class="container-page">
+                <h2 class="text-xl font-black text-ink-900 sm:text-2xl">{{ __('solutions.problem_title') }}</h2>
+                <p class="mt-2 text-sm leading-7 text-ink-500 sm:text-base">{{ __('solutions.problem_subtitle') }}</p>
+
+                <div class="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach ($soils as $row)
+                        <div class="card flex h-full flex-col p-5">
+                            <p class="flex items-center gap-2.5 text-sm font-bold text-ink-900">
+                                <span class="size-2 rounded-full bg-accent-400"></span>
+                                {{ $row['soil']->getLabel() }}
+                            </p>
+
+                            <ul class="mt-4 space-y-1">
+                                @foreach ($row['categories'] as $category)
+                                    <li>
+                                        <a href="{{ $category->url() }}"
+                                           class="flex items-center justify-between gap-2 rounded-lg px-2.5 py-2 text-sm text-ink-600 hover:bg-ink-50 hover:text-brand-700">
+                                            <span>{{ $category->name }}</span>
+                                            <x-ui-icon name="arrow-left" class="size-3.5 shrink-0 text-ink-300 flip-rtl" />
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+
+                            <a href="{{ route('products.index', ['soil' => [$row['soil']->value], 'environment' => $environment->slug]) }}"
+                               class="mt-auto pt-4 text-xs font-semibold text-brand-700 hover:text-brand-800">
+                                {{ __('solutions.see_machines') }}
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
     <div class="container-page py-12">
         @if ($products->isNotEmpty())
             <x-section-heading :title="__('ui.featured_title')" />

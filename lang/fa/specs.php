@@ -20,4 +20,7 @@ return [
     'weight_kg' => 'وزن',
     'warranty_months' => 'گارانتی (ماه)',
     'model_code' => 'کد مدل',
+
+    'soil_type' => 'نوع آلودگی',
+    'surface_type' => 'نوع سطح',
 ];

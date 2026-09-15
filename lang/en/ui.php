@@ -213,4 +213,7 @@ return [
     'per_day' => 'per day',
     'deposit' => 'Deposit',
     'min_duration' => 'Minimum term',
+
+    'closing_title' => 'Find the right machine for your site',
+    'closing_body' => 'Tell us the area and what is on the floor, and get the machine class, the models in stock and today’s price.',
 ];

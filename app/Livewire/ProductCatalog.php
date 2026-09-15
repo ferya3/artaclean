@@ -41,6 +41,13 @@ class ProductCatalog extends Component
     #[Url(as: 'spec', history: true)]
     public array $attributeValueIds = [];
 
+    /** What is on the floor, and what the floor is — the two axes the advisor asks about. */
+    #[Url(as: 'soil', history: true)]
+    public array $soilTypes = [];
+
+    #[Url(as: 'surface', history: true)]
+    public array $surfaceTypes = [];
+
     #[Url(as: 'tank_min', history: true)]
     public ?int $tankCapacityMin = null;
 
@@ -88,6 +95,7 @@ class ProductCatalog extends Component
     {
         $this->reset([
             'brands', 'powerSources', 'operatorTypes', 'attributeValueIds',
+            'soilTypes', 'surfaceTypes',
             'tankCapacityMin', 'tankCapacityMax', 'powerMin', 'powerMax',
             'cleaningWidthMin', 'cleaningWidthMax', 'coverageArea',
             'rentableOnly', 'inStockOnly', 'search',
@@ -126,6 +134,8 @@ class ProductCatalog extends Component
             'brands' => $this->brands,
             'power_sources' => $this->powerSources,
             'operator_types' => $this->operatorTypes,
+            'soil_types' => $this->soilTypes,
+            'surface_types' => $this->surfaceTypes,
             'attribute_values' => $this->attributeValueIds,
             'tank_capacity_min' => $this->tankCapacityMin,
             'tank_capacity_max' => $this->tankCapacityMax,

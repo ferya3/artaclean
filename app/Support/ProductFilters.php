@@ -16,6 +16,8 @@ final class ProductFilters
      * @param  array<int, string>  $brands  brand slugs
      * @param  array<int, string>  $powerSources
      * @param  array<int, string>  $operatorTypes
+     * @param  array<int, string>  $soilTypes  what the machine has to remove
+     * @param  array<int, string>  $surfaceTypes  what it has to remove it from
      * @param  array<int, int>  $attributeValueIds
      */
     public function __construct(
@@ -24,6 +26,8 @@ final class ProductFilters
         public readonly array $brands = [],
         public readonly array $powerSources = [],
         public readonly array $operatorTypes = [],
+        public readonly array $soilTypes = [],
+        public readonly array $surfaceTypes = [],
         public readonly array $attributeValueIds = [],
         public readonly ?int $tankCapacityMin = null,
         public readonly ?int $tankCapacityMax = null,
@@ -53,6 +57,8 @@ final class ProductFilters
             brands: $list('brands'),
             powerSources: $list('power_sources'),
             operatorTypes: $list('operator_types'),
+            soilTypes: $list('soil_types'),
+            surfaceTypes: $list('surface_types'),
             attributeValueIds: array_map('intval', $list('attribute_values')),
             tankCapacityMin: $ints('tank_capacity_min'),
             tankCapacityMax: $ints('tank_capacity_max'),
@@ -82,6 +88,8 @@ final class ProductFilters
             'brands' => $this->brands,
             'power_sources' => $this->powerSources,
             'operator_types' => $this->operatorTypes,
+            'soil_types' => $this->soilTypes,
+            'surface_types' => $this->surfaceTypes,
             'attribute_values' => $this->attributeValueIds,
             'tank_capacity_min' => $this->tankCapacityMin,
             'tank_capacity_max' => $this->tankCapacityMax,

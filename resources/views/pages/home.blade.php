@@ -196,6 +196,23 @@
     </section>
 
     {{-- ------------------------------------------------------------------ --}}
+    {{-- Product advisor                                                    --}}
+    {{-- ------------------------------------------------------------------ --}}
+    {{--
+        Second on the page, above the categories, because most visitors cannot
+        name the category they need. A grid of nine machine types asks them to
+        already know the answer; four questions do not.
+
+        It overlaps the hero slightly so it reads as part of the first screen
+        rather than as the next thing down.
+    --}}
+    <section class="relative z-10 -mt-8 sm:-mt-10 lg:-mt-14">
+        <div class="container-page">
+            <livewire:machine-advisor :compact="true" />
+        </div>
+    </section>
+
+    {{-- ------------------------------------------------------------------ --}}
     {{-- Who we are                                                         --}}
     {{-- ------------------------------------------------------------------ --}}
     <section class="border-b border-ink-100 bg-white py-16 sm:py-20 lg:py-24">
@@ -520,6 +537,39 @@
     @endif
 
     {{-- ------------------------------------------------------------------ --}}
+    {{-- Services                                                           --}}
+    {{-- ------------------------------------------------------------------ --}}
+    {{--
+        On a consumer site this would be a footer link. Here it is a section:
+        a procurement manager comparing two suppliers of the same Kärcher
+        machine is choosing on exactly this — who installs it, who services it,
+        who has the brush in stock on a Tuesday.
+    --}}
+    <section class="section bg-ink-50">
+        <div class="container-page">
+            <x-section-heading :eyebrow="__('nav.services')"
+                               :title="__('seo.services_title')"
+                               :subtitle="__('seo.services_description')"
+                               :href="route('services.index')" />
+
+            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                @foreach ($services as $service)
+                    <a href="{{ $service->url() }}"
+                       class="card-hover group flex items-center gap-3.5 p-5">
+                        <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-white text-brand-700 ring-1 ring-ink-100
+                                     transition-[background-color,color] duration-300 group-hover:bg-brand-600 group-hover:text-white group-hover:ring-brand-600">
+                            <x-ui-icon :name="$service->icon ?? 'wrench'" class="size-5" />
+                        </span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-ink-900 transition-colors group-hover:text-brand-700">{{ $service->name }}</span>
+                        </span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ------------------------------------------------------------------ --}}
     {{-- Articles                                                           --}}
     {{-- ------------------------------------------------------------------ --}}
     @if ($articles->isNotEmpty())
@@ -549,5 +599,33 @@
             </div>
         </section>
     @endif
+
+    {{-- ------------------------------------------------------------------ --}}
+    {{-- Closing CTA                                                        --}}
+    {{-- ------------------------------------------------------------------ --}}
+    <section class="section bg-ink-950">
+        <div class="container-page">
+            <div class="relative isolate overflow-hidden rounded-2xl p-8 text-center sm:p-14">
+                <div class="absolute inset-0 -z-10 blueprint"></div>
+                <div class="absolute -top-24 start-1/3 -z-10 size-[26rem] glow-brand"></div>
+
+                <h2 class="mx-auto max-w-2xl text-2xl leading-snug font-black text-white sm:text-3xl">
+                    {{ __('ui.closing_title') }}
+                </h2>
+                <p class="mx-auto mt-4 max-w-xl text-base leading-8 text-ink-300">{{ __('ui.closing_body') }}</p>
+
+                <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                    <a href="{{ route('advisor') }}" class="btn-accent btn-lg w-full sm:w-auto">
+                        {{ __('advisor.find') }}
+                        <x-ui-icon name="arrow-left" class="size-4 flip-rtl" />
+                    </a>
+                    <a href="{{ route('contact') }}"
+                       class="btn btn-lg w-full border border-white/20 bg-white/5 text-white backdrop-blur-sm hover:border-white/40 hover:bg-white/10 sm:w-auto">
+                        {{ __('ui.free_consultation') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
 @endsection

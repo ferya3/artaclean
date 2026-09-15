@@ -231,6 +231,24 @@ class EloquentProductRepository implements ProductRepository
             $query->whereIn('products.operator_type', $filters->operatorTypes);
         }
 
+        // OR within each axis, AND across them: a buyer ticking oil and grease
+        // wants machines that handle either, not only the ones that do both.
+        if ($filters->soilTypes !== []) {
+            $query->where(function (Builder $q) use ($filters) {
+                foreach ($filters->soilTypes as $soil) {
+                    $q->orWhereJsonContains('products.soil_types', $soil);
+                }
+            });
+        }
+
+        if ($filters->surfaceTypes !== []) {
+            $query->where(function (Builder $q) use ($filters) {
+                foreach ($filters->surfaceTypes as $surface) {
+                    $q->orWhereJsonContains('products.surface_types', $surface);
+                }
+            });
+        }
+
         foreach ($filters->attributeValueIds as $valueId) {
             // AND across attributes: each selected value must be present.
             $query->whereHas(

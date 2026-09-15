@@ -97,6 +97,36 @@
                 </fieldset>
             @endif
 
+            {{--
+                Soil and surface: the two questions a buyer can answer without
+                knowing any machine vocabulary at all. No facet counts here —
+                these are plain capability flags rather than a join, and a
+                count of zero on an axis this coarse reads as an error.
+            --}}
+            <fieldset>
+                <legend class="field-label">{{ __('specs.soil_type') }}</legend>
+                <div class="space-y-1.5">
+                    @foreach (App\Enums\SoilType::options() as $value => $label)
+                        <label class="check-row">
+                            <input type="checkbox" value="{{ $value }}" wire:model.live="soilTypes" class="check-box">
+                            <span class="flex-1">{{ $label }}</span>
+                        </label>
+                    @endforeach
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend class="field-label">{{ __('specs.surface_type') }}</legend>
+                <div class="space-y-1.5">
+                    @foreach (App\Enums\SurfaceType::options() as $value => $label)
+                        <label class="check-row">
+                            <input type="checkbox" value="{{ $value }}" wire:model.live="surfaceTypes" class="check-box">
+                            <span class="flex-1">{{ $label }}</span>
+                        </label>
+                    @endforeach
+                </div>
+            </fieldset>
+
             {{-- Numeric ranges --}}
             <fieldset>
                 <legend class="field-label">{{ __('specs.tank_capacity_l') }} (L)</legend>

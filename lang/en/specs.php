@@ -20,4 +20,7 @@ return [
     'weight_kg' => 'Weight',
     'warranty_months' => 'Warranty (months)',
     'model_code' => 'Model code',
+
+    'soil_type' => 'Soil type',
+    'surface_type' => 'Surface',
 ];

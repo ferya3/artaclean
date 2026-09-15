@@ -13,6 +13,7 @@ use App\CQRS\Query;
 use App\Models\Brand;
 use App\Models\Environment;
 use App\Models\Faq;
+use App\Models\Service;
 
 class GetHomePageDataHandler implements Handler
 {
@@ -31,6 +32,7 @@ class GetHomePageDataHandler implements Handler
             'environments' => Environment::query()->active()->ordered()->get(),
             'brands' => Brand::query()->active()->ordered()->get(),
             'articles' => $this->blogs->latest(3),
+            'services' => Service::query()->active()->ordered()->get(),
             'faqs' => Faq::query()->active()->global()->orderBy('sort_order')->limit(6)->get(),
         ];
     }
