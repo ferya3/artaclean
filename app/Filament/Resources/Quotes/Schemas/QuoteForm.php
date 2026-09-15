@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Quotes\Schemas;
 
+use App\Enums\PurchaseTimeline;
 use App\Enums\QuoteStatus;
 use App\Enums\RentalPeriod;
 use Filament\Forms\Components\DatePicker;
@@ -32,6 +33,10 @@ class QuoteForm
                     ->searchable()
                     ->preload(),
                 TextInput::make('quantity')->label(__('admin.field.quantity'))->numeric()->default(1)->required(),
+                TextInput::make('site_area_sqm')->label(__('admin.field.site_area'))->numeric()->suffix('m²'),
+                Select::make('purchase_timeline')
+                    ->label(__('admin.field.purchase_timeline'))
+                    ->options(PurchaseTimeline::options()),
 
                 Select::make('type')
                     ->label(__('admin.field.type'))

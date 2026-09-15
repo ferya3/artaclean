@@ -152,4 +152,11 @@ return [
         'video' => 'Video',
         'article' => 'Article',
     ],
+
+    'purchase_timeline' => [
+        'immediate' => 'Immediately (this month)',
+        'quarter' => 'Within three months',
+        'year' => 'This year',
+        'researching' => 'Still researching',
+    ],
 ];

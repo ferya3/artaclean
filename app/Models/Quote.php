@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\PurchaseTimeline;
 use App\Enums\QuoteStatus;
 use App\Enums\RentalPeriod;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,6 +23,7 @@ class Quote extends Model
     {
         return [
             'status' => QuoteStatus::class,
+            'purchase_timeline' => PurchaseTimeline::class,
             'rental_period' => RentalPeriod::class,
             'quoted_price' => 'decimal:0',
             'discount' => 'decimal:0',

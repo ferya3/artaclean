@@ -76,6 +76,33 @@
                 @error('quantity') <p class="field-error">{{ $message }}</p> @enderror
             </div>
 
+            {{--
+                The project, not the customer. A price on a machine of this
+                size is never quoted from the model alone, so the two things
+                the salesperson would open the call by asking are asked here:
+                how big the floor is, and when the money is available.
+            --}}
+            <div>
+                <label for="q-area-{{ $mode }}" class="field-label">
+                    {{ __('ui.form.site_area') }} <span class="text-ink-400">({{ __('ui.optional') }})</span>
+                </label>
+                <input id="q-area-{{ $mode }}" type="number" min="10" step="10" class="field tabular"
+                       wire:model="siteArea" placeholder="{{ __('ui.selector.area_placeholder') }}">
+                @error('siteArea') <p class="field-error">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label for="q-when-{{ $mode }}" class="field-label">
+                    {{ __('ui.form.purchase_timeline') }} <span class="text-ink-400">({{ __('ui.optional') }})</span>
+                </label>
+                <select id="q-when-{{ $mode }}" class="field" wire:model="purchaseTimeline">
+                    <option value="">{{ __('ui.form.select') }}</option>
+                    @foreach ($timelines as $value => $label)
+                        <option value="{{ $value }}">{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             @if ($mode === 'rental')
                 <div>
                     <label for="q-period" class="field-label">{{ __('ui.form.rental_period') }}</label>

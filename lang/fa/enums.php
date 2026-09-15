@@ -152,4 +152,11 @@ return [
         'video' => 'ویدئو',
         'article' => 'مقاله',
     ],
+
+    'purchase_timeline' => [
+        'immediate' => 'فوری (این ماه)',
+        'quarter' => 'تا سه ماه آینده',
+        'year' => 'امسال',
+        'researching' => 'فعلاً در حال بررسی',
+    ],
 ];

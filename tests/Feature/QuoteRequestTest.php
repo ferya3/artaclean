@@ -135,4 +135,28 @@ class QuoteRequestTest extends TestCase
 
         $this->assertSame(0, Lead::count());
     }
+
+    /**
+     * A price on equipment at this size is never quoted from the model alone,
+     * so the two questions a salesperson would open the call with are asked on
+     * the form and have to reach the record.
+     */
+    public function test_the_project_details_reach_the_quote(): void
+    {
+        Livewire::test(QuoteRequestForm::class, ['productId' => $this->product->id])
+            ->set('name', 'سعید رامین‌فر')
+            ->set('phone', '09121234567')
+            ->set('quantity', 2)
+            ->set('siteArea', 5000)
+            ->set('purchaseTimeline', 'quarter')
+            ->set('note', 'کف اپوکسی، دو شیفت کاری')
+            ->call('submit')
+            ->assertSet('submitted', true);
+
+        $quote = Quote::latest('id')->first();
+
+        $this->assertSame(5000, $quote->site_area_sqm);
+        $this->assertSame('quarter', $quote->purchase_timeline->value);
+        $this->assertSame(2, $quote->quantity);
+    }
 }

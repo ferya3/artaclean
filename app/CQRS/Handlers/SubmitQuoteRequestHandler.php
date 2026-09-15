@@ -30,6 +30,8 @@ class SubmitQuoteRequestHandler implements Handler
             'rental_duration' => $message->rentalDuration,
             'rental_starts_at' => $message->rentalStartsAt,
             'customer_note' => $message->customerNote,
+            'site_area_sqm' => $message->siteAreaSqm,
+            'purchase_timeline' => $message->purchaseTimeline,
             // Prices move weekly, so a quote is only good for a fortnight.
             'valid_until' => now()->addDays(14),
         ]);

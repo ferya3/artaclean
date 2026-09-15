@@ -200,6 +200,8 @@ return [
         'success_title' => 'Your request is in',
         'success_body' => 'A specialist will contact you within one working day.',
         'reference' => 'Reference',
+        'site_area' => 'Floor area of the site (m²)',
+        'purchase_timeline' => 'Expected purchase time',
         'privacy' => 'Your number is used for this enquiry only.',
     ],
 

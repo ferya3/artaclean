@@ -22,5 +22,7 @@ final readonly class SubmitQuoteRequest implements Command
         public ?int $rentalDuration = null,
         public ?string $rentalStartsAt = null,
         public ?string $customerNote = null,
+        public ?int $siteAreaSqm = null,
+        public ?string $purchaseTimeline = null,
     ) {}
 }

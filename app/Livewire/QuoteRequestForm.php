@@ -8,6 +8,7 @@ use App\CQRS\Bus\CommandBus;
 use App\CQRS\Commands\CaptureLead;
 use App\CQRS\Commands\SubmitQuoteRequest;
 use App\Enums\LeadSource;
+use App\Enums\PurchaseTimeline;
 use App\Enums\RentalPeriod;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
@@ -50,6 +51,14 @@ class QuoteRequestForm extends Component
     #[Validate('nullable|string|max:1000')]
     public string $note = '';
 
+    // The project, not the customer: the two things a salesperson would
+    // otherwise have to open the call by asking.
+    #[Validate('nullable|integer|min:10|max:500000')]
+    public ?int $siteArea = null;
+
+    #[Validate('nullable|string|max:24')]
+    public string $purchaseTimeline = '';
+
     // --- Rental only ---------------------------------------------------------
     public ?string $rentalPeriod = null;
 
@@ -83,6 +92,8 @@ class QuoteRequestForm extends Component
             'company' => 'nullable|string|max:160',
             'quantity' => 'required|integer|min:1|max:999',
             'note' => 'nullable|string|max:1000',
+            'siteArea' => 'nullable|integer|min:10|max:500000',
+            'purchaseTimeline' => 'nullable|in:immediate,quarter,year,researching',
         ];
 
         if ($this->mode === 'rental') {
@@ -116,6 +127,8 @@ class QuoteRequestForm extends Component
             rentalDuration: $this->rentalDuration,
             rentalStartsAt: $this->rentalStartsAt,
             customerNote: $this->note ?: null,
+            siteAreaSqm: $this->siteArea,
+            purchaseTimeline: $this->purchaseTimeline ?: null,
         ));
 
         $this->submitted = true;
@@ -128,6 +141,7 @@ class QuoteRequestForm extends Component
             'product' => $this->productId ? Product::find($this->productId) : null,
             'businessTypes' => __('business_types'),
             'rentalPeriods' => RentalPeriod::options(),
+            'timelines' => PurchaseTimeline::options(),
         ]);
     }
 }

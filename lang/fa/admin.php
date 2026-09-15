@@ -212,6 +212,8 @@ return [
         'nav_group' => 'گروه منو',
         'knowledge_type' => 'نوع مطلب',
         'fits_machines' => 'سازگار با دستگاه‌های',
+        'site_area' => 'متراژ محل',
+        'purchase_timeline' => 'زمان خرید',
     ],
 
     'value' => [

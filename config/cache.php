@@ -4,6 +4,7 @@ use App\Enums\KnowledgeType;
 use App\Enums\NavGroup;
 use App\Enums\OperatorType;
 use App\Enums\PowerSource;
+use App\Enums\PurchaseTimeline;
 use App\Enums\StockStatus;
 use App\Models\Blog;
 use App\Models\Brand;
@@ -169,6 +170,7 @@ return [
         NavGroup::class,
         OperatorType::class,
         PowerSource::class,
+        PurchaseTimeline::class,
         StockStatus::class,
     ],
 

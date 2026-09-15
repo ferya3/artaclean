@@ -212,6 +212,8 @@ return [
         'nav_group' => 'Menu group',
         'knowledge_type' => 'Article type',
         'fits_machines' => 'Fits machines',
+        'site_area' => 'Site area',
+        'purchase_timeline' => 'Purchase timeline',
     ],
 
     'value' => [
