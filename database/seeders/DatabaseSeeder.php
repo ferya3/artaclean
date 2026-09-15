@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             CatalogSeeder::class,
             ProductSeeder::class,
             ContentSeeder::class,
+            SolutionArchitectureSeeder::class,
             DemoPipelineSeeder::class,
         ]);
     }

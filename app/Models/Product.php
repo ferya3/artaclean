@@ -6,7 +6,9 @@ namespace App\Models;
 
 use App\Enums\OperatorType;
 use App\Enums\PowerSource;
+use App\Enums\SoilType;
 use App\Enums\StockStatus;
+use App\Enums\SurfaceType;
 use App\Support\HasTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,6 +53,10 @@ class Product extends Model
             'power_source' => PowerSource::class,
             'operator_type' => OperatorType::class,
             'stock_status' => StockStatus::class,
+            // Plain arrays of enum values: they are filtered with JSON
+            // containment rather than hydrated one row at a time.
+            'soil_types' => 'array',
+            'surface_types' => 'array',
         ];
     }
 
@@ -119,6 +125,22 @@ class Product extends Model
         return $this->hasMany(RentalPlan::class)->where('is_active', true);
     }
 
+    /**
+     * The machines this product fits, when this product is a spare part or an
+     * accessory. Both sides are products, so the pivot names the roles rather
+     * than relying on which table it points at.
+     */
+    public function fitsMachines(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'product_compatibility', 'part_id', 'machine_id');
+    }
+
+    /** The parts and accessories that fit this machine. */
+    public function compatibleParts(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'product_compatibility', 'machine_id', 'part_id');
+    }
+
     public function blogs(): BelongsToMany
     {
         return $this->belongsToMany(Blog::class);
@@ -163,6 +185,22 @@ class Product extends Model
         $id = $environment instanceof Environment ? $environment->id : $environment;
 
         return $query->whereHas('environments', fn (Builder $q) => $q->where('environments.id', $id));
+    }
+
+    /**
+     * Machines that remove this kind of soil. A machine with nothing recorded
+     * is left out rather than assumed suitable: a wrong recommendation costs
+     * far more here than a short list does.
+     */
+    public function scopeForSoil(Builder $query, string|SoilType $soil): Builder
+    {
+        return $query->whereJsonContains('soil_types', $soil instanceof SoilType ? $soil->value : $soil);
+    }
+
+    /** Machines built for this surface. */
+    public function scopeForSurface(Builder $query, string|SurfaceType $surface): Builder
+    {
+        return $query->whereJsonContains('surface_types', $surface instanceof SurfaceType ? $surface->value : $surface);
     }
 
     /**

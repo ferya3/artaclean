@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\KnowledgeType;
 use App\Support\HasTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,6 +32,7 @@ class Blog extends Model
             'seo_description' => 'array',
             'is_published' => 'boolean',
             'published_at' => 'datetime',
+            'type' => KnowledgeType::class,
         ];
     }
 
@@ -57,6 +59,11 @@ class Blog extends Model
     public function scopePublished(Builder $query): Builder
     {
         return $query->where('is_published', true)->where('published_at', '<=', now());
+    }
+
+    public function scopeOfType(Builder $query, KnowledgeType|string $type): Builder
+    {
+        return $query->where('type', $type instanceof KnowledgeType ? $type->value : $type);
     }
 
     public function url(): string

@@ -8,6 +8,7 @@ use Database\Seeders\CatalogSeeder;
 use Database\Seeders\ContentSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\RoleSeeder;
+use Database\Seeders\SolutionArchitectureSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -21,7 +22,14 @@ class StorefrontRoutesTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed([RoleSeeder::class, UserSeeder::class, CatalogSeeder::class, ProductSeeder::class, ContentSeeder::class]);
+        $this->seed([
+            RoleSeeder::class,
+            UserSeeder::class,
+            CatalogSeeder::class,
+            ProductSeeder::class,
+            ContentSeeder::class,
+            SolutionArchitectureSeeder::class,
+        ]);
     }
 
     public static function publicRoutes(): array
@@ -35,8 +43,12 @@ class StorefrontRoutesTest extends TestCase
             'compare' => ['/compare'],
             'selector' => ['/machine-selector'],
             'rental' => ['/rental'],
-            'environments' => ['/environments'],
-            'environment' => ['/environments/factory'],
+            'solutions' => ['/solutions'],
+            'solution' => ['/solutions/factory'],
+            'advisor' => ['/find-your-machine'],
+            'services' => ['/services'],
+            'service' => ['/services/maintenance'],
+            'knowledge' => ['/knowledge'],
             'brands' => ['/brands'],
             'brand' => ['/brands/karcher'],
             'blog' => ['/blog'],
@@ -54,6 +66,17 @@ class StorefrontRoutesTest extends TestCase
     public function test_public_pages_respond(string $path): void
     {
         $this->get($path)->assertOk();
+    }
+
+    /**
+     * The industry pages moved from /environments to /solutions when the site
+     * was organised around what a buyer is looking for. Anything already
+     * linking to the old path has to keep working.
+     */
+    public function test_the_old_environment_urls_redirect_permanently(): void
+    {
+        $this->get('/environments')->assertRedirect('/solutions');
+        $this->get('/environments/factory')->assertRedirect('/solutions/factory');
     }
 
     public function test_a_product_reached_through_the_wrong_category_is_a_miss(): void

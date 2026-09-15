@@ -30,4 +30,13 @@ return [
     'contact_title' => 'Contact us',
     'contact_description' => 'Free machine selection consultation.',
     'thank_you_title' => 'Request received',
+
+    // --- Solutions, services, knowledge, advisor ----------------------------
+    'advisor_title' => 'Find the right industrial cleaning machine',
+    'advisor_description' => 'Tell us the surface, the soil and the area, and we name the machine for the job.',
+    'services_title' => 'Service and support for industrial cleaning equipment',
+    'services_description' => 'Installation, scheduled maintenance, repair, spare parts, operator training, rental and warranty.',
+    'service_title' => ':name for industrial cleaning equipment',
+    'knowledge_title' => 'Buying guides and technical knowledge',
+    'knowledge_description' => 'Buying guides, machine comparisons, finished projects and maintenance advice.',
 ];

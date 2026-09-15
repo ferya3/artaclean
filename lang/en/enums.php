@@ -115,4 +115,41 @@ return [
         'ride_on' => 'Ride-on scrubber',
         'ride_on_heavy' => 'Heavy ride-on sweeper or scrubber',
     ],
+
+    'soil_type' => [
+        'dust' => 'Dust',
+        'oil' => 'Oil',
+        'grease' => 'Grease',
+        'mud' => 'Mud',
+        'food' => 'Food waste',
+        'chemical' => 'Chemicals',
+        'liquid' => 'Water and liquids',
+    ],
+
+    'surface_type' => [
+        'concrete' => 'Concrete floor',
+        'epoxy' => 'Epoxy floor',
+        'tile' => 'Tile and stone',
+        'carpet' => 'Carpet',
+        'upholstery' => 'Upholstery',
+        'machinery' => 'Machinery',
+        'vertical' => 'Walls and vertical surfaces',
+        'outdoor' => 'Yards and asphalt',
+    ],
+
+    'nav_group' => [
+        'floor' => 'Floor care',
+        'pressure' => 'High pressure',
+        'specialist' => 'Specialist cleaning',
+        'consumable' => 'Consumables and parts',
+    ],
+
+    'knowledge_type' => [
+        'guide' => 'Buying guide',
+        'cleaning' => 'Cleaning guide',
+        'comparison' => 'Comparison',
+        'case_study' => 'Case study',
+        'video' => 'Video',
+        'article' => 'Article',
+    ],
 ];

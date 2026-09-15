@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\NavGroup;
 use App\Support\HasTranslations;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,6 +36,7 @@ class Category extends Model
             'seo_description' => 'array',
             'is_active' => 'boolean',
             'show_in_menu' => 'boolean',
+            'nav_group' => NavGroup::class,
         ];
     }
 
@@ -101,6 +103,11 @@ class Category extends Model
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function scopeInNavGroup(Builder $query, NavGroup|string $group): Builder
+    {
+        return $query->where('nav_group', $group instanceof NavGroup ? $group->value : $group);
     }
 
     /**
