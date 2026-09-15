@@ -1,7 +1,9 @@
 @php
     $navigation = app(App\Services\NavigationService::class);
     $navCategories = $navigation->categories();
+    $navGroups = $navigation->categoryGroups();
     $navEnvironments = $navigation->environments();
+    $navServices = $navigation->services();
 @endphp
 
 {{--
@@ -83,53 +85,120 @@
                     <x-ui-icon name="chevron-down" class="size-3.5" />
                 </button>
 
+                {{--
+                    Grouped by what the machines do, not listed flat. The
+                    advisor sits in the panel as a column of its own: the
+                    visitor who opens this menu and does not recognise a single
+                    heading is exactly the one it was built for.
+                --}}
                 <div x-cloak
                      x-show="mega === 'products'"
                      x-transition.opacity.duration.150ms
-                     class="absolute start-0 top-full w-[46rem] rounded-xl border border-ink-100 bg-white p-6 shadow-[var(--shadow-card-hover)]">
-                    <div class="grid grid-cols-2 gap-8">
-                        <div>
-                            <p class="eyebrow mb-3">{{ __('nav.categories') }}</p>
-                            <ul class="space-y-1">
-                                @foreach ($navCategories as $category)
-                                    <li>
-                                        <a href="{{ $category->url() }}"
-                                           class="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-ink-700 hover:bg-ink-50 hover:text-ink-900">
-                                            <span>{{ $category->name }}</span>
-                                            <x-ui-icon name="arrow-left" class="size-3.5 text-ink-300 flip-rtl" />
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+                     class="absolute start-0 top-full w-[62rem] max-w-[calc(100vw-2rem)] rounded-xl border border-ink-100 bg-white p-6 shadow-[var(--shadow-card-hover)]">
+                    <div class="grid grid-cols-4 gap-7">
+                        @foreach ($navGroups as $group => $groupCategories)
+                            <div>
+                                <p class="eyebrow mb-3">{{ __('enums.nav_group.'.$group) }}</p>
+                                <ul class="space-y-0.5">
+                                    @foreach ($groupCategories as $category)
+                                        <li>
+                                            <a href="{{ $category->url() }}"
+                                               class="flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm text-ink-700 hover:bg-ink-50 hover:text-ink-900">
+                                                <span>{{ $category->name }}</span>
+                                                <x-ui-icon name="arrow-left" class="size-3.5 shrink-0 text-ink-300 flip-rtl" />
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endforeach
+                    </div>
 
-                        <div>
-                            <p class="eyebrow mb-3">{{ __('nav.environments') }}</p>
-                            <ul class="grid grid-cols-2 gap-1">
-                                @foreach ($navEnvironments as $environment)
-                                    <li>
-                                        <a href="{{ $environment->url() }}"
-                                           class="block rounded-lg px-3 py-2 text-sm text-ink-700 hover:bg-ink-50 hover:text-ink-900">
-                                            {{ $environment->name }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
+                    <div class="mt-6 grid grid-cols-4 gap-4 border-t border-ink-100 pt-5">
+                        <a href="{{ route('advisor') }}"
+                           class="col-span-2 flex items-center gap-3 rounded-xl bg-brand-600 px-4 py-3 text-white transition-colors hover:bg-brand-700">
+                            <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-white/15">
+                                <x-ui-icon name="sparkles" class="size-5" />
+                            </span>
+                            <span>
+                                <span class="block text-sm font-bold">{{ __('advisor.title') }}</span>
+                                <span class="mt-0.5 block text-xs text-brand-100">{{ __('advisor.subtitle') }}</span>
+                            </span>
+                        </a>
 
-                            <a href="{{ route('selector') }}"
-                               class="mt-4 flex items-center gap-2 rounded-lg bg-brand-50 px-3 py-2.5 text-sm font-semibold text-brand-800 hover:bg-brand-100">
-                                <x-ui-icon name="calculator" class="size-4" />
-                                {{ __('nav.selector') }}
-                            </a>
-                        </div>
+                        <a href="{{ route('selector') }}"
+                           class="flex items-center gap-2.5 rounded-xl bg-ink-50 px-4 py-3 text-sm font-semibold text-ink-800 hover:bg-ink-100">
+                            <x-ui-icon name="calculator" class="size-4 text-brand-700" />
+                            {{ __('nav.selector') }}
+                        </a>
+
+                        <a href="{{ route('products.index') }}"
+                           class="flex items-center gap-2.5 rounded-xl bg-ink-50 px-4 py-3 text-sm font-semibold text-ink-800 hover:bg-ink-100">
+                            <x-ui-icon name="cube" class="size-4 text-brand-700" />
+                            {{ __('ui.view_all') }}
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <a href="{{ route('rental') }}" class="btn-ghost btn-sm">{{ __('nav.rental') }}</a>
+            {{-- Solutions: the way in for a buyer who thinks in buildings, not machines. --}}
+            <div class="relative" @mouseenter="mega = 'solutions'" @mouseleave="mega = null">
+                <button type="button"
+                        class="btn-ghost btn-sm gap-1"
+                        :aria-expanded="mega === 'solutions'"
+                        @click="mega = mega === 'solutions' ? null : 'solutions'">
+                    {{ __('nav.environments') }}
+                    <x-ui-icon name="chevron-down" class="size-3.5" />
+                </button>
+
+                <div x-cloak
+                     x-show="mega === 'solutions'"
+                     x-transition.opacity.duration.150ms
+                     class="absolute start-0 top-full w-[34rem] max-w-[calc(100vw-2rem)] rounded-xl border border-ink-100 bg-white p-6 shadow-[var(--shadow-card-hover)]">
+                    <p class="eyebrow mb-3">{{ __('nav.solutions') }}</p>
+                    <ul class="grid grid-cols-2 gap-1">
+                        @foreach ($navEnvironments as $environment)
+                            <li>
+                                <a href="{{ $environment->url() }}"
+                                   class="block rounded-lg px-3 py-2 text-sm text-ink-700 hover:bg-ink-50 hover:text-ink-900">
+                                    {{ $environment->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+            {{-- Services: half of what a supplier is chosen on in this trade. --}}
+            <div class="relative" @mouseenter="mega = 'services'" @mouseleave="mega = null">
+                <button type="button"
+                        class="btn-ghost btn-sm gap-1"
+                        :aria-expanded="mega === 'services'"
+                        @click="mega = mega === 'services' ? null : 'services'">
+                    {{ __('nav.services') }}
+                    <x-ui-icon name="chevron-down" class="size-3.5" />
+                </button>
+
+                <div x-cloak
+                     x-show="mega === 'services'"
+                     x-transition.opacity.duration.150ms
+                     class="absolute start-0 top-full w-[30rem] max-w-[calc(100vw-2rem)] rounded-xl border border-ink-100 bg-white p-6 shadow-[var(--shadow-card-hover)]">
+                    <ul class="grid grid-cols-2 gap-1">
+                        @foreach ($navServices as $service)
+                            <li>
+                                <a href="{{ $service->url() }}"
+                                   class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink-700 hover:bg-ink-50 hover:text-ink-900">
+                                    <x-ui-icon :name="$service->icon ?? 'wrench'" class="size-4 shrink-0 text-ink-400" />
+                                    {{ $service->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
+            <a href="{{ route('knowledge') }}" class="btn-ghost btn-sm">{{ __('nav.knowledge') }}</a>
             <a href="{{ route('brands.index') }}" class="btn-ghost btn-sm">{{ __('nav.brands') }}</a>
-            <a href="{{ route('downloads.index') }}" class="btn-ghost btn-sm">{{ __('nav.downloads') }}</a>
-            <a href="{{ route('blog.index') }}" class="btn-ghost btn-sm">{{ __('nav.blog') }}</a>
             <a href="{{ route('contact') }}" class="btn-ghost btn-sm">{{ __('nav.contact') }}</a>
         </nav>
 
@@ -159,26 +228,51 @@
     <div id="mobile-nav" x-cloak x-show="mobile" x-transition.opacity
          class="max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-ink-100 bg-white lg:hidden">
         <div class="container-page space-y-1 py-4">
-            <p class="eyebrow pt-2 pb-1">{{ __('nav.categories') }}</p>
-            @foreach ($navCategories as $category)
-                <a href="{{ $category->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
-                    {{ $category->name }}
-                </a>
+            {{--
+                The advisor comes first on a phone, above every category. A
+                visitor who could name the category would have used the search;
+                the one scrolling a drawer is the one with a problem to
+                describe.
+            --}}
+            <a href="{{ route('advisor') }}"
+               class="mb-3 flex min-h-14 items-center gap-3 rounded-xl bg-brand-600 px-4 text-white">
+                <x-ui-icon name="sparkles" class="size-5 shrink-0" />
+                <span>
+                    <span class="block text-base font-bold">{{ __('advisor.title') }}</span>
+                    <span class="mt-0.5 block text-xs text-brand-100">{{ __('advisor.subtitle') }}</span>
+                </span>
+            </a>
+
+            @foreach ($navGroups as $group => $groupCategories)
+                <p class="eyebrow pt-3 pb-1">{{ __('enums.nav_group.'.$group) }}</p>
+                @foreach ($groupCategories as $category)
+                    <a href="{{ $category->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
+                        {{ $category->name }}
+                    </a>
+                @endforeach
             @endforeach
 
-            <p class="eyebrow pt-4 pb-1">{{ __('nav.environments') }}</p>
+            <p class="eyebrow pt-4 pb-1">{{ __('nav.solutions') }}</p>
             @foreach ($navEnvironments as $environment)
                 <a href="{{ $environment->url() }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
                     {{ $environment->name }}
                 </a>
             @endforeach
 
+            <p class="eyebrow pt-4 pb-1">{{ __('nav.services') }}</p>
+            @foreach ($navServices as $service)
+                <a href="{{ $service->url() }}" class="flex min-h-12 items-center gap-2.5 rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">
+                    <x-ui-icon :name="$service->icon ?? 'wrench'" class="size-4 shrink-0 text-ink-400" />
+                    {{ $service->name }}
+                </a>
+            @endforeach
+
             <div class="grid gap-1 pt-4">
                 <a href="{{ route('selector') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base font-semibold text-brand-700 hover:bg-brand-50">{{ __('nav.selector') }}</a>
-                <a href="{{ route('rental') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.rental') }}</a>
+                <a href="{{ route('knowledge') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.knowledge') }}</a>
                 <a href="{{ route('brands.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.brands') }}</a>
+                <a href="{{ route('compare') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('ui.compare') }}</a>
                 <a href="{{ route('downloads.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.downloads') }}</a>
-                <a href="{{ route('blog.index') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.blog') }}</a>
                 <a href="{{ route('contact') }}" class="flex min-h-12 items-center rounded-lg px-3 text-base text-ink-700 hover:bg-ink-50">{{ __('nav.contact') }}</a>
             </div>
 

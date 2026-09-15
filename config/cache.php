@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\KnowledgeType;
+use App\Enums\NavGroup;
 use App\Enums\OperatorType;
 use App\Enums\PowerSource;
 use App\Enums\StockStatus;
@@ -9,6 +11,7 @@ use App\Models\Category;
 use App\Models\Environment;
 use App\Models\Faq;
 use App\Models\Product;
+use App\Models\Service;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -160,7 +163,10 @@ return [
         Environment::class,
         Faq::class,
         Product::class,
+        Service::class,
 
+        KnowledgeType::class,
+        NavGroup::class,
         OperatorType::class,
         PowerSource::class,
         StockStatus::class,

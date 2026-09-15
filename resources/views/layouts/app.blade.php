@@ -17,7 +17,8 @@
 
     @stack('head')
 </head>
-<body class="min-h-screen bg-white">
+{{-- The bottom padding keeps the last rows of every page clear of the phone action bar. --}}
+<body class="min-h-screen bg-white pb-16 lg:pb-0">
     <a href="#main"
        class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:start-3 focus:z-[100] focus:rounded-lg focus:bg-ink-900 focus:px-4 focus:py-2 focus:text-white">
         {{ __('nav.menu') }}
@@ -32,8 +33,9 @@
 
     @include('partials.footer')
 
-    {{-- Sticky comparison strip and the WhatsApp shortcut sit above everything. --}}
+    {{-- Sticky comparison strip, the phone action bar and the WhatsApp shortcut. --}}
     @livewire('compare-bar')
+    @include('partials.mobile-cta')
     @include('partials.whatsapp')
 
     @stack('scripts')
