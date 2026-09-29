@@ -76,9 +76,31 @@ npm run build --silent
 # Installed globally (-g), into ~/.claude/skills, rather than committed to the
 # repo: the container is fresh each session, so this costs a download instead
 # of megabytes of vendored files in git history.
+#
+# Everything above this line is what the app needs to boot; everything below is
+# tooling for whoever is working on it. So the two are separated:
+#
+#   - The whole block is skipped by exporting SKIP_SKILLS=true. On a network
+#     where npm or GitHub is slow or filtered — which is where this project is
+#     deployed — six npx fetches at the start of every session is a toll worth
+#     being able to decline.
+#   - A failure here never aborts the hook. Under `set -e` a single unreachable
+#     repository would have taken the session down with it *after* the install
+#     had already succeeded, which reads as a broken setup when in fact the app
+#     is ready and only the extras are missing.
+if [ "${SKIP_SKILLS:-false}" = "true" ]; then
+  echo "Session ready (skills skipped)."
+  exit 0
+fi
+
 echo "Installing skills..."
 
-npx --yes skills@latest add obra/superpowers -g -a claude-code --copy -y \
+skills_failed=0
+try_skills() {
+  "$@" || { skills_failed=1; echo "  ...skipped: $* (not reachable)"; }
+}
+
+try_skills npx --yes skills@latest add obra/superpowers -g -a claude-code --copy -y \
   -s brainstorming -s writing-plans -s executing-plans \
   -s subagent-driven-development -s dispatching-parallel-agents \
   -s test-driven-development -s systematic-debugging \
@@ -86,17 +108,21 @@ npx --yes skills@latest add obra/superpowers -g -a claude-code --copy -y \
   -s verification-before-completion -s finishing-a-development-branch \
   -s using-git-worktrees -s using-superpowers -s writing-skills
 
-npx --yes skills@latest add thedotmack/claude-mem -g -a claude-code --copy -y \
+try_skills npx --yes skills@latest add thedotmack/claude-mem -g -a claude-code --copy -y \
   -s smart-explore -s learn-codebase -s pathfinder -s babysit
 
-npx --yes skills@latest add pbakaus/impeccable -g -a claude-code --copy -y -s impeccable
-npx --yes skills@latest add vercel-labs/skills -g -a claude-code --copy -y -s find-skills
-npx --yes skills@latest add rebelytics/one-skill-to-rule-them-all -g -a claude-code --copy -y \
+try_skills npx --yes skills@latest add pbakaus/impeccable -g -a claude-code --copy -y -s impeccable
+try_skills npx --yes skills@latest add vercel-labs/skills -g -a claude-code --copy -y -s find-skills
+try_skills npx --yes skills@latest add rebelytics/one-skill-to-rule-them-all -g -a claude-code --copy -y \
   -s task-observer
 
 # UI/UX Pro Max ships as its own CLI rather than a skills-repo, so it installs
 # in two steps. -g here means the home directory, same destination as above.
-npm install -g --silent ui-ux-pro-max-cli@latest
-uipro init -g -a claude --force
+try_skills npm install -g --silent ui-ux-pro-max-cli@latest
+try_skills uipro init -g -a claude --force
 
-echo "Session ready."
+if [ "$skills_failed" = "1" ]; then
+  echo "Session ready (some skills were not reachable)."
+else
+  echo "Session ready."
+fi
