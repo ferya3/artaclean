@@ -10,6 +10,7 @@ use Database\Seeders\ProductSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 /**
@@ -30,11 +31,63 @@ class UrlSchemeTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** True when this test wrote the manifest and therefore has to remove it. */
+    private bool $manifestIsOurs = false;
+
     protected function setUp(): void
     {
         parent::setUp();
 
+        /*
+         * The base case switches Vite off so the suite does not depend on a
+         * bundler run. This file is the one that asserts on the asset URLs
+         * themselves — the https-without-a-certificate bug it guards against
+         * showed up precisely as a stylesheet URL — so it needs Vite back, and
+         * a manifest for Vite to read.
+         *
+         * A throwaway manifest keeps that hermetic: the assertions are about
+         * the scheme and host Laravel builds the URL from, never about what a
+         * build produced. A real one already on disk is left alone.
+         */
+        $this->withVite();
+        $this->writeManifestIfMissing();
+
         $this->seed([RoleSeeder::class, UserSeeder::class, CatalogSeeder::class, ProductSeeder::class, ContentSeeder::class]);
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->manifestIsOurs) {
+            File::deleteDirectory(public_path('build'));
+            $this->manifestIsOurs = false;
+        }
+
+        parent::tearDown();
+    }
+
+    private function writeManifestIfMissing(): void
+    {
+        $manifest = public_path('build/manifest.json');
+
+        if (File::exists($manifest)) {
+            return;
+        }
+
+        File::ensureDirectoryExists(dirname($manifest));
+        File::put($manifest, json_encode([
+            'resources/css/app.css' => [
+                'file' => 'assets/app.css',
+                'src' => 'resources/css/app.css',
+                'isEntry' => true,
+            ],
+            'resources/js/app.js' => [
+                'file' => 'assets/app.js',
+                'src' => 'resources/js/app.js',
+                'isEntry' => true,
+            ],
+        ], JSON_THROW_ON_ERROR));
+
+        $this->manifestIsOurs = true;
     }
 
     public function test_the_test_environment_pins_a_plain_http_app_url(): void
